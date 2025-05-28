@@ -9,6 +9,10 @@ class Login extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('CaterFit Login'),
+        backgroundColor: Colors.green,
+      ),
       body: Column(
         children: [
           ElevatedButton(
