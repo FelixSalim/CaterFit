@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:caterfit/admin/package_management.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -165,7 +166,18 @@ class _LoginPageState extends State<LoginPage> {
 
                   // Tombol Login
                   ElevatedButton(
-                    onPressed: allFieldsFilled ? () {} : null,
+                    onPressed: allFieldsFilled
+                        ? () {
+                            if (_usernameController.text == "Admin" &&
+                                _passwordController.text == "Admin123") {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          const PackageManagement())); // Sementara
+                            }
+                          }
+                        : null,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: allFieldsFilled
                           ? const Color(0xFF0D3011)
