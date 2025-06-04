@@ -15,6 +15,8 @@ class MyApp extends StatelessWidget {
     return const MaterialApp(
       title: 'CaterFit',
       home: Subscription(),
+      home: LoginPage(),
+      debugShowMaterialGrid: false,
     );
   }
 }
