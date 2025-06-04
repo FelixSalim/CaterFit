@@ -42,7 +42,7 @@ class _LoginPageState extends State<LoginPage> {
               padding: const EdgeInsets.only(top: 60),
               child: Opacity(
                 opacity: 1,
-                child: Image.asset('assets/pnglogo.png', width: 200),
+                child: Image.asset('Assets/pnglogo.png', width: 200),
               ),
             ),
           ),
@@ -141,7 +141,8 @@ class _LoginPageState extends State<LoginPage> {
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(5),
                             ),
-                            side: const BorderSide(color: Colors.black, width: 1),
+                            side:
+                                const BorderSide(color: Colors.black, width: 1),
                           ),
                           Text(
                             'Remember Me',
