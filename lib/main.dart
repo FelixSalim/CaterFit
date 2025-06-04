@@ -16,6 +16,7 @@ class MyApp extends StatelessWidget {
       title: 'CaterFit',
       home: LoginPage(),
       debugShowMaterialGrid: false,
+      debugShowCheckedModeBanner: false,
     );
   }
 }

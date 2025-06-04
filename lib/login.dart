@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -8,202 +9,217 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  bool _obscurePassword = true;
+  bool _rememberMe = false;
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  bool _isObscure = true;
-  bool _rememberMe = false;
+
+  @override
+  void dispose() {
+    _usernameController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    bool isFormFilled =
-        _usernameController.text.isNotEmpty && _passwordController.text.isNotEmpty;
+    bool allFieldsFilled = _usernameController.text.isNotEmpty &&
+        _passwordController.text.isNotEmpty;
+
+    OutlineInputBorder customBorder = OutlineInputBorder(
+      borderSide: const BorderSide(color: Colors.black, width: 1),
+      borderRadius: BorderRadius.circular(10),
+    );
 
     return Scaffold(
-      backgroundColor: const Color(0xFFFEFFDE),
+      backgroundColor: Colors.white,
       body: Stack(
         children: [
-          // Transparent logo in background
-          Positioned(
-            top: 80,
-            left: 0,
-            right: 0,
-            child: Opacity(
-              opacity: 0.1,
-              child: Image.asset(
-                'assets/logo.png', // Sesuaikan path asset logo CaterFit
-                height: 120,
+          // Logo di atas
+          Align(
+            alignment: Alignment.topCenter,
+            child: Padding(
+              padding: const EdgeInsets.only(top: 60),
+              child: Opacity(
+                opacity: 1,
+                child: Image.asset('assets/pnglogo.png', width: 200),
               ),
             ),
           ),
 
-          SafeArea(
-            child: SingleChildScrollView(
+          // Container Login
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
+              decoration: const BoxDecoration(
+                color: Color(0xFFCDE38B),
+                borderRadius: BorderRadius.vertical(top: Radius.circular(50)),
+              ),
+              height: MediaQuery.of(context).size.height / 1.3,
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Back Button
-                  Padding(
-                    padding: const EdgeInsets.only(left: 16, top: 8),
-                    child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: IconButton(
-                        icon: const Icon(Icons.arrow_back),
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
+                  Center(
+                    child: Text(
+                      'Login to Your Account',
+                      style: GoogleFonts.montserrat(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
                       ),
                     ),
                   ),
-
-                  const SizedBox(height: 20),
-
-                  // Main logo
-                  Image.asset(
-                    'assets/logo.png',
-                    height: 100,
-                  ),
-
-                  const SizedBox(height: 20),
-
-                  // Login Container
-                  Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 24),
-                    padding: const EdgeInsets.all(24),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(24),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Center(
-                          child: Text(
-                            'Login To Your Account',
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 24),
-
-                        // Username Field
-                        TextField(
-                          controller: _usernameController,
-                          onChanged: (_) => setState(() {}),
-                          decoration: const InputDecoration(
-                            prefixIcon: Icon(Icons.person),
-                            hintText: 'Username',
-                            border: OutlineInputBorder(),
-                          ),
-                        ),
-                        const SizedBox(height: 16),
-
-                        // Password Field
-                        TextField(
-                          controller: _passwordController,
-                          obscureText: _isObscure,
-                          onChanged: (_) => setState(() {}),
-                          decoration: InputDecoration(
-                            prefixIcon: const Icon(Icons.lock),
-                            hintText: 'Password',
-                            border: const OutlineInputBorder(),
-                            suffixIcon: IconButton(
-                              icon: Icon(_isObscure
-                                  ? Icons.visibility_off
-                                  : Icons.visibility),
-                              onPressed: () {
-                                setState(() {
-                                  _isObscure = !_isObscure;
-                                });
-                              },
-                            ),
-                          ),
-                        ),
-
-                        const SizedBox(height: 8),
-
-                        // Remember Me & Forgot Password
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Row(
-                              children: [
-                                Checkbox(
-                                  value: _rememberMe,
-                                  onChanged: (value) {
-                                    setState(() {
-                                      _rememberMe = value ?? false;
-                                    });
-                                  },
-                                ),
-                                const Text('Remember Me'),
-                              ],
-                            ),
-                            TextButton(
-                              onPressed: () {
-                                // Navigasi ke halaman lupa password
-                              },
-                              child: const Text(
-                                'Forget Password?',
-                                style: TextStyle(
-                                  decoration: TextDecoration.underline,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-
-                        const SizedBox(height: 16),
-
-                        // Login Button
-                        SizedBox(
-                          width: double.infinity,
-                          child: ElevatedButton(
-                            onPressed: isFormFilled
-                                ? () {
-                                    // Aksi login
-                                  }
-                                : null,
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: isFormFilled
-                                  ? const Color(0xFFCDE38B)
-                                  : Colors.grey.shade300,
-                              foregroundColor: Colors.black,
-                              padding: const EdgeInsets.symmetric(vertical: 14),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                            ),
-                            child: const Text('Login'),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-
                   const SizedBox(height: 24),
 
-                  // Register Link
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Text("Don't have an account? "),
-                      GestureDetector(
-                        onTap: () {
-                          // Navigasi ke halaman register
+                  // Username
+                  TextField(
+                    controller: _usernameController,
+                    onChanged: (_) => setState(() {}),
+                    decoration: InputDecoration(
+                      prefixIcon: const Icon(Icons.person_outline),
+                      hintText: 'Username',
+                      hintStyle: GoogleFonts.nunitoSans(color: Colors.grey),
+                      filled: true,
+                      fillColor: Colors.white,
+                      border: customBorder,
+                      enabledBorder: customBorder,
+                      focusedBorder: customBorder,
+                      isDense: true,
+                      contentPadding: const EdgeInsets.symmetric(vertical: 14),
+                    ),
+                    style: GoogleFonts.nunitoSans(),
+                  ),
+                  const SizedBox(height: 20),
+
+                  // Password
+                  TextField(
+                    controller: _passwordController,
+                    onChanged: (_) => setState(() {}),
+                    obscureText: _obscurePassword,
+                    decoration: InputDecoration(
+                      prefixIcon: const Icon(Icons.lock_outline),
+                      hintText: 'Password',
+                      hintStyle: GoogleFonts.nunitoSans(color: Colors.grey),
+                      filled: true,
+                      fillColor: Colors.white,
+                      border: customBorder,
+                      enabledBorder: customBorder,
+                      focusedBorder: customBorder,
+                      isDense: true,
+                      contentPadding: const EdgeInsets.symmetric(vertical: 14),
+                      suffixIcon: IconButton(
+                        icon: Icon(
+                          _obscurePassword
+                              ? Icons.visibility_off
+                              : Icons.visibility,
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            _obscurePassword = !_obscurePassword;
+                          });
                         },
-                        child: const Text(
-                          'Register',
-                          style: TextStyle(
+                      ),
+                    ),
+                    style: GoogleFonts.nunitoSans(),
+                  ),
+                  const SizedBox(height: 12),
+
+                  // Remember Me + Forget Password
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        children: [
+                          Checkbox(
+                            value: _rememberMe,
+                            onChanged: (value) {
+                              setState(() {
+                                _rememberMe = value ?? false;
+                              });
+                            },
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5),
+                            ),
+                            side: const BorderSide(color: Colors.black, width: 1),
+                          ),
+                          Text(
+                            'Remember Me',
+                            style: GoogleFonts.nunitoSans(),
+                          ),
+                        ],
+                      ),
+                      GestureDetector(
+                        onTap: () {},
+                        child: Text(
+                          'Forget Password?',
+                          style: GoogleFonts.nunitoSans(
                             decoration: TextDecoration.underline,
-                            fontWeight: FontWeight.bold,
                           ),
                         ),
                       ),
                     ],
                   ),
-                  const SizedBox(height: 32),
+                  const SizedBox(height: 20),
+
+                  // Tombol Login
+                  ElevatedButton(
+                    onPressed: allFieldsFilled ? () {} : null,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: allFieldsFilled
+                          ? const Color(0xFF0D3011)
+                          : Colors.white,
+                      foregroundColor:
+                          allFieldsFilled ? Colors.white : Colors.black,
+                      minimumSize: const Size.fromHeight(50),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                    child: Text(
+                      'Login',
+                      style: GoogleFonts.montserrat(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  const Spacer(),
+
+                  // Register
+                  Center(
+                    child: GestureDetector(
+                      onTap: () {},
+                      child: Text.rich(
+                        TextSpan(
+                          text: "Don’t have an account? ",
+                          style: GoogleFonts.nunitoSans(),
+                          children: [
+                            TextSpan(
+                              text: "Register",
+                              style: GoogleFonts.nunitoSans(
+                                decoration: TextDecoration.underline,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
                 ],
+              ),
+            ),
+          ),
+
+          // Tombol Kembali
+          SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.only(left: 16, top: 8),
+              child: IconButton(
+                icon: const Icon(Icons.arrow_back),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
               ),
             ),
           ),
@@ -212,3 +228,11 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 }
+
+// DIBERIKAN SNIPPET CODE FLUTTER DIATAS NAMUN DITEMUKAN BBRP KENDALA
+// PERBAIKI SEHINGGA
+// - textcontroller bisa digunakan sehingga bisa mengetik
+// - hide & see password (icon mata) bisa digunakan
+// - check & uncheck remember me
+
+// BERIKAN YG SIAP DICOPY
