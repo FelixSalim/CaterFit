@@ -14,7 +14,6 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return const MaterialApp(
       title: 'CaterFit',
-      home: Subscription(),
       home: LoginPage(),
       debugShowMaterialGrid: false,
     );
