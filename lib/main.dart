@@ -1,3 +1,4 @@
+import 'package:caterfit/user/subscription.dart';
 import 'package:flutter/material.dart';
 
 import 'package:caterfit/login.dart';
@@ -13,7 +14,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return const MaterialApp(
       title: 'CaterFit',
-      home: LoginPage(),
+      home: Subscription(),
     );
   }
 }
