@@ -1,4 +1,3 @@
-import 'package:caterfit/user/subscription.dart';
 import 'package:flutter/material.dart';
 
 import 'package:caterfit/login.dart';

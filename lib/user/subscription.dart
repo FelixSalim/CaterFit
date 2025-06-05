@@ -52,9 +52,9 @@ class _SubscriptionPageState extends State<Subscription> {
                       backgroundColor: Colors.green.withOpacity(0.2),
                     ),
                   ),
-                  Column(
+                  const Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
-                    children: const [
+                    children: [
                       Text(
                         'Current Plan',
                         style: TextStyle(
@@ -66,7 +66,8 @@ class _SubscriptionPageState extends State<Subscription> {
                       SizedBox(height: 8),
                       Text(
                         'Paket Anak Sekolah',
-                        style: TextStyle(fontSize: 20, fontStyle: FontStyle.italic),
+                        style: TextStyle(
+                            fontSize: 20, fontStyle: FontStyle.italic),
                       ),
                       SizedBox(height: 20),
                       Row(
@@ -75,7 +76,8 @@ class _SubscriptionPageState extends State<Subscription> {
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              Text('Start date', style: TextStyle(color: Colors.green)),
+                              Text('Start date',
+                                  style: TextStyle(color: Colors.green)),
                               Text('01 June 2025'),
                             ],
                           ),
@@ -83,7 +85,8 @@ class _SubscriptionPageState extends State<Subscription> {
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              Text('End date', style: TextStyle(color: Colors.red)),
+                              Text('End date',
+                                  style: TextStyle(color: Colors.red)),
                               Text('08 June 2025'),
                             ],
                           ),
@@ -96,7 +99,8 @@ class _SubscriptionPageState extends State<Subscription> {
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              Text('Days Left', style: TextStyle(color: Colors.orange)),
+                              Text('Days Left',
+                                  style: TextStyle(color: Colors.orange)),
                               Text('4 days'),
                             ],
                           ),
@@ -128,7 +132,8 @@ class _SubscriptionPageState extends State<Subscription> {
               ),
               child: const Text(
                 'Tuesday, 3 June 2025',
-                style: TextStyle(color: Colors.green, fontWeight: FontWeight.bold),
+                style:
+                    TextStyle(color: Colors.green, fontWeight: FontWeight.bold),
               ),
             ),
             const SizedBox(height: 10),
@@ -138,7 +143,7 @@ class _SubscriptionPageState extends State<Subscription> {
       ),
     );
   }
-  
+
   Widget _buildMenuRow() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
