@@ -1,23 +1,54 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import 'package:caterfit/admin/add_package.dart';
+
 class PackageManagement extends StatelessWidget {
   const PackageManagement({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return Scaffold(
       backgroundColor: Colors.white,
-      body: SingleChildScrollView(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            PackageManagementTitle(),
-            OnGoingPackage(),
-            ArchivedPackage(),
-          ],
-        ),
+      body: Stack(
+        children: [
+          const SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                PackageManagementTitle(),
+                OnGoingPackage(),
+                ArchivedPackage(),
+              ],
+            ),
+          ),
+          Positioned(
+            bottom: 50,
+            right: 25,
+            child: Container(
+              width: 75,
+              height: 75,
+              decoration: const BoxDecoration(
+                color: Color(0xFF0D3011),
+                borderRadius: BorderRadius.all(Radius.circular(37.5)),
+              ),
+              child: IconButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const AddPackage(),
+                    ),
+                  );
+                },
+                icon: const Icon(Icons.add),
+                color: Colors.white,
+                iconSize: 50,
+              ),
+            ),
+          )
+        ],
       ),
     );
   }
@@ -91,7 +122,7 @@ class OnGoingPackageCards extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
         width: MediaQuery.of(context).size.width,
-        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+        padding: const EdgeInsets.only(left: 24, top: 16, bottom: 16),
         child: const Column(children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -103,6 +134,7 @@ class OnGoingPackageCards extends StatelessWidget {
             ],
           ),
           Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               PackageCard(
                   title: "School Meal Package", image: "PackageImageTemp.png"),
@@ -163,7 +195,7 @@ class PackageCardFront extends StatelessWidget {
             )
           ]),
       clipBehavior: Clip.antiAliasWithSaveLayer,
-      margin: const EdgeInsets.all(8.0),
+      margin: const EdgeInsets.symmetric(vertical: 8.0),
       child: Card(
         child: Image.asset('Assets/$image', fit: BoxFit.cover),
       ),
@@ -186,7 +218,7 @@ class PackageCardBack extends StatelessWidget {
     return Container(
       width: 175,
       height: 200,
-      margin: const EdgeInsets.all(8.0),
+      margin: const EdgeInsets.symmetric(vertical: 8.0),
       decoration: const BoxDecoration(
         color: Color(0xBF0D3011),
         borderRadius: BorderRadius.all(Radius.circular(40.0)),
@@ -222,7 +254,7 @@ class PackageCardBack extends StatelessWidget {
                   height: 30,
                   margin: const EdgeInsets.only(right: 10),
                   decoration: BoxDecoration(
-                    color: Color(0xFF0D3011),
+                    color: const Color(0xFF0D3011),
                     borderRadius: BorderRadius.circular(12.5),
                   ),
                   child: const Icon(Icons.edit, color: Colors.white, size: 24),
@@ -254,7 +286,12 @@ class ArchivedPackage extends StatelessWidget {
     return const Column(
       children: [
         Row(
-          children: [SubTitle(text: "Archived Package")],
+          children: [
+            Padding(
+              padding: EdgeInsets.only(top: 17.0),
+              child: SubTitle(text: "Archived Package"),
+            )
+          ],
         ),
         Row(
           children: [ArchivedPackageCards()],
@@ -271,7 +308,7 @@ class ArchivedPackageCards extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
         width: MediaQuery.of(context).size.width,
-        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+        padding: const EdgeInsets.only(left: 24, top: 16, bottom: 16),
         child: const Column(children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -335,7 +372,7 @@ class ArchiveCardFront extends StatelessWidget {
             )
           ]),
       clipBehavior: Clip.antiAliasWithSaveLayer,
-      margin: const EdgeInsets.all(8.0),
+      margin: const EdgeInsets.symmetric(vertical: 8.0),
       child: Card(
         child: Image.asset('Assets/$image', fit: BoxFit.cover),
       ),
@@ -358,7 +395,7 @@ class ArchiveCardBack extends StatelessWidget {
     return Container(
       width: 175,
       height: 200,
-      margin: const EdgeInsets.all(8.0),
+      margin: const EdgeInsets.symmetric(vertical: 8.0),
       decoration: const BoxDecoration(
         color: Color(0xBF0D3011),
         borderRadius: BorderRadius.all(Radius.circular(40.0)),
