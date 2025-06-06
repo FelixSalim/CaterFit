@@ -64,7 +64,7 @@ class SubTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 24),
       child: Text(
         text,
@@ -83,7 +83,7 @@ class PackageManagementTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return Padding(
       padding: const EdgeInsets.only(top: 40, left: 24, bottom: 20),
       child: Text(
         "Package Management",
@@ -185,7 +185,7 @@ class PackageCardFront extends StatelessWidget {
       width: 175,
       height: 200,
       decoration: BoxDecoration(
-          borderRadius: const BorderRadius.all(Radius.circular(40.0)),
+          borderRadius: const BorderRadius.all(Radius.circular(20.0)),
           boxShadow: [
             BoxShadow(
               color: Colors.black.withOpacity(0.5),
@@ -221,7 +221,7 @@ class PackageCardBack extends StatelessWidget {
       margin: const EdgeInsets.symmetric(vertical: 8.0),
       decoration: const BoxDecoration(
         color: Color(0xBF0D3011),
-        borderRadius: BorderRadius.all(Radius.circular(40.0)),
+        borderRadius: BorderRadius.all(Radius.circular(20.0)),
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -362,7 +362,7 @@ class ArchiveCardFront extends StatelessWidget {
       width: 175,
       height: 200,
       decoration: BoxDecoration(
-          borderRadius: const BorderRadius.all(Radius.circular(40.0)),
+          borderRadius: const BorderRadius.all(Radius.circular(20.0)),
           boxShadow: [
             BoxShadow(
               color: Colors.black.withOpacity(0.5),
@@ -398,7 +398,7 @@ class ArchiveCardBack extends StatelessWidget {
       margin: const EdgeInsets.symmetric(vertical: 8.0),
       decoration: const BoxDecoration(
         color: Color(0xBF0D3011),
-        borderRadius: BorderRadius.all(Radius.circular(40.0)),
+        borderRadius: BorderRadius.all(Radius.circular(20.0)),
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,

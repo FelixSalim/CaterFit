@@ -31,6 +31,7 @@ dependencies:
   flutter:
     sdk: flutter
   google_fonts: ^6.1.0
+  image_field: ^0.0.12
 
 dev_dependencies:
   flutter_test:
