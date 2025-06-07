@@ -1,162 +1,633 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:image_picker/image_picker.dart';
 
-class AddPackage extends StatelessWidget {
+class AddPackage extends StatefulWidget {
   const AddPackage({super.key});
 
   @override
+  State<AddPackage> createState() => _AddPackageState();
+}
+
+class _AddPackageState extends State<AddPackage> {
+  TextEditingController packageNameController = TextEditingController();
+  TextEditingController packageDescriptionController = TextEditingController();
+  TextEditingController packageCategoryController = TextEditingController();
+  List<TextEditingController> mealPlanControllers = List.generate(
+    7,
+    (index) => TextEditingController(),
+  );
+
+  List<TextEditingController> customControllers = [];
+  List<List<TextEditingController>> customListControllers = [];
+
+  void addCustomField() {
+    setState(() {
+      customControllers.add(TextEditingController());
+      customListControllers.add([]);
+    });
+  }
+
+  void removeCustomField(int index) {
+    setState(() {
+      customControllers.removeAt(index);
+      customListControllers.removeAt(index);
+    });
+  }
+
+  void addCustomListField(int index) {
+    setState(() {
+      customListControllers[index].add(TextEditingController());
+    });
+  }
+
+  void removeCustomListField(int listIndex, int fieldIndex) {
+    setState(() {
+      customListControllers[listIndex].removeAt(fieldIndex);
+    });
+  }
+
+  @override
+  void dispose() {
+    packageNameController.dispose();
+    packageDescriptionController.dispose();
+    packageCategoryController.dispose();
+    for (var controller in mealPlanControllers) {
+      controller.dispose();
+    }
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return Scaffold(
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            AddPackageTitle(),
-            UploadImageField(),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class AddPackageTitle extends StatelessWidget {
-  const AddPackageTitle({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 40, left: 24, bottom: 20),
-      child: Text(
-        'Add Package',
-        style: GoogleFonts.montserrat(
-          fontSize: 30,
-          fontWeight: FontWeight.w600,
-          color: Colors.black,
-        ),
-      ),
-    );
-  }
-}
-
-class UploadImageField extends StatefulWidget {
-  const UploadImageField({super.key});
-
-  @override
-  State<UploadImageField> createState() => _UploadImageFieldState();
-}
-
-class _UploadImageFieldState extends State<UploadImageField> {
-  XFile? imageFile;
-  final ImagePicker picker = ImagePicker();
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 24),
-      child: Column(
-        children: [
-          Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(20),
-            ),
-            clipBehavior: Clip.antiAlias,
-            child: Image.asset(
-              "Assets/placeholder.png",
-              fit: BoxFit.fill,
-              width: 175,
-              height: 200,
-              color: Colors.grey[400],
-            ),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              showModalBottomSheet(
-                context: context,
-                builder: (builder) => const BottomUpload(),
-              );
-            },
-            style: ElevatedButton.styleFrom(
-              fixedSize: const Size(175, 20),
-              backgroundColor: const Color(0xFF0D3011),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10),
+            Padding(
+              padding: const EdgeInsets.only(top: 40, left: 24, bottom: 20),
+              child: Text(
+                'Add Package',
+                style: GoogleFonts.montserrat(
+                  fontSize: 30,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.black,
+                ),
               ),
             ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                const Icon(
-                  Icons.upload_file,
-                  color: Colors.white,
-                  size: 20,
-                ),
-                Text(
-                  "Upload Image",
-                  style:
-                      GoogleFonts.nunitoSans(color: Colors.white, fontSize: 14),
-                ),
-              ],
-            ),
-          )
-        ],
-      ),
-    );
-  }
-}
-
-class BottomUpload extends StatefulWidget {
-  const BottomUpload({super.key});
-
-  @override
-  State<BottomUpload> createState() => _BottomUploadState();
-}
-
-class _BottomUploadState extends State<BottomUpload> {
-  final GlobalKey<_UploadImageFieldState> globalKey = GlobalKey();
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 100,
-      width: MediaQuery.of(context).size.width,
-      margin: const EdgeInsets.all(20),
-      child: Column(
-        children: [
-          Text(
-            "Choose Package Image",
-            style: GoogleFonts.montserrat(
-              fontSize: 20,
-              fontWeight: FontWeight.w600,
-              color: Colors.black,
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(top: 20),
-            child: Row(
-              children: [
-                TextButton.icon(
-                  onPressed: () async {
-                    // Implement camera functionality here
-                    final pickedFile = await globalKey.currentState?.picker
-                        .pickImage(source: ImageSource.gallery);
-                    globalKey.currentState?.setState(() {
-                      globalKey.currentState?.imageFile = pickedFile;
-                    });
-                  },
-                  icon: const Icon(Icons.image),
-                  label: Text(
-                    "Gallery",
-                    style: GoogleFonts.nunitoSans(color: Colors.black),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24),
+              child: ElevatedButton(
+                onPressed: () {},
+                style: ElevatedButton.styleFrom(
+                  fixedSize: const Size(175, 20),
+                  backgroundColor: const Color(0xFF0D3011),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
                   ),
                 ),
-              ],
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    const Icon(
+                      Icons.upload_file,
+                      color: Colors.white,
+                      size: 20,
+                    ),
+                    Text(
+                      "Upload Image",
+                      style: GoogleFonts.nunitoSans(
+                          color: Colors.white, fontSize: 14),
+                    ),
+                  ],
+                ),
+              ),
             ),
-          ),
-        ],
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 15),
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      Text(
+                        "Package Name",
+                        style: GoogleFonts.montserrat(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ],
+                  ),
+                  Container(
+                    margin: const EdgeInsets.only(top: 5),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.25),
+                          blurRadius: 4,
+                          offset:
+                              const Offset(2, 4), // changes position of shadow
+                        ),
+                      ],
+                    ),
+                    clipBehavior: Clip.antiAlias,
+                    height: 45,
+                    child: TextFormField(
+                      controller: packageNameController,
+                      decoration: InputDecoration(
+                        hintText: "Enter Package Name",
+                        hintStyle: GoogleFonts.nunitoSans(
+                          fontSize: 14,
+                          color: Colors.grey,
+                        ),
+                        border: InputBorder.none,
+                        fillColor: const Color(0xFFFEFFDE),
+                        filled: true,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 24, right: 24, bottom: 15),
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      Text(
+                        "Package Description",
+                        style: GoogleFonts.montserrat(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ],
+                  ),
+                  Container(
+                    margin: const EdgeInsets.only(top: 5),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.25),
+                          blurRadius: 4,
+                          offset:
+                              const Offset(2, 4), // changes position of shadow
+                        ),
+                      ],
+                    ),
+                    clipBehavior: Clip.antiAlias,
+                    child: TextFormField(
+                      maxLines: 5,
+                      controller: packageDescriptionController,
+                      decoration: InputDecoration(
+                        hintText: "Enter Package Description",
+                        hintStyle: GoogleFonts.nunitoSans(
+                          fontSize: 14,
+                          color: Colors.grey,
+                        ),
+                        border: InputBorder.none,
+                        filled: true,
+                        fillColor: const Color(0xFFFEFFDE),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 24, right: 24, bottom: 15),
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      Text(
+                        "Package Category",
+                        style: GoogleFonts.montserrat(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ],
+                  ),
+                  Container(
+                    margin: const EdgeInsets.only(top: 5),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.25),
+                          blurRadius: 4,
+                          offset:
+                              const Offset(2, 4), // changes position of shadow
+                        ),
+                      ],
+                    ),
+                    clipBehavior: Clip.antiAlias,
+                    height: 45,
+                    child: TextFormField(
+                      controller: packageCategoryController,
+                      decoration: InputDecoration(
+                        hintText: "Enter Package Category",
+                        hintStyle: GoogleFonts.nunitoSans(
+                          fontSize: 14,
+                          color: Colors.grey,
+                        ),
+                        border: InputBorder.none,
+                        fillColor: const Color(0xFFFEFFDE),
+                        filled: true,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 24, right: 24, bottom: 10),
+              child: Column(children: [
+                Row(
+                  children: [
+                    Text(
+                      "Package Category",
+                      style: GoogleFonts.montserrat(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.black,
+                      ),
+                    ),
+                  ],
+                ),
+                Container(
+                  margin: const EdgeInsets.only(top: 5),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.25),
+                        blurRadius: 5,
+                        offset:
+                            const Offset(0, 0), // changes position of shadow
+                      ),
+                    ],
+                  ),
+                  clipBehavior: Clip.antiAlias,
+                  child: Column(
+                    children: List.generate(
+                      7,
+                      (index) {
+                        return Container(
+                          decoration: BoxDecoration(
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.25),
+                                blurRadius: 5,
+                                offset: const Offset(
+                                    0, 0), // changes position of shadow
+                              ),
+                            ],
+                          ),
+                          child: TextFormField(
+                            controller: mealPlanControllers[index],
+                            maxLines: 3,
+                            decoration: InputDecoration(
+                              hintText: "Enter Meal Plan ${index + 1}",
+                              hintStyle: GoogleFonts.nunitoSans(
+                                fontSize: 14,
+                                color: Colors.grey,
+                              ),
+                              border: InputBorder.none,
+                              fillColor: const Color(0xFFFEFFDE),
+                              filled: true,
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                )
+              ]),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 24, right: 24),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "Custom",
+                    style: GoogleFonts.montserrat(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.black),
+                  ),
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      minimumSize: const Size(24, 24),
+                      maximumSize: const Size(24, 24),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                      backgroundColor: const Color(0xFF0D3011),
+                      padding: EdgeInsets.zero,
+                    ),
+                    onPressed: () {
+                      addCustomField();
+                    },
+                    child: const Icon(
+                      Icons.add,
+                      color: Colors.white,
+                      size: 16,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 24, right: 24, bottom: 10),
+              child: Column(
+                children: customControllers.map((controller) {
+                  int index = customControllers.indexOf(controller);
+                  return Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 10, top: 10),
+                        child: Row(
+                          children: [
+                            Text("Customization ${index + 1}",
+                                style: GoogleFonts.montserrat(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.black))
+                          ],
+                        ),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Expanded(
+                            child: Container(
+                              margin: const EdgeInsets.only(bottom: 5),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black.withOpacity(0.25),
+                                    blurRadius: 5,
+                                    offset: const Offset(
+                                        0, 0), // changes position of shadow
+                                  ),
+                                ],
+                              ),
+                              clipBehavior: Clip.antiAlias,
+                              child: TextFormField(
+                                controller: controller,
+                                decoration: InputDecoration(
+                                  hintText:
+                                      "Enter Customization Title ${index + 1}",
+                                  hintStyle: GoogleFonts.nunitoSans(
+                                    fontSize: 14,
+                                    color: Colors.grey,
+                                  ),
+                                  border: InputBorder.none,
+                                  fillColor: const Color(0xFFFEFFDE),
+                                  filled: true,
+                                ),
+                              ),
+                            ),
+                          ),
+                          IconButton(
+                            icon: const Icon(Icons.remove_circle_outline),
+                            onPressed: () => removeCustomField(index),
+                          ),
+                        ],
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 24),
+                        child: Column(
+                          children: [
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      "Customization Value ${index + 1}",
+                                      style: GoogleFonts.montserrat(
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.w600,
+                                          color: Colors.black),
+                                    ),
+                                    IconButton(
+                                      icon:
+                                          const Icon(Icons.add_circle_outline),
+                                      onPressed: () =>
+                                          addCustomListField(index),
+                                    ),
+                                  ],
+                                )
+                              ] +
+                              customListControllers[index].map(
+                                (listController) {
+                                  int listIndex = customListControllers[index]
+                                      .indexOf(listController);
+                                  return Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Expanded(
+                                        child: Container(
+                                          margin:
+                                              const EdgeInsets.only(bottom: 5),
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                            boxShadow: [
+                                              BoxShadow(
+                                                color: Colors.black
+                                                    .withOpacity(0.25),
+                                                blurRadius: 5,
+                                                offset: const Offset(0,
+                                                    0), // changes position of shadow
+                                              ),
+                                            ],
+                                          ),
+                                          clipBehavior: Clip.antiAlias,
+                                          child: TextFormField(
+                                            controller: listController,
+                                            decoration: InputDecoration(
+                                              hintText:
+                                                  "Enter Customization Value ${listIndex + 1}",
+                                              hintStyle: GoogleFonts.nunitoSans(
+                                                fontSize: 14,
+                                                color: Colors.grey,
+                                              ),
+                                              border: InputBorder.none,
+                                              fillColor:
+                                                  const Color(0xFFFEFFDE),
+                                              filled: true,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      IconButton(
+                                        icon: const Icon(
+                                            Icons.remove_circle_outline),
+                                        onPressed: () => removeCustomListField(
+                                            index, listIndex),
+                                      ),
+                                    ],
+                                  );
+                                },
+                              ).toList(),
+                        ),
+                      ),
+                    ],
+                  );
+                }).toList(),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 24, right: 24, bottom: 10),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    flex: 1,
+                    child: Container(
+                      margin: const EdgeInsets.only(right: 10),
+                      child: Column(
+                        children: [
+                          Row(
+                            children: [
+                              Text(
+                                "Price",
+                                style: GoogleFonts.montserrat(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.black,
+                                ),
+                              ),
+                            ],
+                          ),
+                          Container(
+                            margin: const EdgeInsets.only(top: 5),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(0.25),
+                                  blurRadius: 4,
+                                  offset: const Offset(
+                                      2, 4), // changes position of shadow
+                                ),
+                              ],
+                            ),
+                            clipBehavior: Clip.antiAlias,
+                            height: 45,
+                            child: TextFormField(
+                              decoration: InputDecoration(
+                                hintText: "Enter Price",
+                                hintStyle: GoogleFonts.nunitoSans(
+                                  fontSize: 14,
+                                  color: Colors.grey,
+                                ),
+                                border: InputBorder.none,
+                                fillColor: const Color(0xFFFEFFDE),
+                                filled: true,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    flex: 1,
+                    child: Container(
+                      margin: const EdgeInsets.only(left: 10),
+                      child: Column(
+                        children: [
+                          Row(
+                            children: [
+                              Text(
+                                "Stock",
+                                style: GoogleFonts.montserrat(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.black,
+                                ),
+                              ),
+                            ],
+                          ),
+                          Container(
+                            margin: const EdgeInsets.only(top: 5),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(0.25),
+                                  blurRadius: 4,
+                                  offset: const Offset(
+                                      2, 4), // changes position of shadow
+                                ),
+                              ],
+                            ),
+                            clipBehavior: Clip.antiAlias,
+                            height: 45,
+                            child: TextFormField(
+                              decoration: InputDecoration(
+                                hintText: "Enter Discount",
+                                hintStyle: GoogleFonts.nunitoSans(
+                                  fontSize: 14,
+                                  color: Colors.grey,
+                                ),
+                                border: InputBorder.none,
+                                fillColor: const Color(0xFFFEFFDE),
+                                filled: true,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ElevatedButton(
+                    onPressed: () {
+                      // Handle form submission
+                    },
+                    style: ElevatedButton.styleFrom(
+                      fixedSize: const Size(202, 50),
+                      backgroundColor: const Color(0xFF0D3011),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                    child: Text(
+                      "Add Package",
+                      style: GoogleFonts.montserrat(
+                          color: Colors.white,
+                          fontSize: 15,
+                          fontWeight: FontWeight.w600),
+                    ),
+                  )
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -25,17 +25,19 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    bool allFieldsFilled =
-        _usernameController.text.isNotEmpty && _passwordController.text.isNotEmpty;
+    bool allFieldsFilled = _usernameController.text.isNotEmpty &&
+        _passwordController.text.isNotEmpty;
 
     OutlineInputBorder customBorder = OutlineInputBorder(
-      borderSide:
-          const BorderSide(color: Color(0xFF0D3011), width: 1.5), // Slightly thicker stroke for text fields
+      borderSide: const BorderSide(
+          color: Color(0xFF0D3011),
+          width: 1.5), // Slightly thicker stroke for text fields
       borderRadius: BorderRadius.circular(10),
     );
 
     return Scaffold(
-      backgroundColor: const Color(0xFFFEFFDE), // Changed background color to FEFFDE
+      backgroundColor:
+          const Color(0xFFFEFFDE), // Changed background color to FEFFDE
       body: Stack(
         children: [
           // Logo di atas
@@ -96,7 +98,8 @@ class _LoginPageState extends State<LoginPage> {
                           enabledBorder: customBorder,
                           focusedBorder: customBorder,
                           isDense: true,
-                          contentPadding: const EdgeInsets.symmetric(vertical: 14),
+                          contentPadding:
+                              const EdgeInsets.symmetric(vertical: 14),
                         ),
                         style: GoogleFonts.nunitoSans(),
                       ),
@@ -123,7 +126,8 @@ class _LoginPageState extends State<LoginPage> {
                           enabledBorder: customBorder,
                           focusedBorder: customBorder,
                           isDense: true,
-                          contentPadding: const EdgeInsets.symmetric(vertical: 14),
+                          contentPadding:
+                              const EdgeInsets.symmetric(vertical: 14),
                           suffixIcon: IconButton(
                             icon: Icon(
                               _obscurePassword
@@ -143,12 +147,12 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     ),
 
-                    
                     SizedBox(
-                      height: 30.0, 
+                      height: 30.0,
                       child: _errorMessage != null
                           ? Padding(
-                              padding: const EdgeInsets.only(top: 8.0, left: 9.0),
+                              padding:
+                                  const EdgeInsets.only(top: 8.0, left: 9.0),
                               child: Text(
                                 _errorMessage!,
                                 style: GoogleFonts.nunitoSans(
@@ -180,8 +184,7 @@ class _LoginPageState extends State<LoginPage> {
                                 ),
                                 side: const BorderSide(
                                     color: Color(0xFF0D3011), width: 1),
-                                activeColor:
-                                    const Color(0xFF0D3011),
+                                activeColor: const Color(0xFF0D3011),
                                 checkColor: const Color(0xFFFEFFDE),
                               ),
                               Text(
@@ -217,18 +220,20 @@ class _LoginPageState extends State<LoginPage> {
                       child: ElevatedButton(
                         onPressed: allFieldsFilled
                             ? () {
-                                if (_usernameController.text == "cimcarmen" &&
-                                    _passwordController.text == "h2hggoty") {
+                                if (_usernameController.text == "Admin" &&
+                                    _passwordController.text == "Admin123") {
                                   _errorMessage = null;
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) => const PackageManagement(),
+                                      builder: (context) =>
+                                          const PackageManagement(),
                                     ),
                                   );
                                 } else {
                                   setState(() {
-                                    _errorMessage = "Invalid username or password";
+                                    _errorMessage =
+                                        "Invalid username or password";
                                   });
                                 }
                               }
