@@ -1,3 +1,4 @@
+// based of add_package.dart please create edit_package.dart
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -7,40 +8,67 @@ import 'package:caterfit/admin/package_management.dart';
 import 'package:caterfit/models/package_model.dart';
 import 'package:image_picker/image_picker.dart';
 
-class AddPackage extends StatefulWidget {
-  const AddPackage({super.key});
+class EditPackage extends StatefulWidget {
+  final Package packageData;
+
+  const EditPackage({Key? key, required this.packageData}) : super(key: key);
 
   @override
-  State<AddPackage> createState() => _AddPackageState();
+  _EditPackageState createState() => _EditPackageState();
 }
 
-class _AddPackageState extends State<AddPackage> {
-  TextEditingController packageNameController = TextEditingController();
-  TextEditingController packageDescriptionController = TextEditingController();
-  TextEditingController packageCategoryController = TextEditingController();
-  List<TextEditingController> mealPlanControllers = List.generate(
-    7,
-    (index) => TextEditingController(),
-  );
-
-  List<TextEditingController> customControllers = [];
-  List<List<TextEditingController>> customListControllers = [];
-  TextEditingController priceController = TextEditingController();
-  TextEditingController stockController = TextEditingController();
+class _EditPackageState extends State<EditPackage> {
+  late TextEditingController packageNameController;
+  late TextEditingController packageDescriptionController;
+  late TextEditingController packageCategoryController;
+  late List<TextEditingController> mealPlanControllers;
+  late List<TextEditingController> customControllers;
+  late List<List<TextEditingController>> customListControllers;
+  late TextEditingController priceController;
+  late TextEditingController stockController;
 
   File? image;
   final ImagePicker _picker = ImagePicker();
+
+  @override
+  void initState() {
+    super.initState();
+    packageNameController =
+        TextEditingController(text: widget.packageData.name);
+    packageDescriptionController =
+        TextEditingController(text: widget.packageData.description);
+    packageCategoryController =
+        TextEditingController(text: widget.packageData.category);
+    mealPlanControllers = List.generate(
+      7,
+      (index) =>
+          TextEditingController(text: widget.packageData.mealPlans[index]),
+    );
+    customControllers = List.generate(
+      widget.packageData.customizationTitles.length,
+      (index) => TextEditingController(
+          text: widget.packageData.customizationTitles[index]),
+    );
+    customListControllers = List.generate(
+      widget.packageData.customizationOptions.length,
+      (index) => widget.packageData.customizationOptions[index]
+          .map((option) => TextEditingController(text: option))
+          .toList(),
+    );
+    priceController =
+        TextEditingController(text: widget.packageData.price.toString());
+    stockController =
+        TextEditingController(text: widget.packageData.stock.toString());
+  }
 
   Future<void> pickImage() async {
     final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
     if (pickedFile != null) {
       setState(() {
-        image = File(pickedFile.path); // Debugging line to check the image path
-        print(
-            "Picked image path: ${image!.absolute.path}"); // Print the image path
+        image = File(pickedFile.path);
+        print("Picked image path: ${image!.absolute.path}");
       });
     } else {
-      // Handle the case when no image is selected
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
@@ -109,13 +137,12 @@ class _AddPackageState extends State<AddPackage> {
         customListControllers.every(
             (list) => list.every((controller) => controller.text.isNotEmpty)) &&
         priceController.text.isNotEmpty &&
-        stockController.text.isNotEmpty &&
-        image != null;
+        stockController.text.isNotEmpty;
 
     if (fieldsFilled) {
-      // Create a new package object
-      Package newPackage = Package(
-        id: PackageManagement.lastId + 1,
+      // Update the existing package object
+      Package updatedPackage = Package(
+        id: widget.packageData.id,
         name: packageNameController.text,
         description: packageDescriptionController.text,
         category: packageCategoryController.text,
@@ -126,15 +153,20 @@ class _AddPackageState extends State<AddPackage> {
         customizationOptions: customListControllers
             .map((list) => list.map((controller) => controller.text).toList())
             .toList(),
-        imageUrl: image!.absolute, // Set the image URL
+        imageUrl: image ??
+            widget.packageData.imageUrl, // Use existing image if not updated
         price: double.tryParse(priceController.text) ?? 0.0,
         stock: int.tryParse(stockController.text) ?? 0,
       );
 
-      PackageManagement.onGoingPackages.add(newPackage);
-      PackageManagement.lastId = newPackage.id; // Update the last ID
+      // Update the package in the management list
+      int index = PackageManagement.onGoingPackages
+          .indexWhere((pkg) => pkg.id == widget.packageData.id);
+      if (index != -1) {
+        PackageManagement.onGoingPackages[index] = updatedPackage;
+      }
+
       // Close the form and navigate back to the package management screen
-      // Refresh management screen
       Navigator.pushReplacement(
           context,
           MaterialPageRoute(
@@ -144,32 +176,13 @@ class _AddPackageState extends State<AddPackage> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
-            'Package added successfully!',
+            'Package updated successfully!',
             style: GoogleFonts.nunitoSans(fontSize: 14),
           ),
           backgroundColor: Colors.green,
         ),
       );
-      // Show success message
-      packageNameController.clear();
-      packageDescriptionController.clear();
-      packageCategoryController.clear();
-      for (var controller in mealPlanControllers) {
-        controller.clear();
-      }
-      for (var controller in customControllers) {
-        controller.clear();
-      }
-      for (var list in customListControllers) {
-        for (var controller in list) {
-          controller.clear();
-        }
-      }
-      priceController.clear();
-      stockController.clear();
-      image = null;
     } else {
-      // Show validation error message
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
@@ -194,7 +207,7 @@ class _AddPackageState extends State<AddPackage> {
             Padding(
               padding: const EdgeInsets.only(top: 40, left: 24, bottom: 20),
               child: Text(
-                'Add Package',
+                'Edit Package',
                 style: GoogleFonts.montserrat(
                   fontSize: 30,
                   fontWeight: FontWeight.w600,
@@ -223,8 +236,8 @@ class _AddPackageState extends State<AddPackage> {
                         height: 200,
                         width: 175,
                       )
-                    : Image.asset(
-                        'Assets/placeholder.png',
+                    : Image.file(
+                        widget.packageData.imageUrl.absolute,
                         height: 200,
                         width: 175,
                         fit: BoxFit.cover,
@@ -261,6 +274,7 @@ class _AddPackageState extends State<AddPackage> {
                 ),
               ),
             ),
+            // ... (rest of the form fields similar to AddPackage)
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 15),
               child: Column(
@@ -309,6 +323,7 @@ class _AddPackageState extends State<AddPackage> {
                 ],
               ),
             ),
+
             Padding(
               padding: const EdgeInsets.only(left: 24, right: 24, bottom: 15),
               child: Column(
@@ -774,7 +789,7 @@ class _AddPackageState extends State<AddPackage> {
                       ),
                     ),
                     child: Text(
-                      "Add Package",
+                      "Edit Package",
                       style: GoogleFonts.montserrat(
                           color: Colors.white,
                           fontSize: 15,

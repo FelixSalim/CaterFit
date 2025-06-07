@@ -1,10 +1,19 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'package:caterfit/admin/add_package.dart';
+import 'package:caterfit/admin/edit_package.dart';
+import 'package:caterfit/models/package_model.dart';
 
 class PackageManagement extends StatelessWidget {
   const PackageManagement({super.key});
+  static int lastId = 2;
+
+  static List<Package> onGoingPackages = [];
+
+  static List<Package> archivedPackages = [];
 
   @override
   Widget build(BuildContext context) {
@@ -12,15 +21,19 @@ class PackageManagement extends StatelessWidget {
       backgroundColor: Colors.white,
       body: Stack(
         children: [
-          const SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                PackageManagementTitle(),
-                OnGoingPackage(),
-                ArchivedPackage(),
-              ],
+          Container(
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height,
+            child: const SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  PackageManagementTitle(),
+                  OnGoingPackage(),
+                  ArchivedPackage(),
+                ],
+              ),
             ),
           ),
           Positioned(
@@ -35,7 +48,7 @@ class PackageManagement extends StatelessWidget {
               ),
               child: IconButton(
                 onPressed: () {
-                  Navigator.push(
+                  Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
                       builder: (context) => const AddPackage(),
@@ -120,35 +133,45 @@ class OnGoingPackageCards extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var colChild = [];
+    var curRow = [];
+    for (var i = 0; i < PackageManagement.onGoingPackages.length; i++) {
+      if (i % 2 == 0) {
+        curRow.add(PackageCard(
+          title: PackageManagement.onGoingPackages[i].name,
+          image: PackageManagement.onGoingPackages[i].imageUrl,
+        ));
+      } else {
+        curRow.add(PackageCard(
+          title: PackageManagement.onGoingPackages[i].name,
+          image: PackageManagement.onGoingPackages[i].imageUrl,
+        ));
+        colChild.add(Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: List<Widget>.from(curRow),
+        ));
+        curRow = [];
+      }
+    }
+    if (curRow.isNotEmpty) {
+      colChild.add(Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: List<Widget>.from(curRow),
+      ));
+    }
     return Container(
-        width: MediaQuery.of(context).size.width,
-        padding: const EdgeInsets.only(left: 24, top: 16, bottom: 16),
-        child: const Column(children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              PackageCard(
-                  title: "School Meal Package", image: "PackageImageTemp.png"),
-              PackageCard(
-                  title: "School Meal Package", image: "PackageImageTemp.png"),
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              PackageCard(
-                  title: "School Meal Package", image: "PackageImageTemp.png"),
-              PackageCard(
-                  title: "School Meal Package", image: "PackageImageTemp.png"),
-            ],
-          ),
-        ]));
+      width: MediaQuery.of(context).size.width,
+      padding: const EdgeInsets.only(left: 24, top: 16, bottom: 16),
+      child: Column(
+        children: List<Widget>.from(colChild),
+      ),
+    );
   }
 }
 
 class PackageCard extends StatelessWidget {
   final String title;
-  final String image;
+  final File image;
 
   const PackageCard({
     super.key,
@@ -171,7 +194,7 @@ class PackageCard extends StatelessWidget {
 
 class PackageCardFront extends StatelessWidget {
   final String title;
-  final String image;
+  final File image;
 
   const PackageCardFront({
     super.key,
@@ -197,7 +220,7 @@ class PackageCardFront extends StatelessWidget {
       clipBehavior: Clip.antiAliasWithSaveLayer,
       margin: const EdgeInsets.symmetric(vertical: 8.0),
       child: Card(
-        child: Image.asset('Assets/$image', fit: BoxFit.cover),
+        child: Image.file(image, fit: BoxFit.cover),
       ),
     );
   }
@@ -205,7 +228,7 @@ class PackageCardFront extends StatelessWidget {
 
 class PackageCardBack extends StatelessWidget {
   final String title;
-  final String image;
+  final File image;
 
   const PackageCardBack({
     super.key,
@@ -250,24 +273,81 @@ class PackageCardBack extends StatelessWidget {
             child: Row(
               children: [
                 Container(
-                  width: 30,
-                  height: 30,
+                  width: 40,
+                  height: 40,
                   margin: const EdgeInsets.only(right: 10),
                   decoration: BoxDecoration(
                     color: const Color(0xFF0D3011),
-                    borderRadius: BorderRadius.circular(12.5),
+                    borderRadius: BorderRadius.circular(20),
                   ),
-                  child: const Icon(Icons.edit, color: Colors.white, size: 24),
+                  child: ElevatedButton(
+                    onPressed: () {
+                      // Handle edit action
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => EditPackage(
+                            packageData: PackageManagement.onGoingPackages
+                                .firstWhere((pkg) => pkg.name == title),
+                          ),
+                        ),
+                      );
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFF0D3011),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      padding: EdgeInsets.zero,
+                    ),
+                    child: const Icon(
+                      Icons.edit,
+                      color: Colors.white,
+                      size: 26,
+                    ),
+                  ),
                 ),
                 Container(
-                  width: 30,
-                  height: 30,
+                  width: 40,
+                  height: 40,
                   decoration: BoxDecoration(
                     color: const Color(0xFF0D3011),
-                    borderRadius: BorderRadius.circular(12.5),
+                    borderRadius: BorderRadius.circular(20),
                   ),
-                  child:
-                      const Icon(Icons.archive, color: Colors.white, size: 24),
+                  child: ElevatedButton(
+                    onPressed: () {
+                      // Handle archive action
+                      PackageManagement.archivedPackages.add(PackageManagement
+                          .onGoingPackages
+                          .firstWhere((pkg) => pkg.name == title));
+                      PackageManagement.onGoingPackages
+                          .removeWhere((pkg) => pkg.name == title);
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('$title has been archived.'),
+                          duration: const Duration(seconds: 2),
+                        ),
+                      );
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const PackageManagement(),
+                        ),
+                      );
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFF0D3011),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      padding: EdgeInsets.zero,
+                    ),
+                    child: const Icon(
+                      Icons.archive,
+                      color: Colors.white,
+                      size: 30,
+                    ),
+                  ),
                 ),
               ],
             ),
@@ -306,26 +386,45 @@ class ArchivedPackageCards extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var colChild = [];
+    var curRow = [];
+    for (var i = 0; i < PackageManagement.archivedPackages.length; i++) {
+      if (i % 2 == 0) {
+        curRow.add(ArchiveCard(
+          title: PackageManagement.archivedPackages[i].name,
+          image: PackageManagement.archivedPackages[i].imageUrl,
+        ));
+      } else {
+        curRow.add(ArchiveCard(
+          title: PackageManagement.archivedPackages[i].name,
+          image: PackageManagement.archivedPackages[i].imageUrl,
+        ));
+        colChild.add(Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: List<Widget>.from(curRow),
+        ));
+        curRow = [];
+      }
+    }
+    if (curRow.isNotEmpty) {
+      colChild.add(Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: List<Widget>.from(curRow),
+      ));
+    }
     return Container(
-        width: MediaQuery.of(context).size.width,
-        padding: const EdgeInsets.only(left: 24, top: 16, bottom: 16),
-        child: const Column(children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              ArchiveCard(
-                  title: "School Meal Package", image: "PackageImageTemp.png"),
-              ArchiveCard(
-                  title: "School Meal Package", image: "PackageImageTemp.png"),
-            ],
-          )
-        ]));
+      width: MediaQuery.of(context).size.width,
+      padding: const EdgeInsets.only(left: 24, top: 16, bottom: 16),
+      child: Column(
+        children: List<Widget>.from(colChild),
+      ),
+    );
   }
 }
 
 class ArchiveCard extends StatelessWidget {
   final String title;
-  final String image;
+  final File image;
 
   const ArchiveCard({
     super.key,
@@ -348,7 +447,7 @@ class ArchiveCard extends StatelessWidget {
 
 class ArchiveCardFront extends StatelessWidget {
   final String title;
-  final String image;
+  final File image;
 
   const ArchiveCardFront({
     super.key,
@@ -374,7 +473,7 @@ class ArchiveCardFront extends StatelessWidget {
       clipBehavior: Clip.antiAliasWithSaveLayer,
       margin: const EdgeInsets.symmetric(vertical: 8.0),
       child: Card(
-        child: Image.asset('Assets/$image', fit: BoxFit.cover),
+        child: Image.file(image, fit: BoxFit.cover),
       ),
     );
   }
@@ -382,7 +481,7 @@ class ArchiveCardFront extends StatelessWidget {
 
 class ArchiveCardBack extends StatelessWidget {
   final String title;
-  final String image;
+  final File image;
 
   const ArchiveCardBack({
     super.key,
@@ -427,24 +526,86 @@ class ArchiveCardBack extends StatelessWidget {
             child: Row(
               children: [
                 Container(
-                  width: 30,
-                  height: 30,
+                  width: 40,
+                  height: 40,
                   margin: const EdgeInsets.only(right: 10),
                   decoration: BoxDecoration(
                     color: const Color(0xFF0D3011),
-                    borderRadius: BorderRadius.circular(12.5),
+                    borderRadius: BorderRadius.circular(20),
                   ),
-                  child: const Icon(Icons.undo, color: Colors.white, size: 24),
+                  child: ElevatedButton(
+                    onPressed: () {
+                      // Handle undo action
+                      PackageManagement.onGoingPackages.add(PackageManagement
+                          .archivedPackages
+                          .firstWhere((pkg) => pkg.name == title));
+                      PackageManagement.archivedPackages
+                          .removeWhere((pkg) => pkg.name == title);
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('$title has been restored.'),
+                          duration: const Duration(seconds: 2),
+                        ),
+                      );
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const PackageManagement(),
+                        ),
+                      );
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFF0D3011),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      padding: EdgeInsets.zero,
+                    ),
+                    child: const Icon(
+                      Icons.undo,
+                      color: Colors.white,
+                      size: 30,
+                    ),
+                  ),
                 ),
                 Container(
-                  width: 30,
-                  height: 30,
+                  width: 40,
+                  height: 40,
                   decoration: BoxDecoration(
                     color: const Color(0xFF0D3011),
-                    borderRadius: BorderRadius.circular(12.5),
+                    borderRadius: BorderRadius.circular(20),
                   ),
-                  child:
-                      const Icon(Icons.delete, color: Colors.white, size: 24),
+                  child: ElevatedButton(
+                    onPressed: () {
+                      // Handle delete action
+                      PackageManagement.archivedPackages
+                          .removeWhere((pkg) => pkg.name == title);
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('$title has been deleted.'),
+                          duration: const Duration(seconds: 2),
+                        ),
+                      );
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const PackageManagement(),
+                        ),
+                      );
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFF0D3011),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      padding: EdgeInsets.zero,
+                    ),
+                    child: const Icon(
+                      Icons.delete,
+                      color: Colors.white,
+                      size: 30,
+                    ),
+                  ),
                 ),
               ],
             ),
