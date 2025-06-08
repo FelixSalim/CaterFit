@@ -266,7 +266,7 @@ class _LoginPageState extends State<LoginPage> {
                         },
                         child: Text.rich(
                           TextSpan(
-                            text: "Don’t have an account? ",
+                            text: "Don't have an account? ",
                             style: GoogleFonts.nunitoSans(
                                 color: const Color(0xFF0D3011)),
                             children: [
