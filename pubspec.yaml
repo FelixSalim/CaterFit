@@ -30,6 +30,11 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  google_fonts: ^6.1.0
+  http: ^1.4.0
+  image_field: ^0.0.12
+  image_picker: ^1.1.2
+  mysql1: ^0.20.0
 
 dev_dependencies:
   flutter_test:
@@ -47,6 +52,11 @@ dev_dependencies:
 
 # The following section is specific to Flutter packages.
 flutter:
+  assets:
+    # The following line ensures that the Material Icons font is
+    # included with your application, so that you can use the icons in
+    # the material Icons class.
+    - Assets/
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
