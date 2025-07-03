@@ -1,3 +1,4 @@
+import 'package:caterfit/user/packageMenu.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:caterfit/admin/package_management.dart';
@@ -227,6 +228,16 @@ class _LoginPageState extends State<LoginPage> {
                                   MaterialPageRoute(
                                     builder: (context) =>
                                         const PackageManagement(),
+                                  ),
+                                );
+                              } else if (_usernameController.text == "User" &&
+                                  _passwordController.text == "User123") {
+                                _errorMessage = null;
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        const CaterfitPackageScreen(),
                                   ),
                                 );
                               } else {

@@ -1,30 +1,31 @@
 import 'package:flutter/material.dart';
+import 'package:caterfit/user/packageDetail.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart' as intl;
 
 class CaterfitPackage {
- final String name;
- final int price;
- final String imageUrl; 
- final List<String> categories;
+  final String name;
+  final int price;
+  final String imageUrl;
+  final List<String> categories;
 
-CaterfitPackage({
- required this.name,
- required this.price,
- required this.imageUrl,
- required this.categories,
- });
+  CaterfitPackage({
+    required this.name,
+    required this.price,
+    required this.imageUrl,
+    required this.categories,
+  });
 }
 
 class CaterfitPackageScreen extends StatefulWidget {
- const CaterfitPackageScreen({super.key});
+  const CaterfitPackageScreen({super.key});
 
- @override
- State<CaterfitPackageScreen> createState() => _CaterfitPackageScreenState();
+  @override
+  State<CaterfitPackageScreen> createState() => _CaterfitPackageScreenState();
 }
 
 class _CaterfitPackageScreenState extends State<CaterfitPackageScreen> {
- // --- STATE MANAGEMENT ---
+  // --- STATE MANAGEMENT ---
   final List<String> _categories = [
     'Hot Deals',
     'Bulking',
@@ -68,14 +69,15 @@ class _CaterfitPackageScreenState extends State<CaterfitPackageScreen> {
     CaterfitPackage(
       name: 'Gains on the Go',
       price: 500000,
-      imageUrl: 'Assets/musclemeal.jpg', 
+      imageUrl: 'Assets/musclemeal.jpg',
       categories: ['Bulking', 'Hot Deals'],
     ),
   ];
 
   List<CaterfitPackage> _filteredPackages = [];
 
-  final formatCurrency = intl.NumberFormat.currency(locale: 'id_ID', symbol: 'Rp ', decimalDigits: 0);
+  final formatCurrency = intl.NumberFormat.currency(
+      locale: 'id_ID', symbol: 'Rp ', decimalDigits: 0);
 
   @override
   void initState() {
@@ -85,10 +87,10 @@ class _CaterfitPackageScreenState extends State<CaterfitPackageScreen> {
 
   // --- LOGIC ---
   void _filterPackages() {
-  setState(() {
-    _filteredPackages = _allPackages
-      .where((package) => package.categories.contains(_selectedCategory))
-      .toList();
+    setState(() {
+      _filteredPackages = _allPackages
+          .where((package) => package.categories.contains(_selectedCategory))
+          .toList();
     });
   }
 
@@ -125,13 +127,11 @@ class _CaterfitPackageScreenState extends State<CaterfitPackageScreen> {
     );
   }
 
-
-  Widget _buildCategorySelector(Color darkGreen, Color lightYellow, Color cardGreen) {
-
+  Widget _buildCategorySelector(
+      Color darkGreen, Color lightYellow, Color cardGreen) {
     return Container(
-      height: 64, 
+      height: 64,
       child: ListView.builder(
-
         clipBehavior: Clip.none,
         scrollDirection: Axis.horizontal,
         padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
@@ -142,10 +142,10 @@ class _CaterfitPackageScreenState extends State<CaterfitPackageScreen> {
 
           return GestureDetector(
             onTap: () {
-            setState(() {
-            _selectedCategory = category;
-            _filterPackages();
-            });
+              setState(() {
+                _selectedCategory = category;
+                _filterPackages();
+              });
             },
             child: Container(
               margin: const EdgeInsets.only(right: 8.0),
@@ -167,7 +167,7 @@ class _CaterfitPackageScreenState extends State<CaterfitPackageScreen> {
                 category,
                 style: GoogleFonts.nunitoSans(
                   fontWeight: FontWeight.bold,
-                  color: darkGreen, 
+                  color: darkGreen,
                 ),
               ),
             ),
@@ -180,7 +180,7 @@ class _CaterfitPackageScreenState extends State<CaterfitPackageScreen> {
   Widget _buildPackageGrid(Color cardGreen, Color darkGreen) {
     return Expanded(
       child: GridView.builder(
-        padding: const EdgeInsets.fromLTRB(16.0, 4.0, 16.0, 16.0), 
+        padding: const EdgeInsets.fromLTRB(16.0, 4.0, 16.0, 16.0),
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
           crossAxisSpacing: 16.0,
@@ -196,70 +196,81 @@ class _CaterfitPackageScreenState extends State<CaterfitPackageScreen> {
     );
   }
 
-  Widget _buildPackageCard(CaterfitPackage package, Color cardGreen, Color darkGreen) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16.0),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.3),
-            spreadRadius: 2,
-            blurRadius: 2,
-            offset: const Offset(2, 2),
-          )
-        ]
-      ),
-      child: ClipRRect( 
-        borderRadius: BorderRadius.circular(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Expanded(
-            flex: 4,
-            child: Image.asset(
-            package.imageUrl,
-            fit: BoxFit.cover,
-            errorBuilder: (context, error, stackTrace) {
-            return const Center(child: Icon(Icons.broken_image, color: Colors.grey));
-            },
-            ),
-            ),
-            Expanded(
-              flex: 2,
-              child: Container(
-                color: cardGreen,
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                    package.name,
-                    style: GoogleFonts.montserrat(
-                    fontWeight: FontWeight.w600,
-                    color: darkGreen,
-                    fontSize: 14,
-                    ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      formatCurrency.format(package.price),
-                      style: GoogleFonts.nunitoSans(
-                        fontWeight: FontWeight.w600,
-                        color: darkGreen,
-                        fontSize: 13,
-                      ),
-                    ),
-                  ],
+  Widget _buildPackageCard(
+      CaterfitPackage package, Color cardGreen, Color darkGreen) {
+    return InkWell(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => PackageDetailScreen(),
+          ),
+        );
+      },
+      child: Container(
+        decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(16.0),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.3),
+                spreadRadius: 2,
+                blurRadius: 2,
+                offset: const Offset(2, 2),
+              )
+            ]),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Expanded(
+                flex: 4,
+                child: Image.asset(
+                  package.imageUrl,
+                  fit: BoxFit.cover,
+                  errorBuilder: (context, error, stackTrace) {
+                    return const Center(
+                        child: Icon(Icons.broken_image, color: Colors.grey));
+                  },
                 ),
               ),
-            ),
-          ],
+              Expanded(
+                flex: 2,
+                child: Container(
+                  color: cardGreen,
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        package.name,
+                        style: GoogleFonts.montserrat(
+                          fontWeight: FontWeight.w600,
+                          color: darkGreen,
+                          fontSize: 14,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        formatCurrency.format(package.price),
+                        style: GoogleFonts.nunitoSans(
+                          fontWeight: FontWeight.w600,
+                          color: darkGreen,
+                          fontSize: 13,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
-} 
+}
