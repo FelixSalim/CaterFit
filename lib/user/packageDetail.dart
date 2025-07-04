@@ -150,45 +150,105 @@ class PackageDetailScreen extends StatelessWidget {
                           );
                         },
                       ),
-                      SizedBox(height: 20),
+                      const SizedBox(height: 20),
                       Text("Custom",
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 16)),
-                      SizedBox(height: 10),
-                      Text("I want to change BEEF STEAK to..."),
-                      Wrap(
-                        spacing: 8,
-                        children: beefOptions
-                            .map((option) => ChoiceChip(
-                                  label: Text(option),
-                                  selected: false,
-                                ))
-                            .toList(),
+                          style: GoogleFonts.montserrat(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20,
+                            fontStyle: FontStyle.italic,
+                            color: const Color(0xFF0D3011),
+                          )),
+                      const SizedBox(height: 10),
+                      Text(
+                        "I want to change BEEF STEAK to...",
+                        style: GoogleFonts.nunitoSans(
+                          fontStyle: FontStyle.italic,
+                          fontSize: 15,
+                          color: const Color(0xFF0D3011),
+                        ),
                       ),
-                      SizedBox(height: 16),
-                      Text("I want to change BOILED EGG to..."),
+                      const SizedBox(height: 10),
                       Wrap(
-                        spacing: 8,
-                        children: eggOptions
-                            .map((option) => ChoiceChip(
-                                  label: Text(option),
-                                  selected: false,
-                                ))
-                            .toList(),
+                        spacing: 12,
+                        runSpacing: 12,
+                        children: beefOptions.map((option) {
+                          return Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(12),
+                                child: Image.asset(
+                                  'Assets/${option.replaceAll(' ', '_').toLowerCase()}-custom.png',
+                                  width: 80,
+                                  height: 80,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                              const SizedBox(height: 3),
+                              Text(option,
+                                  style: GoogleFonts.nunitoSans(
+                                    fontSize: 14,
+                                    color: const Color(0xFF0D3011),
+                                    fontStyle: FontStyle.italic,
+                                  )),
+                            ],
+                          );
+                        }).toList(),
                       ),
-                      SizedBox(height: 30),
+                      const SizedBox(height: 16),
+                      Text(
+                        "I want to change BOILED EGG to...",
+                        style: GoogleFonts.nunitoSans(
+                          fontStyle: FontStyle.italic,
+                          fontSize: 15,
+                          color: const Color(0xFF0D3011),
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      Wrap(
+                        spacing: 12,
+                        runSpacing: 12,
+                        children: eggOptions.map((option) {
+                          return Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(12),
+                                child: Image.asset(
+                                  'Assets/${option.replaceAll(' ', '_').toLowerCase()}-custom.png',
+                                  width: 80,
+                                  height: 80,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                              const SizedBox(height: 3),
+                              Text(option,
+                                  style: GoogleFonts.nunitoSans(
+                                    fontSize: 14,
+                                    color: const Color(0xFF0D3011),
+                                    fontStyle: FontStyle.italic,
+                                  )),
+                            ],
+                          );
+                        }).toList(),
+                      ),
+                      const SizedBox(height: 30),
                       Center(
                         child: ElevatedButton(
                           onPressed: () {},
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.green[800],
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 40, vertical: 16),
+                            backgroundColor: const Color(0xFF0D3011),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 50, vertical: 20),
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10)),
                           ),
                           child: Text("Subscribe Now",
-                              style: TextStyle(color: Colors.white)),
+                              style: GoogleFonts.montserrat(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w600,
+                                fontSize: 20,
+                              )),
                         ),
                       ),
                     ],
