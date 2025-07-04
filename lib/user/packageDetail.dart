@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class PackageDetailScreen extends StatelessWidget {
+// Mengubah dari StatelessWidget menjadi StatefulWidget untuk mengelola state
+class PackageDetailScreen extends StatefulWidget {
+  @override
+  _PackageDetailScreenState createState() => _PackageDetailScreenState();
+}
+
+class _PackageDetailScreenState extends State<PackageDetailScreen> {
   final List<String> mealPlans = [
     "Beef steak, soft boiled eggs, sweet potatoes, steamed corn, quinoa",
     "Minced beef, steamed veggies, scrambled egg, bok choy",
@@ -13,6 +19,119 @@ class PackageDetailScreen extends StatelessWidget {
   ];
   final List<String> beefOptions = ["Turkey", "Salmon", "Tuna"];
   final List<String> eggOptions = ["Tahini", "Edamame", "Hummus", "Nut butter"];
+
+  bool _isSubscribing = false;
+  int _subscriptionWeeks = 1; //initial subscribe
+
+  ///confirmed duration function
+  void _confirmSubscription() {
+
+
+    // send to other page(s)
+    // Navigator.push(
+    //   context,
+    //   MaterialPageRoute(
+    //     builder: (context) => CheckoutScreen(weeks: _subscriptionWeeks),
+    //   ),
+    // );
+
+    // save it to database
+    // await DatabaseService().saveSubscription(userId: 'some_user_id', weeks: _subscriptionWeeks);
+
+    // after confirmed, return it to subscribe now button
+    setState(() {
+      _isSubscribing = false;
+    });
+
+  }
+
+  //"Subscribe Now"
+  Widget _buildSubscribeButton() {
+    return Center(
+      child: ElevatedButton(
+        onPressed: () {
+          setState(() {
+            _isSubscribing = true;
+          });
+        },
+        style: ElevatedButton.styleFrom(
+          backgroundColor: const Color(0xFF0D3011),
+          padding: const EdgeInsets.symmetric(horizontal: 63.5, vertical: 14.5),
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10)),
+        ),
+        child: Text("Subscribe Now",
+            style: GoogleFonts.montserrat(
+              color: Colors.white,
+              fontWeight: FontWeight.w600,
+              fontSize: 20,
+            )),
+      ),
+    );
+  }
+
+  // Choose duration of subscribtion
+  Widget _buildDurationSelector() {
+    return Center(
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+        decoration: BoxDecoration(
+          color: const Color(0xFF0D3011),
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            // Minus
+            IconButton(
+              onPressed: _subscriptionWeeks <= 1
+                  ? null // deactivate button if weeks <= 1
+                  : () {
+                      setState(() {
+                        _subscriptionWeeks--;
+                      });
+                    },
+              icon: Icon(Icons.remove,
+                  color: _subscriptionWeeks <= 1
+                      ? Colors.white.withOpacity(0.5)
+                      : Colors.white),
+            ),
+            const SizedBox(width: 10),
+            // Duration Text
+            Text(
+              '$_subscriptionWeeks Week(s)',
+              style: GoogleFonts.montserrat(
+                color: Colors.white,
+                fontWeight: FontWeight.w600, // SemiBold
+                fontSize: 18,
+              ),
+            ),
+            const SizedBox(width: 10),
+            // Plus
+            IconButton(
+              onPressed: _subscriptionWeeks >= 4
+                  ? null // deactivate button if weeks <= 1
+                  : () {
+                      setState(() {
+                        _subscriptionWeeks++;
+                      });
+                    },
+              icon: Icon(Icons.add,
+                  color: _subscriptionWeeks >= 4
+                      ? Colors.white.withOpacity(0.5)
+                      : Colors.white),
+            ),
+            // Check
+            IconButton(
+              onPressed: _confirmSubscription,
+              icon: const Icon(Icons.check, color: Colors.white, size: 28),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -233,24 +352,15 @@ class PackageDetailScreen extends StatelessWidget {
                         }).toList(),
                       ),
                       const SizedBox(height: 30),
-                      Center(
-                        child: ElevatedButton(
-                          onPressed: () {},
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(0xFF0D3011),
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 50, vertical: 20),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10)),
-                          ),
-                          child: Text("Subscribe Now",
-                              style: GoogleFonts.montserrat(
-                                color: Colors.white,
-                                fontWeight: FontWeight.w600,
-                                fontSize: 20,
-                              )),
-                        ),
+                      
+                      // switch the button widget
+                      AnimatedSwitcher(
+                        duration: const Duration(milliseconds: 300),
+                        child: _isSubscribing
+                            ? _buildDurationSelector()
+                            : _buildSubscribeButton(),
                       ),
+
                     ],
                   ),
                 ),

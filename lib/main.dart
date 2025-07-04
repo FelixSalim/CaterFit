@@ -13,8 +13,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return const MaterialApp(
       title: 'CaterFit',
-      home: LoginPage(),
-      // home: CaterfitPackageScreen(),
+      // home: LoginPage(),
+      home: CaterfitPackageScreen(),
       debugShowMaterialGrid: false,
       debugShowCheckedModeBanner: false,
     );
