@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'dart:async'; 
+import 'dart:async';
 
 class PackageDetailScreen extends StatefulWidget {
   @override
@@ -8,7 +8,7 @@ class PackageDetailScreen extends StatefulWidget {
 }
 
 class _PackageDetailScreenState extends State<PackageDetailScreen> {
-  final String packageName = "Muscle Meal"; 
+  final String packageName = "Muscle Meal";
   final List<String> mealPlans = [
     "Beef steak, soft boiled eggs, sweet potatoes, steamed corn, quinoa",
     "Minced beef, steamed veggies, scrambled egg, bok choy",
@@ -20,6 +20,11 @@ class _PackageDetailScreenState extends State<PackageDetailScreen> {
   ];
   final List<String> beefOptions = ["Turkey", "Salmon", "Tuna"];
   final List<String> eggOptions = ["Tahini", "Edamame", "Hummus", "Nut butter"];
+
+  static final Map<String, String?> selectedOptions = {
+    'beef': null,
+    'egg': null,
+  };
 
   bool _isSubscribing = false;
   int _subscriptionWeeks = 1; //initial subscribe
@@ -90,8 +95,7 @@ class _PackageDetailScreenState extends State<PackageDetailScreen> {
         },
         style: ElevatedButton.styleFrom(
           backgroundColor: const Color(0xFF0D3011),
-          padding:
-              const EdgeInsets.symmetric(horizontal: 63.5, vertical: 14.5),
+          padding: const EdgeInsets.symmetric(horizontal: 63.5, vertical: 14.5),
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         ),
@@ -296,8 +300,7 @@ class _PackageDetailScreenState extends State<PackageDetailScreen> {
                                           mealPlans[index],
                                           softWrap: true,
                                           textAlign: TextAlign.center,
-                                          textWidthBasis:
-                                              TextWidthBasis.parent,
+                                          textWidthBasis: TextWidthBasis.parent,
                                           style: GoogleFonts.nunitoSans(
                                             color: Colors.white,
                                             fontSize: 15,
@@ -339,26 +342,58 @@ class _PackageDetailScreenState extends State<PackageDetailScreen> {
                               spacing: 12,
                               runSpacing: 12,
                               children: beefOptions.map((option) {
-                                return Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    ClipRRect(
-                                      borderRadius: BorderRadius.circular(12),
-                                      child: Image.asset(
-                                        'Assets/${option.replaceAll(' ', '_').toLowerCase()}-custom.png',
-                                        width: 80,
-                                        height: 80,
-                                        fit: BoxFit.cover,
+                                final isSelected =
+                                    selectedOptions['beef'] == option;
+                                return GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      selectedOptions['beef'] =
+                                          selectedOptions['beef'] == option
+                                              ? null
+                                              : option;
+                                    });
+                                  },
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Stack(
+                                        children: [
+                                          ClipRRect(
+                                            borderRadius:
+                                                BorderRadius.circular(40),
+                                            child: Image.asset(
+                                              'Assets/${option.replaceAll(' ', '_').toLowerCase()}-custom.png',
+                                              width: 80,
+                                              height: 80,
+                                              fit: BoxFit.cover,
+                                            ),
+                                          ),
+                                          if (isSelected)
+                                            Positioned(
+                                              right: 0,
+                                              top: 0,
+                                              child: Container(
+                                                width: 80,
+                                                height: 80,
+                                                decoration: BoxDecoration(
+                                                  color: Colors.black
+                                                      .withOpacity(0.5),
+                                                  borderRadius:
+                                                      BorderRadius.circular(40),
+                                                ),
+                                              ),
+                                            ),
+                                        ],
                                       ),
-                                    ),
-                                    const SizedBox(height: 3),
-                                    Text(option,
-                                        style: GoogleFonts.nunitoSans(
-                                          fontSize: 14,
-                                          color: const Color(0xFF0D3011),
-                                          fontStyle: FontStyle.italic,
-                                        )),
-                                  ],
+                                      const SizedBox(height: 3),
+                                      Text(option,
+                                          style: GoogleFonts.nunitoSans(
+                                            fontSize: 14,
+                                            color: const Color(0xFF0D3011),
+                                            fontStyle: FontStyle.italic,
+                                          )),
+                                    ],
+                                  ),
                                 );
                               }).toList(),
                             ),
@@ -376,26 +411,60 @@ class _PackageDetailScreenState extends State<PackageDetailScreen> {
                               spacing: 12,
                               runSpacing: 12,
                               children: eggOptions.map((option) {
-                                return Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    ClipRRect(
-                                      borderRadius: BorderRadius.circular(12),
-                                      child: Image.asset(
-                                        'Assets/${option.replaceAll(' ', '_').toLowerCase()}-custom.png',
-                                        width: 80,
-                                        height: 80,
-                                        fit: BoxFit.cover,
+                                final isSelected =
+                                    selectedOptions['egg'] == option;
+                                return GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      selectedOptions['egg'] =
+                                          selectedOptions['egg'] == option
+                                              ? null
+                                              : option;
+                                    });
+                                  },
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Stack(
+                                        children: [
+                                          ClipRRect(
+                                            borderRadius:
+                                                BorderRadius.circular(40),
+                                            child: Image.asset(
+                                              'Assets/${option.replaceAll(' ', '_').toLowerCase()}-custom.png',
+                                              width: 80,
+                                              height: 80,
+                                              fit: BoxFit.cover,
+                                            ),
+                                          ),
+                                          if (isSelected)
+                                            Positioned(
+                                              right: 0,
+                                              top: 0,
+                                              child: Container(
+                                                width: 80,
+                                                height: 80,
+                                                decoration: BoxDecoration(
+                                                  color: Colors.black
+                                                      .withOpacity(0.5),
+                                                  borderRadius:
+                                                      BorderRadius.circular(40),
+                                                ),
+                                              ),
+                                            ),
+                                        ],
                                       ),
-                                    ),
-                                    const SizedBox(height: 3),
-                                    Text(option,
+                                      const SizedBox(height: 3),
+                                      Text(
+                                        option,
                                         style: GoogleFonts.nunitoSans(
                                           fontSize: 14,
                                           color: const Color(0xFF0D3011),
                                           fontStyle: FontStyle.italic,
-                                        )),
-                                  ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 );
                               }).toList(),
                             ),
@@ -443,7 +512,7 @@ class _PackageDetailScreenState extends State<PackageDetailScreen> {
                 // opacity
                 opacity: _isAlertVisible ? 1.0 : 0.0,
                 duration: const Duration(milliseconds: 300),
-                // IgnorePointer 
+                // IgnorePointer
                 child: IgnorePointer(
                   ignoring: !_isAlertVisible,
                   child: Container(
@@ -451,15 +520,15 @@ class _PackageDetailScreenState extends State<PackageDetailScreen> {
                     padding: const EdgeInsets.fromLTRB(20, 16, 20, 16),
                     decoration: const BoxDecoration(
                       color: Color(0xFFCDE38B),
-                      borderRadius: BorderRadius.vertical(
-                          top: Radius.circular(16)),
+                      borderRadius:
+                          BorderRadius.vertical(top: Radius.circular(16)),
                     ),
                     child: Text(
                       // alert text
                       '$packageName package only has $_stock left in stock.',
                       textAlign: TextAlign.center,
                       style: GoogleFonts.nunitoSans(
-                        color: const Color(0xFF0D3011), 
+                        color: const Color(0xFF0D3011),
                         fontWeight: FontWeight.w600,
                         fontSize: 15,
                       ),
