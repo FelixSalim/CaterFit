@@ -1,6 +1,7 @@
+import 'package:caterfit/user/payment.dart';
 import 'package:flutter/material.dart';
 import 'package:caterfit/login.dart';
-import 'package:caterfit/user/packageMenu.dart'; 
+import 'package:caterfit/user/packageMenu.dart';
 
 void main() {
   runApp(const MyApp());
@@ -14,7 +15,7 @@ class MyApp extends StatelessWidget {
     return const MaterialApp(
       title: 'CaterFit',
       // home: LoginPage(),
-      home: CaterfitPackageScreen(),
+      home: PaymentPage(),
       debugShowMaterialGrid: false,
       debugShowCheckedModeBanner: false,
     );
