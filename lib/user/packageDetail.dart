@@ -4,13 +4,8 @@ import 'dart:async';
 import 'payment.dart';
 
 class PackageDetailScreen extends StatefulWidget {
-  @override
-  _PackageDetailScreenState createState() => _PackageDetailScreenState();
-}
-
-class _PackageDetailScreenState extends State<PackageDetailScreen> {
-  final String packageName = "Muscle Meal";
-  final List<String> mealPlans = [
+  static final String packageName = "Muscle Meal";
+  static final List<String> mealPlans = [
     "Beef steak, soft boiled eggs, sweet potatoes, steamed corn, quinoa",
     "Minced beef, steamed veggies, scrambled egg, bok choy",
     "Grilled chicken breast, avocado, baby spinach, edamame",
@@ -19,19 +14,25 @@ class _PackageDetailScreenState extends State<PackageDetailScreen> {
     "Roasted chicken, mashed potatoes, steamed carrots, beetroot salad",
     "Rolled grilled beef slices, roasted bell peppers, quinoa, roasted chickpeas",
   ];
-  final List<String> beefOptions = ["Turkey", "Salmon", "Tuna"];
-  final List<String> eggOptions = ["Tahini", "Edamame", "Hummus", "Nut butter"];
+  static final List<String> beefOptions = ["Turkey", "Salmon", "Tuna"];
+  static final List<String> eggOptions = ["Tahini", "Edamame", "Hummus", "Nut butter"];
+
+  static bool isSubscribing = false;
+  static int subscriptionWeeks = 1; //initial subscribe
+
+  static final int stock = 3;
 
   static final Map<String, String?> selectedOptions = {
     'beef': null,
     'egg': null,
   };
+  
 
-  bool _isSubscribing = false;
-  int _subscriptionWeeks = 1; //initial subscribe
+  @override
+  _PackageDetailScreenState createState() => _PackageDetailScreenState();
+}
 
-  final int _stock = 3;
-
+class _PackageDetailScreenState extends State<PackageDetailScreen> {
   bool _isAlertVisible = false;
   Timer? _alertTimer;
 
@@ -74,14 +75,14 @@ class _PackageDetailScreenState extends State<PackageDetailScreen> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => PaymentPage(weeks: _subscriptionWeeks),
+        builder: (context) => PaymentPage(weeks: PackageDetailScreen.subscriptionWeeks),
       ),
     ).then((_) {
       // reset state after returning from payment page
       if (mounted) {
         setState(() {
-          _isSubscribing = false;
-          _subscriptionWeeks = 1;
+          PackageDetailScreen.isSubscribing = false;
+          PackageDetailScreen.subscriptionWeeks = 1;
         });
       }
     });
@@ -93,9 +94,10 @@ class _PackageDetailScreenState extends State<PackageDetailScreen> {
       child: ElevatedButton(
         onPressed: () {
           setState(() {
-            _isSubscribing = true;
+            PackageDetailScreen.isSubscribing = true;
           });
         },
+        key: const Key('subscribeButton'),
         style: ElevatedButton.styleFrom(
           backgroundColor: const Color(0xFF0D3011),
           padding: const EdgeInsets.symmetric(horizontal: 63.5, vertical: 14.5),
@@ -127,42 +129,44 @@ class _PackageDetailScreenState extends State<PackageDetailScreen> {
           children: [
             // Minus
             IconButton(
-              onPressed: _subscriptionWeeks <= 1
+              key: const Key('minusButton'),
+              onPressed: PackageDetailScreen.subscriptionWeeks <= 1
                   ? null // deactivate button if weeks <= 1
                   : () {
                       setState(() {
-                        _subscriptionWeeks--;
+                        PackageDetailScreen.subscriptionWeeks--;
                       });
                     },
               icon: Icon(Icons.remove,
-                  color: _subscriptionWeeks <= 1
+                  color: PackageDetailScreen.subscriptionWeeks <= 1
                       ? Colors.white.withOpacity(0.5)
                       : Colors.white),
             ),
             const SizedBox(width: 10),
             // Duration Text
             Text(
-              '$_subscriptionWeeks Week(s)',
+              '${PackageDetailScreen.subscriptionWeeks} Week(s)',
               style: GoogleFonts.montserrat(
                 color: Colors.white,
                 fontWeight: FontWeight.w600,
                 fontSize: 18,
               ),
+              key: const Key('durationText'),
             ),
             const SizedBox(width: 10),
             // Plus
             IconButton(
               onPressed: () {
-                if (_subscriptionWeeks >= _stock) {
+                if (PackageDetailScreen.subscriptionWeeks >= PackageDetailScreen.stock) {
                   _showStockAlert();
                 } else {
                   setState(() {
-                    _subscriptionWeeks++;
+                    PackageDetailScreen.subscriptionWeeks++;
                   });
                 }
               },
               icon: Icon(Icons.add,
-                  color: _subscriptionWeeks >= _stock
+                  color: PackageDetailScreen.subscriptionWeeks >= PackageDetailScreen.stock
                       ? Colors.white.withOpacity(0.5)
                       : Colors.white),
             ),
@@ -216,7 +220,7 @@ class _PackageDetailScreenState extends State<PackageDetailScreen> {
                           children: [
                             const SizedBox(height: 10),
                             Text(
-                              packageName, // Menggunakan variabel nama paket
+                              PackageDetailScreen.packageName, // Menggunakan variabel nama paket
                               textAlign: TextAlign.center,
                               style: GoogleFonts.montserrat(
                                 fontSize: 28,
@@ -255,7 +259,7 @@ class _PackageDetailScreenState extends State<PackageDetailScreen> {
                               ),
                             ),
                             ListView.builder(
-                              itemCount: mealPlans.length,
+                              itemCount: PackageDetailScreen.mealPlans.length,
                               shrinkWrap: true,
                               physics: const NeverScrollableScrollPhysics(),
                               itemBuilder: (context, index) {
@@ -300,7 +304,7 @@ class _PackageDetailScreenState extends State<PackageDetailScreen> {
                                             MediaQuery.of(context).size.width -
                                                 80,
                                         child: Text(
-                                          mealPlans[index],
+                                          PackageDetailScreen.mealPlans[index],
                                           softWrap: true,
                                           textAlign: TextAlign.center,
                                           textWidthBasis: TextWidthBasis.parent,
@@ -344,14 +348,14 @@ class _PackageDetailScreenState extends State<PackageDetailScreen> {
                             Wrap(
                               spacing: 12,
                               runSpacing: 12,
-                              children: beefOptions.map((option) {
+                              children: PackageDetailScreen.beefOptions.map((option) {
                                 final isSelected =
-                                    selectedOptions['beef'] == option;
+                                    PackageDetailScreen.selectedOptions['beef'] == option;
                                 return GestureDetector(
                                   onTap: () {
                                     setState(() {
-                                      selectedOptions['beef'] =
-                                          selectedOptions['beef'] == option
+                                      PackageDetailScreen.selectedOptions['beef'] =
+                                          PackageDetailScreen.selectedOptions['beef'] == option
                                               ? null
                                               : option;
                                     });
@@ -413,14 +417,14 @@ class _PackageDetailScreenState extends State<PackageDetailScreen> {
                             Wrap(
                               spacing: 12,
                               runSpacing: 12,
-                              children: eggOptions.map((option) {
+                              children: PackageDetailScreen.eggOptions.map((option) {
                                 final isSelected =
-                                    selectedOptions['egg'] == option;
+                                    PackageDetailScreen.selectedOptions['egg'] == option;
                                 return GestureDetector(
                                   onTap: () {
                                     setState(() {
-                                      selectedOptions['egg'] =
-                                          selectedOptions['egg'] == option
+                                      PackageDetailScreen.selectedOptions['egg'] =
+                                          PackageDetailScreen.selectedOptions['egg'] == option
                                               ? null
                                               : option;
                                     });
@@ -476,7 +480,7 @@ class _PackageDetailScreenState extends State<PackageDetailScreen> {
                             // switch the button widget
                             AnimatedSwitcher(
                               duration: const Duration(milliseconds: 300),
-                              child: _isSubscribing
+                              child: PackageDetailScreen.isSubscribing
                                   ? _buildDurationSelector()
                                   : _buildSubscribeButton(),
                             ),
@@ -528,7 +532,7 @@ class _PackageDetailScreenState extends State<PackageDetailScreen> {
                     ),
                     child: Text(
                       // alert text
-                      '$packageName package only has $_stock left in stock.',
+                      '${PackageDetailScreen.packageName} package only has ${PackageDetailScreen.stock} left in stock.',
                       textAlign: TextAlign.center,
                       style: GoogleFonts.nunitoSans(
                         color: const Color(0xFF0D3011),
