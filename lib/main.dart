@@ -15,7 +15,8 @@ class MyApp extends StatelessWidget {
     return const MaterialApp(
       title: 'CaterFit',
       // home: LoginPage(),
-      home: PaymentPage(),
+      // home: PaymentPage(),
+      home:CaterfitPackageScreen(),
       debugShowMaterialGrid: false,
       debugShowCheckedModeBanner: false,
     );

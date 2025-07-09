@@ -3,12 +3,15 @@ import 'package:flutter/material.dart';
 void main() {
   runApp(const MaterialApp(
     debugShowCheckedModeBanner: false,
-    home: PaymentPage(),
+    // default value for 'weeks' HERE
+    home: PaymentPage(weeks: 1),
   ));
 }
 
 class PaymentPage extends StatefulWidget {
-  const PaymentPage({super.key});
+  final int weeks;
+
+  const PaymentPage({super.key, required this.weeks});
 
   @override
   State<PaymentPage> createState() => _PaymentPageState();
@@ -33,6 +36,12 @@ class _PaymentPageState extends State<PaymentPage> {
 
   @override
   Widget build(BuildContext context) {
+    // price calculation HERE
+    final int pricePerWeek = 400000;
+    final int subTotal = pricePerWeek * widget.weeks;
+    final int couponDiscount = 100000; 
+    final int totalExpenses = subTotal - couponDiscount;
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
@@ -74,18 +83,18 @@ class _PaymentPageState extends State<PaymentPage> {
                       ),
                     ),
                     const SizedBox(height: 12),
-                    rowItem('Meal Plan A [7 Days Subscription]', 'Rp. 500,000'),
-                    rowItem('Meal Plan A [7 Days Subscription]', 'Rp. 500,000'),
-                    rowItem('Coupon Fast Meal 10%', '-Rp. 100,000'),
+                    // order summary view HERE
+                    rowItem('Muscle Meal [${widget.weeks} Week(s)]', 'Rp. $subTotal'),
+                    rowItem('Coupon Fast Meal 10%', '-Rp. $couponDiscount'),
                     const SizedBox(height: 8),
                     const Divider(),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: const [
-                        Text('Total Expenses'),
+                      children: [
+                        const Text('Total Expenses'),
                         Text(
-                          'Rp. 900,000',
-                          style: TextStyle(
+                          'Rp. $totalExpenses',
+                          style: const TextStyle(
                             backgroundColor: Colors.white,
                             fontWeight: FontWeight.bold,
                           ),

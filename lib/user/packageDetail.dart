@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'dart:async';
+import 'payment.dart';
 
 class PackageDetailScreen extends StatefulWidget {
   @override
@@ -69,18 +70,20 @@ class _PackageDetailScreenState extends State<PackageDetailScreen> {
 
   ///confirmed duration function
   void _confirmSubscription() {
-    // send to other page(s)
-    // Navigator.push(
-    //   context,
-    //   MaterialPageRoute(
-    //     builder: (context) => CheckoutScreen(weeks: _subscriptionWeeks),
-    //   ),
-    // );
-
-    // after confirmed, return it to subscribe now button
-    setState(() {
-      _isSubscribing = false;
-      _subscriptionWeeks = 1;
+    // send data to payment page
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => PaymentPage(weeks: _subscriptionWeeks),
+      ),
+    ).then((_) {
+      // reset state after returning from payment page
+      if (mounted) {
+        setState(() {
+          _isSubscribing = false;
+          _subscriptionWeeks = 1;
+        });
+      }
     });
   }
 
