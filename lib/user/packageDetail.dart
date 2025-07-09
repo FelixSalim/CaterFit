@@ -15,7 +15,12 @@ class PackageDetailScreen extends StatefulWidget {
     "Rolled grilled beef slices, roasted bell peppers, quinoa, roasted chickpeas",
   ];
   static final List<String> beefOptions = ["Turkey", "Salmon", "Tuna"];
-  static final List<String> eggOptions = ["Tahini", "Edamame", "Hummus", "Nut butter"];
+  static final List<String> eggOptions = [
+    "Tahini",
+    "Edamame",
+    "Hummus",
+    "Nut butter"
+  ];
 
   static bool isSubscribing = false;
   static int subscriptionWeeks = 1; //initial subscribe
@@ -26,7 +31,6 @@ class PackageDetailScreen extends StatefulWidget {
     'beef': null,
     'egg': null,
   };
-  
 
   @override
   _PackageDetailScreenState createState() => _PackageDetailScreenState();
@@ -75,7 +79,8 @@ class _PackageDetailScreenState extends State<PackageDetailScreen> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => PaymentPage(weeks: PackageDetailScreen.subscriptionWeeks),
+        builder: (context) =>
+            PaymentPage(weeks: PackageDetailScreen.subscriptionWeeks),
       ),
     ).then((_) {
       // reset state after returning from payment page
@@ -156,8 +161,10 @@ class _PackageDetailScreenState extends State<PackageDetailScreen> {
             const SizedBox(width: 10),
             // Plus
             IconButton(
+              key: const Key('plusButton'),
               onPressed: () {
-                if (PackageDetailScreen.subscriptionWeeks >= PackageDetailScreen.stock) {
+                if (PackageDetailScreen.subscriptionWeeks >=
+                    PackageDetailScreen.stock) {
                   _showStockAlert();
                 } else {
                   setState(() {
@@ -166,7 +173,8 @@ class _PackageDetailScreenState extends State<PackageDetailScreen> {
                 }
               },
               icon: Icon(Icons.add,
-                  color: PackageDetailScreen.subscriptionWeeks >= PackageDetailScreen.stock
+                  color: PackageDetailScreen.subscriptionWeeks >=
+                          PackageDetailScreen.stock
                       ? Colors.white.withOpacity(0.5)
                       : Colors.white),
             ),
@@ -220,7 +228,8 @@ class _PackageDetailScreenState extends State<PackageDetailScreen> {
                           children: [
                             const SizedBox(height: 10),
                             Text(
-                              PackageDetailScreen.packageName, // Menggunakan variabel nama paket
+                              PackageDetailScreen
+                                  .packageName, // Menggunakan variabel nama paket
                               textAlign: TextAlign.center,
                               style: GoogleFonts.montserrat(
                                 fontSize: 28,
@@ -348,16 +357,20 @@ class _PackageDetailScreenState extends State<PackageDetailScreen> {
                             Wrap(
                               spacing: 12,
                               runSpacing: 12,
-                              children: PackageDetailScreen.beefOptions.map((option) {
-                                final isSelected =
-                                    PackageDetailScreen.selectedOptions['beef'] == option;
+                              children:
+                                  PackageDetailScreen.beefOptions.map((option) {
+                                final isSelected = PackageDetailScreen
+                                        .selectedOptions['beef'] ==
+                                    option;
                                 return GestureDetector(
                                   onTap: () {
                                     setState(() {
-                                      PackageDetailScreen.selectedOptions['beef'] =
-                                          PackageDetailScreen.selectedOptions['beef'] == option
-                                              ? null
-                                              : option;
+                                      PackageDetailScreen.selectedOptions[
+                                          'beef'] = PackageDetailScreen
+                                                  .selectedOptions['beef'] ==
+                                              option
+                                          ? null
+                                          : option;
                                     });
                                   },
                                   child: Column(
@@ -417,14 +430,19 @@ class _PackageDetailScreenState extends State<PackageDetailScreen> {
                             Wrap(
                               spacing: 12,
                               runSpacing: 12,
-                              children: PackageDetailScreen.eggOptions.map((option) {
-                                final isSelected =
-                                    PackageDetailScreen.selectedOptions['egg'] == option;
+                              children:
+                                  PackageDetailScreen.eggOptions.map((option) {
+                                final isSelected = PackageDetailScreen
+                                        .selectedOptions['egg'] ==
+                                    option;
                                 return GestureDetector(
                                   onTap: () {
                                     setState(() {
-                                      PackageDetailScreen.selectedOptions['egg'] =
-                                          PackageDetailScreen.selectedOptions['egg'] == option
+                                      PackageDetailScreen
+                                              .selectedOptions['egg'] =
+                                          PackageDetailScreen
+                                                      .selectedOptions['egg'] ==
+                                                  option
                                               ? null
                                               : option;
                                     });
@@ -516,6 +534,7 @@ class _PackageDetailScreenState extends State<PackageDetailScreen> {
             Align(
               alignment: Alignment.bottomCenter,
               child: AnimatedOpacity(
+                key: const Key('stockAlert'),
                 // opacity
                 opacity: _isAlertVisible ? 1.0 : 0.0,
                 duration: const Duration(milliseconds: 300),
