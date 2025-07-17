@@ -1,3 +1,4 @@
+import 'package:caterfit/navbar.dart';
 import 'package:caterfit/user/packageMenu.dart';
 import 'package:caterfit/user/home.dart';
 import 'package:flutter/material.dart';
@@ -239,9 +240,7 @@ class _LoginPageState extends State<LoginPage> {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => HomeScreen(
-                                      username: _usernameController.text,
-                                    ),
+                                    builder: (context) => const Navbar(),
                                   ),
                                 );
                               } else {
