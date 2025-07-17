@@ -1,4 +1,5 @@
 import 'package:caterfit/user/packageMenu.dart';
+import 'package:caterfit/user/home.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:caterfit/admin/package_management.dart';
@@ -6,6 +7,7 @@ import 'package:caterfit/register.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
+  static String username = 'Carmen';
 
   @override
   State<LoginPage> createState() => _LoginPageState();
@@ -233,11 +235,13 @@ class _LoginPageState extends State<LoginPage> {
                               } else if (_usernameController.text == "User" &&
                                   _passwordController.text == "User123") {
                                 _errorMessage = null;
+                                LoginPage.username = _usernameController.text;
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) =>
-                                        const CaterfitPackageScreen(),
+                                    builder: (context) => HomeScreen(
+                                      username: _usernameController.text,
+                                    ),
                                   ),
                                 );
                               } else {

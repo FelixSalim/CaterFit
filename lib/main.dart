@@ -1,4 +1,6 @@
+import 'package:caterfit/navbar.dart';
 import 'package:caterfit/user/payment.dart';
+import 'package:caterfit/user/home.dart';
 import 'package:flutter/material.dart';
 import 'package:caterfit/login.dart';
 import 'package:caterfit/register.dart';
@@ -23,7 +25,8 @@ class MyApp extends StatelessWidget {
       // home:Register(),
       // home: PaymentPage(),
       // home:CaterfitPackageScreen(),
-      home:ChatApp(),
+      // home:HomeScreen(username: 'Carmen',),
+      home: LoginPage(),
       // home: TodaysOrderDetail(),
       // home: Subscription(),
       // home:PackageManagement(),
