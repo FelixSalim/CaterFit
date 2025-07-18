@@ -300,7 +300,7 @@ class _PackageDetailScreenState extends State<PackageDetailScreen> {
                                         child: Container(
                                           decoration: BoxDecoration(
                                             color:
-                                                Colors.black.withOpacity(0.6),
+                                                Colors.black.withOpacity(0.75),
                                           ),
                                         ),
                                       ),

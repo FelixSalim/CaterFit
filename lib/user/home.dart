@@ -240,11 +240,11 @@ class PromoCarousel extends StatelessWidget {
       child: Stack(
         clipBehavior: Clip.none,
         children: [
-          // --- TEXT & BUTTON ---
+          // --- TEXT & LIST ---
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 20),
             child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Expanded(
                   child: Column(
@@ -265,27 +265,35 @@ class PromoCarousel extends StatelessWidget {
                           ],
                         ),
                       ),
-
-                      // TO-DO Ricky : Masukin point tips makan sehat 1-5
-                      const Text(
-                        "1. Eat 3 meals a day + healthy snacks (fruits, nuts) ",
-                        style: TextStyle(
-                          color: Color(0xFF0D3011),
-                          fontSize: 12,
-                          fontWeight: FontWeight.w600,
+                      const SizedBox(height: 8),
+                      Padding(
+                        padding:
+                            const EdgeInsets.only(left: 8.0), // indent tips
+                        child: const Text(
+                          "1. Eat 3 meals a day + healthy snacks\n"
+                          "2. Limit fried & fast foods and sweet drinks\n"
+                          "3. Drink 8 glasses of water/day\n"
+                          "4. Pay attention to portion sizes\n"
+                          "5. Combine with regular exercise",
+                          style: TextStyle(
+                            color: Color(0xFF0D3011),
+                            fontSize: 10,
+                            fontWeight: FontWeight.w600,
+                            height: 1.5,
+                          ),
                         ),
                       ),
                     ],
                   ),
                 ),
-                const SizedBox(width: 100), // Space to make room for image
+                const SizedBox(width: 80), // slightly smaller gap than before
               ],
             ),
           ),
 
           // --- POSITIONED IMAGE ---
           Positioned(
-            right: -5,
+            right: -15, // move image more to the right
             top: -22,
             child: Image.asset(
               'Assets/quickTips.png',
