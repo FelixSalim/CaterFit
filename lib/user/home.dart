@@ -53,6 +53,40 @@ class HomeScreen extends StatelessWidget {
               // --- CAROUSEL ---
               SizedBox(height: 20),
               PromoCarousel(),
+              const SizedBox(height: 32),
+              Text(
+                "Today’s Package",
+                style: GoogleFonts.montserrat(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFF0D3011),
+                ),
+              ),
+              const SizedBox(height: 16),
+              SizedBox(
+                height: 250,
+                child: ListView(
+                  scrollDirection: Axis.horizontal,
+                  children: [
+                    _buildTodayCard(
+                      imagePath: 'Assets/salmon-custom.png',
+                      title: "Salmon Fried Rice",
+                      subtitle: "Fried Rice, Salmon, Egg, Leek, Peas, Carrot",
+                    ),
+                    _buildTodayCard(
+                      imagePath: 'Assets/salmon-custom.png',
+                      title: "Chicken Wrap",
+                      subtitle: "Chicken, Sausage, Tomato, Cabbage, Egg",
+                    ),
+                    _buildTodayCard(
+                      imagePath: 'Assets/salmon-custom.png',
+                      title: "Cornflakes Bowl",
+                      subtitle: "Brownies, Cornflakes, Marshmallow, Berry",
+                    ),
+                  ],
+                ),
+              ),
+
             ],
           ),
         ),
@@ -263,3 +297,124 @@ class PromoCarousel extends StatelessWidget {
     );
   }
 }
+
+Widget _buildTodayCard({
+  required String imagePath,
+  required String title,
+  required String subtitle,
+}) {
+  return Container(
+    width: 180,
+    margin: const EdgeInsets.only(right: 16),
+    child: Stack(
+      clipBehavior: Clip.none,
+      alignment: Alignment.topCenter, // Center the image horizontally
+      children: [
+        // Main Card
+        Positioned(
+          top: 50,
+          child: Container(
+            width: 180,
+            decoration: BoxDecoration(
+              color: const Color(0xFFFEFFDE),
+              borderRadius: BorderRadius.circular(20),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.1),
+                  blurRadius: 8,
+                  offset: Offset(2, 2),
+                ),
+              ],
+            ),
+            padding: const EdgeInsets.fromLTRB(12, 60, 12, 12),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: GoogleFonts.montserrat(
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                    color: const Color(0xFF0D3011),
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  subtitle,
+                  style: GoogleFonts.nunitoSans(
+                    fontSize: 12,
+                    color: const Color(0xFF0D3011),
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
+                const SizedBox(height: 12),
+                Row(
+                  children: const [
+                    Icon(Icons.local_shipping, size: 16, color: Colors.green),
+                    SizedBox(width: 4),
+                    Text(
+                      "Delivered",
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: Color(0xFF0D3011),
+                        fontStyle: FontStyle.italic,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 6),
+                Container(
+                  height: 15,
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFE4F0E2),
+                    borderRadius: BorderRadius.circular(30),
+                  ),
+                  child: Stack(
+                    children: [
+                      FractionallySizedBox(
+                        widthFactor: 0.75, // 75%
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: const Color(0xFFCDE38B),
+                            borderRadius: BorderRadius.circular(30),
+                          ),
+                        ),
+                      ),
+                      Center(
+                        child: Text(
+                          '75%',
+                          style: GoogleFonts.nunitoSans(
+                            color: const Color(0xFF0D3011),
+                            fontWeight: FontWeight.bold,
+                            fontSize: 12,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+
+        // Centered Floating Image without Shadow
+        Positioned(
+          top: 0,
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(20),
+            child: Image.asset(
+              imagePath,
+              height: 100,
+              width: 100,
+              fit: BoxFit.cover,
+            ),
+          ),
+        ),
+      ],
+    ),
+  );
+}
+
