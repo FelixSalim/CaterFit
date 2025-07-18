@@ -539,10 +539,7 @@ packages:
       sha256: "688af5ed3402a4bde5b3a6c15fd768dbf2621a614950b17f04626c431ab3c4c3"
       url: "https://pub.dev"
     source: hosted
-<<<<<<< HEAD
     version: "1.3.0"
-=======
-    version: "1.2.0"
   sync_http:
     dependency: transitive
     description:
@@ -551,7 +548,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.3.1"
->>>>>>> 393734d2f4f2c2050e14f8619c52f60575038de8
   term_glyph:
     dependency: transitive
     description:
@@ -604,10 +600,10 @@ packages:
     dependency: transitive
     description:
       name: webdriver
-      sha256: "003d7da9519e1e5f329422b36c4dcdf18d7d2978d1ba099ea4e45ba490ed845e"
+      sha256: "3d773670966f02a646319410766d3b5e1037efb7f07cc68f844d5e06cd4d61c8"
       url: "https://pub.dev"
     source: hosted
-    version: "3.0.3"
+    version: "3.0.4"
   xdg_directories:
     dependency: transitive
     description:
