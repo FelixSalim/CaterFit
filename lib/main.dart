@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:caterfit/login.dart';
 import 'package:caterfit/register.dart';
 import 'package:caterfit/user/packageMenu.dart';
+import 'package:caterfit/user/profile.dart';
 import 'package:caterfit/admin/complaints.dart';
 import 'package:caterfit/admin/orderDetail.dart';
 import 'package:caterfit/admin/package_management.dart';
@@ -23,10 +24,11 @@ class MyApp extends StatelessWidget {
       // home:Register(),
       // home: PaymentPage(),
       // home:CaterfitPackageScreen(),
-      home:ChatApp(),
+      // home:ChatApp(),
       // home: TodaysOrderDetail(),
       // home: Subscription(),
       // home:PackageManagement(),
+      home:ProfilePage(),
       debugShowMaterialGrid: false,
       debugShowCheckedModeBanner: false,
     );
