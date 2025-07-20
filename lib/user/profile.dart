@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:caterfit/login.dart';
+import 'package:caterfit/user/preferences.dart';
+
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -31,7 +33,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
   // State for tracking changes
   bool _isEditing = false;
-  
+
   // State for alert
   bool _isAlertVisible = false;
   String _alertMessage = '';
@@ -40,6 +42,15 @@ class _ProfilePageState extends State<ProfilePage> {
   // Original data to revert changes
   late Map<String, dynamic> _originalData;
   File? _originalImage;
+
+  // FocusNode for the address field
+  final FocusNode _addressFocusNode = FocusNode();
+  bool _isAddressFieldInFocus = false;
+
+  // FocusNode and state for gender dropdown
+  final FocusNode _genderFocusNode = FocusNode();
+  bool _isGenderDropdownOpen = false;
+
 
   @override
   void initState() {
@@ -56,7 +67,7 @@ class _ProfilePageState extends State<ProfilePage> {
       'gender': 'Female',
       'email': 'carmenkim88@gmail.com',
       'phone': '0812345678910',
-      'address': 'Jalan Jalan Ke Pasar No 77, Cianjai',
+      'address': 'Jalan Jalan Ke Pasar No 77, Cianjai, Jawa Barat, Indonesia 43282',
     };
     _originalImage = _image;
 
@@ -76,6 +87,28 @@ class _ProfilePageState extends State<ProfilePage> {
     _emailController.addListener(_onFieldChanged);
     _phoneController.addListener(_onFieldChanged);
     _addressController.addListener(_onFieldChanged);
+
+    // Listener to detect focus on the address field
+    _addressFocusNode.addListener(() {
+      if (_addressFocusNode.hasFocus != _isAddressFieldInFocus) {
+        setState(() {
+          _isAddressFieldInFocus = _addressFocusNode.hasFocus;
+          // When the address field is focused, move the cursor to the end of the text
+          if (_isAddressFieldInFocus) {
+            _addressController.selection = TextSelection.fromPosition(
+              TextPosition(offset: _addressController.text.length),
+            );
+          }
+        });
+      }
+    });
+
+    // Listener to detect focus on the gender dropdown
+    _genderFocusNode.addListener(() {
+      setState(() {
+        _isGenderDropdownOpen = _genderFocusNode.hasFocus;
+      });
+    });
   }
 
   void _onFieldChanged() {
@@ -92,7 +125,7 @@ class _ProfilePageState extends State<ProfilePage> {
       });
     }
   }
-  
+
   void _onGenderChanged(String? newValue) {
     if (newValue != null) {
       setState(() {
@@ -104,12 +137,14 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   void dispose() {
-    // Dispose controllers
+    // Dispose controllers and focus nodes
     _usernameController.dispose();
     _nameController.dispose();
     _emailController.dispose();
     _phoneController.dispose();
     _addressController.dispose();
+    _addressFocusNode.dispose();
+    _genderFocusNode.dispose();
     _alertTimer?.cancel();
     super.dispose();
   }
@@ -125,7 +160,7 @@ class _ProfilePageState extends State<ProfilePage> {
       });
     }
   }
-  
+
   void _showAlert(String message) {
     if (_isAlertVisible) return;
 
@@ -143,7 +178,7 @@ class _ProfilePageState extends State<ProfilePage> {
       }
     });
   }
-  
+
   void _saveChanges() {
     setState(() {
       // Update original data with new values
@@ -191,7 +226,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 surfaceTintColor: Colors.white,
                 elevation: 0,
                 centerTitle: true,
-                floating: true, 
+                floating: true,
                 snap: true,
                 title: Text(
                   'Profile',
@@ -213,7 +248,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     _buildGenderDropdown(),
                     _buildProfileTextField(label: 'Email', controller: _emailController, keyboardType: TextInputType.emailAddress),
                     _buildProfileTextField(label: 'Phone Number', controller: _phoneController, keyboardType: TextInputType.phone),
-                    _buildProfileTextField(label: 'Address', controller: _addressController, isAddress: true),
+                    _buildAddressField(),
                     if (_isEditing) _buildActionButtons(),
                     const SizedBox(height: 40),
                     _buildPreferencesButton(),
@@ -226,34 +261,34 @@ class _ProfilePageState extends State<ProfilePage> {
             ],
           ),
           // Alert Widget
-           Align(
-            alignment: Alignment.bottomCenter,
-            child: AnimatedContainer(
-              duration: const Duration(milliseconds: 300),
-              curve: Curves.easeInOut,
-              transform: Matrix4.translationValues(0, _isAlertVisible ? 0 : 120, 0),
-              child: Material(
-                color: Colors.transparent,
-                child: Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.fromLTRB(20, 16, 20, 16),
-                  decoration: const BoxDecoration(
-                    color: Color(0xFFCDE38B),
-                    borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
-                  ),
-                  child: Text(
-                    _alertMessage,
-                    textAlign: TextAlign.center,
-                    style: GoogleFonts.nunitoSans(
-                      color: const Color(0xFF0D3011),
-                      fontWeight: FontWeight.w600,
-                      fontSize: 15,
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 300),
+                curve: Curves.easeInOut,
+                transform: Matrix4.translationValues(0, _isAlertVisible ? 0 : 120, 0),
+                child: Material(
+                  color: Colors.transparent,
+                  child: Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.fromLTRB(20, 16, 20, 16),
+                    decoration: const BoxDecoration(
+                      color: Color(0xFFCDE38B),
+                      borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+                    ),
+                    child: Text(
+                      _alertMessage,
+                      textAlign: TextAlign.center,
+                      style: GoogleFonts.nunitoSans(
+                        color: const Color(0xFF0D3011),
+                        fontWeight: FontWeight.w600,
+                        fontSize: 15,
+                      ),
                     ),
                   ),
                 ),
               ),
             ),
-          ),
         ],
       ),
     );
@@ -277,8 +312,13 @@ class _ProfilePageState extends State<ProfilePage> {
                   offset: const Offset(0, 4),
                 ),
               ],
-              image: DecorationImage(
+            ),
+            // REVISED: Use a ClipOval to ensure the image is always circular
+            child: ClipOval(
+              child: Image(
                 fit: BoxFit.cover,
+                width: 120,
+                height: 120,
                 image: (_image != null
                         ? FileImage(_image!)
                         : const AssetImage('Assets/profile.png'))
@@ -309,7 +349,7 @@ class _ProfilePageState extends State<ProfilePage> {
       ),
     );
   }
-  
+
   Widget _buildActionButtons() {
     return Padding(
       padding: const EdgeInsets.fromLTRB(24.0, 16.0, 24.0, 8.0),
@@ -340,7 +380,7 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
               child: Text(
                 'Discard',
-                 style: GoogleFonts.montserrat(color: const Color(0xFF0D3011), fontWeight: FontWeight.bold),
+                  style: GoogleFonts.montserrat(color: const Color(0xFF0D3011), fontWeight: FontWeight.bold),
               ),
             ),
           ),
@@ -353,7 +393,6 @@ class _ProfilePageState extends State<ProfilePage> {
     required String label,
     required TextEditingController controller,
     bool isUsername = false,
-    bool isAddress = false,
     TextInputType keyboardType = TextInputType.text,
   }) {
     return Padding(
@@ -380,11 +419,12 @@ class _ProfilePageState extends State<ProfilePage> {
                   offset: const Offset(0, 3),
                 ),
               ],
+              borderRadius: BorderRadius.circular(10),
             ),
             child: TextFormField(
               controller: controller,
               keyboardType: keyboardType,
-              maxLines: isAddress ? 1 : null,
+              maxLines: 1,
               style: GoogleFonts.nunitoSans(
                 color: const Color(0xFF0D3011).withOpacity(0.7),
                 fontWeight: FontWeight.w600,
@@ -412,7 +452,92 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
+  Widget _buildAddressField() {
+    String displayText = _addressController.text;
+    // Truncate text if longer than 40 characters for display
+    if (displayText.length > 40 && !_isAddressFieldInFocus) {
+      displayText = '${displayText.substring(0, 40)}...';
+    }
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 8.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Address',
+            style: GoogleFonts.montserrat(
+              color: const Color(0xFF0D3011),
+              fontWeight: FontWeight.w600,
+              fontStyle: FontStyle.italic,
+            ),
+          ),
+          const SizedBox(height: 8),
+          GestureDetector(
+            onTap: () {
+              // Request focus when the container is tapped
+              if (!_addressFocusNode.hasFocus) {
+                FocusScope.of(context).requestFocus(_addressFocusNode);
+              }
+            },
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+              width: double.infinity,
+              constraints: const BoxConstraints(minHeight: 50), // Ensure consistent height
+              alignment: Alignment.centerLeft,
+              decoration: BoxDecoration(
+                color: const Color(0xFFFEFFDE),
+                borderRadius: BorderRadius.circular(10),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.1),
+                    spreadRadius: 1,
+                    blurRadius: 5,
+                    offset: const Offset(0, 3),
+                  ),
+                ],
+              ),
+              child: _isAddressFieldInFocus
+                  ? TextFormField(
+                      controller: _addressController,
+                      focusNode: _addressFocusNode,
+                      keyboardType: TextInputType.multiline,
+                      maxLines: null, // Allow multi-line when editing
+                      style: GoogleFonts.nunitoSans(
+                        color: const Color(0xFF0D3011).withOpacity(0.7),
+                        fontWeight: FontWeight.w600,
+                      ),
+                      decoration: const InputDecoration.collapsed(
+                        hintText: '',
+                      ),
+                    )
+                  : Text(
+                      displayText,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: GoogleFonts.nunitoSans(
+                        color: const Color(0xFF0D3011).withOpacity(0.7),
+                        fontWeight: FontWeight.w600,
+                        fontSize: 16,
+                      ),
+                    ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // REVISED: Updated gender dropdown widget
   Widget _buildGenderDropdown() {
+    final double dropdownWidth = MediaQuery.of(context).size.width - 48;
+    // REVISED: Define the correct text style once
+    final TextStyle dropdownTextStyle = GoogleFonts.nunitoSans(
+        color: const Color(0xFF0D3011).withOpacity(0.7),
+        fontWeight: FontWeight.w600,
+        fontSize: 16 // Explicitly set font size to match TextFormField
+    );
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 8.0),
       child: Column(
@@ -428,41 +553,66 @@ class _ProfilePageState extends State<ProfilePage> {
           ),
           const SizedBox(height: 8),
           Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              color: const Color(0xFFFEFFDE),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.1),
-                  spreadRadius: 1,
-                  blurRadius: 5,
-                  offset: const Offset(0, 3),
+              decoration: BoxDecoration(
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.1),
+                    spreadRadius: 1,
+                    blurRadius: 5,
+                    offset: const Offset(0, 3),
+                  ),
+                ],
+                // REVISED: Dynamic radius based on dropdown open/close state
+                borderRadius: _isGenderDropdownOpen
+                    ? const BorderRadius.vertical(top: Radius.circular(10))
+                    : BorderRadius.circular(10),
+                color: const Color(0xFFFEFFDE),
+              ),
+              child: DropdownMenu<String>(
+                // REVISED: Add focus node
+                focusNode: _genderFocusNode,
+                initialSelection: _selectedGender,
+                onSelected: _onGenderChanged,
+                width: dropdownWidth,
+                // REVISED: Match text style with other fields
+                textStyle: dropdownTextStyle,
+                inputDecorationTheme: InputDecorationTheme(
+                  filled: true,
+                  fillColor: Colors.transparent, // Set to transparent as container handles color
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    borderSide: BorderSide.none,
+                  ),
+                  // REVISED: Ensure no extra borders are shown
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    borderSide: BorderSide.none,
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    borderSide: BorderSide.none,
+                  ),
                 ),
-              ],
-            ),
-            child: DropdownButtonFormField<String>(
-              value: _selectedGender,
-              onChanged: _onGenderChanged,
-              items: _genders.map<DropdownMenuItem<String>>((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(value),
-                );
-              }).toList(),
-              style: GoogleFonts.nunitoSans(
-                color: const Color(0xFF0D3011).withOpacity(0.7),
-                fontWeight: FontWeight.w600,
+                menuStyle: MenuStyle(
+                  backgroundColor: MaterialStateProperty.all(const Color(0xFFFEFFDE)),
+                  surfaceTintColor: MaterialStateProperty.all(Colors.transparent),
+                  // REVISED: Shape the menu to be seamless
+                  shape: MaterialStateProperty.all(const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.vertical(bottom: Radius.circular(10)),
+                  )),
+                ),
+                dropdownMenuEntries: _genders.map<DropdownMenuEntry<String>>((String value) {
+                  return DropdownMenuEntry<String>(
+                    value: value,
+                    label: value,
+                    // REVISED: Style the menu item text as well
+                    style: MenuItemButton.styleFrom(
+                      textStyle: dropdownTextStyle,
+                    )
+                  );
+                }).toList(),
               ),
-              decoration: const InputDecoration(
-                contentPadding:
-                    EdgeInsets.symmetric(horizontal: 20, vertical: 11),
-                border: InputBorder.none,
-                filled: true,
-                fillColor: Colors.transparent,
-              ),
-              dropdownColor: const Color(0xFFFEFFDE),
-              borderRadius: BorderRadius.circular(10),
-            ),
           ),
         ],
       ),
@@ -474,8 +624,8 @@ class _ProfilePageState extends State<ProfilePage> {
       padding: const EdgeInsets.symmetric(horizontal: 24.0),
       child: GestureDetector(
         onTap: () {
-          // Navigasi ke halaman preferences
-          // Navigator.push(context, MaterialPageRoute(builder: (context) => PreferencesPage()));
+          // Navigate to preferences page
+          Navigator.push(context, MaterialPageRoute(builder: (context) => PreferencesPage()));
           print('Navigate to Preferences');
         },
         child: Container(
@@ -515,7 +665,7 @@ class _ProfilePageState extends State<ProfilePage> {
     return Center(
       child: ElevatedButton.icon(
         onPressed: () {
-          // Navigasi ke halaman login
+          // Navigate to login page
           Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(builder: (context) => LoginPage()),
             (Route<dynamic> route) => false,
@@ -541,4 +691,3 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 }
-
