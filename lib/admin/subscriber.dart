@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-void main() {
-  runApp(const MaterialApp(
-    debugShowCheckedModeBanner: false,
-    home: SubscriberPage(),
-  ));
-}
+// void main() {
+//   runApp(const MaterialApp(
+//     debugShowCheckedModeBanner: false,
+//     home: SubscriberPage(),
+//   ));
+// }
 
 class Subscriber {
   final String name;
