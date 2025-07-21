@@ -18,11 +18,9 @@ class NavbarState extends State<NavbarAdmin> {
   int page = 0;
   final GlobalKey<CurvedNavigationBarState> _bottomNavigationKey = GlobalKey();
   List<Widget> body = [
-    // TO-DO : navigation to other pages
     HomeAdmin(username: "Admin123"),
     PackageManagement(),
     TodaysOrderDetail(),
-    // ProfileAdmin()
   ];
   void changeTab(int index) {
     if (mounted) {
@@ -84,10 +82,10 @@ class NavbarState extends State<NavbarAdmin> {
                 icon: _navIcon(Icons.format_list_numbered, selected: page == 2),
                 label: 'Orderlist',
               ),
-              BottomNavigationBarItem(
-                icon: _navIcon(Icons.person, selected: page == 3),
-                label: 'Profile',
-              ),
+              // BottomNavigationBarItem(
+              //   icon: _navIcon(Icons.person, selected: page == 3),
+              //   label: 'Profile',
+              // ),
             ],
           ),
         ));

@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:caterfit/admin/complaints.dart';
 import 'package:caterfit/admin/navbarAdmin.dart';
 import 'package:caterfit/admin/orderDetail.dart';
+import 'package:caterfit/admin/subscriber.dart';
 import 'package:caterfit/user/navbarUser.dart';
 import 'package:caterfit/user/packageMenu.dart';
 import 'package:flutter/material.dart';
@@ -62,14 +63,12 @@ class HomeAdmin extends StatelessWidget {
                   // SUBSCRIBER MENU
                   InkWell(
                     onTap: () {
-                      // TO-DO : MASUKIN NAVIGASi
-                      // Navigator.push(
-                      //   context,
-                      //   MaterialPageRoute(
-                      //     builder: (context) =>
-                      //         ChatApp(),
-                      //   ),
-                      // );
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => SubscriberPage(),
+                        ),
+                      );
                     },
                     child: Container(
                       padding: const EdgeInsets.symmetric(
@@ -94,14 +93,14 @@ class HomeAdmin extends StatelessWidget {
                               ],
                             ),
                             child: Icon(
-                              Icons.chat,
+                              Icons.group,
                               size: 32,
                               color: Color(0xFFCDE38B),
                             ),
                           ),
                           const SizedBox(width: 10),
                           Text(
-                            "Complaints",
+                            "Subscriber",
                             style: TextStyle(
                               fontWeight: FontWeight.w600,
                               color: Color(0xFF0D3011),

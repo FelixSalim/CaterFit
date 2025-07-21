@@ -2,6 +2,7 @@ import 'package:caterfit/login.dart';
 import 'package:caterfit/user/packageMenu.dart';
 import 'package:caterfit/user/payment.dart';
 import 'package:caterfit/user/home.dart';
+import 'package:caterfit/user/profile.dart';
 import 'package:caterfit/user/subscription.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
@@ -25,10 +26,7 @@ class HomePageState extends State<Navbar> {
     ),
     const CaterfitPackageScreen(),
     const Subscription(),
-    // TO-DO : change navigation to profile page
-    const PaymentPage(
-      weeks: 2,
-    ),
+    const ProfilePage(),
   ];
   void changeTab(int index) {
     if (mounted) {
