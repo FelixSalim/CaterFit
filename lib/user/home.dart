@@ -88,80 +88,84 @@ class HomeScreen extends StatelessWidget {
               ),
               const SizedBox(height: 32),
               Stack(
-  clipBehavior: Clip.none,
-  children: [
-    // --- Main Feedback Container ---
-    Container(
-      width: double.infinity,
-      padding: const EdgeInsets.fromLTRB(20, 20, 0, 20), // Add top padding
-      decoration: BoxDecoration(
-        color: Color(0xFFCDE38B),
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            padding: EdgeInsets.only(right: 130), // Customize as needed (top, left, etc.)
-            child: Text(
-              "How was your meal today?",
-              style: GoogleFonts.montserrat(
-                fontSize: 17,
-                fontWeight: FontWeight.bold,
-                color: Color(0xFF0D3011),
+                clipBehavior: Clip.none,
+                children: [
+                  // --- Main Feedback Container ---
+                  Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.fromLTRB(
+                        20, 20, 0, 20), // Add top padding
+                    decoration: BoxDecoration(
+                      color: Color(0xFFCDE38B),
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          padding: EdgeInsets.only(
+                              right:
+                                  130), // Customize as needed (top, left, etc.)
+                          child: Text(
+                            "How was your meal today?",
+                            style: GoogleFonts.montserrat(
+                              fontSize: 17,
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xFF0D3011),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        Container(
+                          padding: EdgeInsets.only(
+                              right:
+                                  150), // Change this as needed (top, bottom, left, right)
+                          child: Text(
+                            "Tell us what you loved or what could be better. Happy or not with your meal? We're here to listen!",
+                            textAlign: TextAlign.justify,
+                            style: GoogleFonts.nunitoSans(
+                              fontSize: 10,
+                              fontWeight: FontWeight.w400,
+                              height: 1.5,
+                              color: Color(0xFF0D3011),
+                            ),
+                          ),
+                        ),
+                        Container(
+                          padding: EdgeInsets.only(
+                              right:
+                                  150), // Change this as needed (top, bottom, left, right)
+                          child: Text(
+                            "\n– CaterFit, “Healthy Catering for Your Fit Life”",
+                            style: GoogleFonts.nunitoSans(
+                              fontSize: 8,
+                              fontWeight: FontWeight.w400,
+                              height: 1.5,
+                              color: Color(0xFF0D3011),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  // --- Floating Image Positioned at Top Center ---
+                  Positioned(
+                    top: -30, // floats above the container
+                    left: 220,
+                    right: 0,
+                    child: Center(
+                      child: Image.asset(
+                        'Assets/ChatUs.png',
+                        width: 140,
+                        height: 140,
+                        fit: BoxFit.contain,
+                      ),
+                    ),
+                  ),
+                ],
               ),
-            ),
-          ),
-
-          const SizedBox(height: 8),
-          Container(
-            padding: EdgeInsets.only(right: 150), // Change this as needed (top, bottom, left, right)
-            child: Text(
-              "Tell us what you loved or what could be better. Happy or not with your meal? We're here to listen!",
-              textAlign: TextAlign.justify,
-              style: GoogleFonts.nunitoSans(
-                fontSize: 10,
-                fontWeight: FontWeight.w400,
-                height: 1.5,
-                color: Color(0xFF0D3011),
-              ),
-            ),
-          ),
-
-          Container(
-            padding: EdgeInsets.only(right: 150), // Change this as needed (top, bottom, left, right)
-            child: Text(
-              "\n– CaterFit, “Healthy Catering for Your Fit Life”",
-              style: GoogleFonts.nunitoSans(
-                fontSize: 8,
-                fontWeight: FontWeight.w400,
-                height: 1.5,
-                color: Color(0xFF0D3011),
-              ),
-            ),
-          ),
-
-        ],
-      ),
-    ),
-
-    // --- Floating Image Positioned at Top Center ---
-    Positioned(
-      top: -30, // floats above the container
-      left: 220,
-      right: 0,
-      child: Center(
-        child: Image.asset(
-          'Assets/ChatUs.png',
-          width: 140,
-          height: 140,
-          fit: BoxFit.contain,
-        ),
-      ),
-    ),
-  ],
-),
-const SizedBox(height: 40),
+              const SizedBox(height: 40),
 
               const SizedBox(height: 40),
             ],
@@ -448,38 +452,38 @@ Widget _buildTodayCard({
                     ),
                   ],
                 ),
-                const SizedBox(height: 6),
-                Container(
-                  height: 15,
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFE4F0E2),
-                    borderRadius: BorderRadius.circular(30),
-                  ),
-                  child: Stack(
-                    children: [
-                      FractionallySizedBox(
-                        widthFactor: 0.75, // 75%
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: const Color(0xFFCDE38B),
-                            borderRadius: BorderRadius.circular(30),
-                          ),
-                        ),
-                      ),
-                      Center(
-                        child: Text(
-                          '75%',
-                          style: GoogleFonts.nunitoSans(
-                            color: const Color(0xFF0D3011),
-                            fontWeight: FontWeight.bold,
-                            fontSize: 12,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+                // const SizedBox(height: 6),
+                // Container(
+                //   height: 15,
+                //   width: double.infinity,
+                //   decoration: BoxDecoration(
+                //     color: const Color(0xFFE4F0E2),
+                //     borderRadius: BorderRadius.circular(30),
+                //   ),
+                //   child: Stack(
+                //     children: [
+                //       FractionallySizedBox(
+                //         widthFactor: 0.75, // 75%
+                //         child: Container(
+                //           decoration: BoxDecoration(
+                //             color: const Color(0xFFCDE38B),
+                //             borderRadius: BorderRadius.circular(30),
+                //           ),
+                //         ),
+                //       ),
+                //       Center(
+                //         child: Text(
+                //           '75%',
+                //           style: GoogleFonts.nunitoSans(
+                //             color: const Color(0xFF0D3011),
+                //             fontWeight: FontWeight.bold,
+                //             fontSize: 12,
+                //           ),
+                //         ),
+                //       ),
+                //     ],
+                //   ),
+                // ),
               ],
             ),
           ),
@@ -502,4 +506,3 @@ Widget _buildTodayCard({
     ),
   );
 }
-
