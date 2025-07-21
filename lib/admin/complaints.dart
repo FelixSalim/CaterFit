@@ -9,9 +9,8 @@ class ChatApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: ChatPage(),
+    return const ChatPage(
+      key: ValueKey('ChatPage'),
     );
   }
 }
@@ -27,13 +26,15 @@ class ChatPage extends StatelessWidget {
         children: [
           Container(
             color: const Color(0xFFD7E893),
-            padding: const EdgeInsets.only(top: 50, left: 16, right: 16, bottom: 16),
+            padding:
+                const EdgeInsets.only(top: 50, left: 16, right: 16, bottom: 16),
             child: Row(
               children: [
                 IconButton(
                   icon: const Icon(Icons.arrow_back),
                   onPressed: () {
-                    Navigator.pop(context); // Works if there's a previous screen
+                    Navigator.pop(
+                        context); // Works if there's a previous screen
                   },
                 ),
                 Expanded(
@@ -55,7 +56,6 @@ class ChatPage extends StatelessWidget {
               ],
             ),
           ),
-
           Expanded(
             child: ListView.builder(
               padding: const EdgeInsets.all(16),
@@ -91,7 +91,7 @@ class ChatTile extends StatelessWidget {
       child: Row(
         children: [
           const CircleAvatar(
-             backgroundImage: AssetImage('Assets/salad.jpg'),
+            backgroundImage: AssetImage('Assets/salad.jpg'),
             radius: 24,
           ),
           const SizedBox(width: 12),

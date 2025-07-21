@@ -1,3 +1,4 @@
+import 'package:caterfit/user/home.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/cupertino.dart';
@@ -152,7 +153,7 @@ class TodaysOrderDetailState extends State<TodaysOrderDetail> {
                         const SizedBox(height: 16),
                         Text(
                           'No orders in this category',
-                          style: TextStyle(
+                          style: GoogleFonts.nunitoSans(
                             fontSize: 16,
                             color: Colors.grey[600],
                           ),
@@ -199,10 +200,10 @@ class TodaysOrderDetailState extends State<TodaysOrderDetail> {
                                   // --- NAME ---
                                   Text(
                                     item.Pname,
-                                    style: const TextStyle(
+                                    style: GoogleFonts.nunitoSans(
                                         fontWeight: FontWeight.w700,
                                         fontSize: 16,
-                                        color: Color(0xFF0D3011)),
+                                        color: const Color(0xFF0D3011)),
                                   ),
 
                                   const SizedBox(height: 6),
@@ -214,7 +215,7 @@ class TodaysOrderDetailState extends State<TodaysOrderDetail> {
                                           size: 12, color: Color(0xFF0D3011)),
                                       const SizedBox(width: 4),
                                       Text(item.Cname,
-                                          style: const TextStyle(
+                                          style: GoogleFonts.nunitoSans(
                                             fontSize: 10,
                                           ))
                                     ],
@@ -229,7 +230,7 @@ class TodaysOrderDetailState extends State<TodaysOrderDetail> {
                                           size: 12, color: Color(0xFF0D3011)),
                                       const SizedBox(width: 4),
                                       Text(item.address,
-                                          style: const TextStyle(
+                                          style: GoogleFonts.nunitoSans(
                                             fontSize: 10,
                                           ))
                                     ],
@@ -243,7 +244,7 @@ class TodaysOrderDetailState extends State<TodaysOrderDetail> {
                                           size: 12, color: Color(0xFF0D3011)),
                                       const SizedBox(width: 4),
                                       Text(item.time,
-                                          style: const TextStyle(
+                                          style: GoogleFonts.nunitoSans(
                                             fontSize: 10,
                                           ))
                                     ],
@@ -294,7 +295,7 @@ class TodaysOrderDetailState extends State<TodaysOrderDetail> {
                                               ],
                                               const SizedBox(width: 4),
                                               Text(item.status,
-                                                  style: const TextStyle(
+                                                  style: GoogleFonts.nunitoSans(
                                                     fontSize: 10,
                                                     fontStyle: FontStyle.italic,
                                                     fontWeight: FontWeight.w700,
@@ -332,10 +333,10 @@ class TodaysOrderDetailState extends State<TodaysOrderDetail> {
                                           ),
                                           backgroundColor: Colors.white,
                                         ),
-                                        child: const Text(
+                                        child: Text(
                                           'Edit Status',
-                                          style: TextStyle(
-                                            color: Color(0xFF0D3011),
+                                          style: GoogleFonts.nunitoSans(
+                                            color: const Color(0xFF0D3011),
                                             fontWeight: FontWeight.w600,
                                           ),
                                         ),
@@ -407,12 +408,12 @@ class _UpdateOrderStatusDialogState extends State<UpdateOrderStatusDialog> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Text(
+                Text(
                   "Update Order Status",
-                  style: TextStyle(
+                  style: GoogleFonts.nunitoSans(
                     fontSize: 22,
                     fontWeight: FontWeight.w700,
-                    color: Color(0xFF0D3011),
+                    color: const Color(0xFF0D3011),
                   ),
                 ),
                 IconButton(
@@ -436,15 +437,15 @@ class _UpdateOrderStatusDialogState extends State<UpdateOrderStatusDialog> {
                 ),
                 title: Text(
                   value[0].toUpperCase() + value.substring(1),
-                  style: const TextStyle(
+                  style: GoogleFonts.montserrat(
                     fontWeight: FontWeight.w600,
                     fontSize: 16,
-                    color: Color(0xFF0D3011),
+                    color: const Color(0xFF0D3011),
                   ),
                 ),
                 subtitle: Text(
                   desc,
-                  style: const TextStyle(
+                  style: GoogleFonts.nunitoSans(
                     color: Colors.grey,
                     fontSize: 14,
                   ),
@@ -452,6 +453,7 @@ class _UpdateOrderStatusDialogState extends State<UpdateOrderStatusDialog> {
                 onTap: () {
                   setState(() {
                     selectedStatus = value;
+                    HomeScreen.orderStatus = value;
                   });
                 },
               );
@@ -475,10 +477,10 @@ class _UpdateOrderStatusDialogState extends State<UpdateOrderStatusDialog> {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 28, vertical: 12),
                 ),
-                child: const Text(
+                child: Text(
                   "Done",
-                  style: TextStyle(
-                    color: Color(0xFFFEFFDE),
+                  style: GoogleFonts.nunitoSans(
+                    color: const Color(0xFFFEFFDE),
                     fontWeight: FontWeight.w600,
                     fontSize: 16,
                   ),

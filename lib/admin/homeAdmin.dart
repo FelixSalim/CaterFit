@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:caterfit/admin/complaints.dart';
 import 'package:caterfit/admin/navbarAdmin.dart';
 import 'package:caterfit/admin/orderDetail.dart';
+import 'package:caterfit/admin/package_management.dart';
 import 'package:caterfit/admin/subscriber.dart';
 import 'package:caterfit/user/navbarUser.dart';
 import 'package:caterfit/user/packageMenu.dart';
@@ -356,8 +357,7 @@ class HomeAdmin extends StatelessWidget {
                     color: Color(0xFF0D3011)),
               ),
               SizedBox(height: 20),
-              PackageCardFront(
-                  title: 'title', image: File('Assets/PackageImageTemp.png'))
+              PackageCardFront()
             ],
           ),
         ),
@@ -367,15 +367,6 @@ class HomeAdmin extends StatelessWidget {
 }
 
 class PackageCardFront extends StatelessWidget {
-  final String title;
-  final File image;
-
-  const PackageCardFront({
-    super.key,
-    required this.title,
-    required this.image,
-  });
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -394,7 +385,7 @@ class PackageCardFront extends StatelessWidget {
       clipBehavior: Clip.antiAliasWithSaveLayer,
       margin: const EdgeInsets.symmetric(vertical: 8.0),
       child: Card(
-        child: Image.file(image, fit: BoxFit.cover),
+        child: Image.asset('Assets/PackageImageTemp.png', fit: BoxFit.cover),
       ),
     );
   }

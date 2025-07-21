@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 class HomeScreen extends StatelessWidget {
   final String username;
+  static String orderStatus = "Received";
   const HomeScreen({super.key, required this.username});
 
   @override
@@ -246,10 +247,10 @@ class PromoCarousel extends StatelessWidget {
                           ],
                         ),
                       ),
-                      const Text(
+                      Text(
                         "Discount packages",
-                        style: TextStyle(
-                          color: Color(0xFF0D3011),
+                        style: GoogleFonts.montserrat(
+                          color: const Color(0xFF0D3011),
                           fontSize: 15,
                           fontWeight: FontWeight.w600,
                         ),
@@ -275,10 +276,10 @@ class PromoCarousel extends StatelessWidget {
                           elevation: 4,
                           shadowColor: Colors.black38,
                         ),
-                        child: const Text(
+                        child: Text(
                           "Subscribe Now",
-                          style: TextStyle(
-                            color: Color(0xFFFEFFDE),
+                          style: GoogleFonts.montserrat(
+                            color: const Color(0xFFFEFFDE),
                             fontSize: 15,
                             fontWeight: FontWeight.w500,
                           ),
@@ -353,14 +354,14 @@ class PromoCarousel extends StatelessWidget {
                       Padding(
                         padding:
                             const EdgeInsets.only(left: 8.0), // indent tips
-                        child: const Text(
+                        child: Text(
                           "1. Eat 3 meals a day + healthy snacks\n"
                           "2. Limit fried & fast foods and sweet drinks\n"
                           "3. Drink 8 glasses of water/day\n"
                           "4. Pay attention to portion sizes\n"
                           "5. Combine with regular exercise",
-                          style: TextStyle(
-                            color: Color(0xFF0D3011),
+                          style: GoogleFonts.montserrat(
+                            color: const Color(0xFF0D3011),
                             fontSize: 10,
                             fontWeight: FontWeight.w600,
                             height: 1.5,
@@ -441,16 +442,17 @@ Widget _buildTodayCard({
                 ),
                 const SizedBox(height: 12),
                 Row(
-                  children: const [
-                    Icon(Icons.local_shipping, size: 16, color: Colors.green),
-                    SizedBox(width: 4),
+                  children: [
+                    const Icon(Icons.local_shipping,
+                        size: 16, color: Colors.green),
+                    const SizedBox(width: 4),
                     Text(
-                      "Delivered",
-                      style: TextStyle(
+                      HomeScreen.orderStatus,
+                      style: GoogleFonts.nunitoSans(
                         fontSize: 12,
-                        color: Color(0xFF0D3011),
+                        color: const Color(0xFF0D3011),
                         fontStyle: FontStyle.italic,
-                        fontWeight: FontWeight.w400,
+                        fontWeight: FontWeight.w500,
                       ),
                     ),
                   ],

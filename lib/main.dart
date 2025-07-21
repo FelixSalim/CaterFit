@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     GlobalKey<NavbarState> navbarAdminKey = GlobalKey<NavbarState>();
-    return MaterialApp(
+    return const MaterialApp(
       title: 'CaterFit',
       // home:Register(),
       // home: PaymentPage(),
@@ -32,10 +32,11 @@ class MyApp extends StatelessWidget {
       // home: HomeAdmin(username: 'Admin123',),
       // home: TodaysOrderDetail(),
       // home: Subscription(),
+      home: LoginPage(),
       // home:PackageManagement(),
-      home: NavbarAdmin(
-        key: navbarAdminKey,
-      ),
+      // home: NavbarAdmin(
+      //   key: navbarAdminKey,
+      // ),
       debugShowMaterialGrid: false,
       debugShowCheckedModeBanner: false,
     );
