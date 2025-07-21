@@ -376,11 +376,11 @@ class _UpdateOrderStatusDialogState extends State<UpdateOrderStatusDialog> {
   late String selectedStatus;
 
   final List<Map<String, String>> statusList = [
-    {'status': 'received', 'desc': 'You have received the order request.'},
-    {'status': 'cooked', 'desc': 'The chef is preparing the meal.'},
-    {'status': 'shipped', 'desc': 'The meal is shipped to the customer.'},
+    {'status': 'Received', 'desc': 'You have received the order request.'},
+    {'status': 'Cooked', 'desc': 'The chef is preparing the meal.'},
+    {'status': 'Shipped', 'desc': 'The meal is shipped to the customer.'},
     {
-      'status': 'arrived',
+      'status': 'Arrived',
       'desc': 'The package has been successfully shipped to the customer.'
     },
   ];
