@@ -1,3 +1,4 @@
+import 'package:caterfit/admin/admin_chat.dart';
 import 'package:caterfit/admin/homeAdmin.dart';
 import 'package:caterfit/admin/navbarAdmin.dart';
 import 'package:caterfit/user/navbarUser.dart';
@@ -32,7 +33,7 @@ class MyApp extends StatelessWidget {
       // home: HomeAdmin(username: 'Admin123',),
       // home: TodaysOrderDetail(),
       // home: Subscription(),
-      home: LoginPage(),
+      home: ChatDetailPageAdmin(),
       // home:PackageManagement(),
       // home: NavbarAdmin(
       //   key: navbarAdminKey,
