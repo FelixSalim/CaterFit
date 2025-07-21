@@ -606,7 +606,6 @@ class _ProfilePageState extends State<ProfilePage> {
                   return DropdownMenuEntry<String>(
                     value: value,
                     label: value,
-                    // REVISED: Style the menu item text as well
                     style: MenuItemButton.styleFrom(
                       textStyle: dropdownTextStyle,
                     )
@@ -691,3 +690,4 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 }
+
