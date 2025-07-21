@@ -28,21 +28,34 @@ class ChatPage extends StatelessWidget {
           Container(
             color: const Color(0xFFD7E893),
             padding: const EdgeInsets.only(top: 50, left: 16, right: 16, bottom: 16),
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(30),
-              ),
-              child: const TextField(
-                decoration: InputDecoration(
-                  hintText: 'Search',
-                  border: InputBorder.none,
-                  icon: Icon(Icons.search),
+            child: Row(
+              children: [
+                IconButton(
+                  icon: const Icon(Icons.arrow_back),
+                  onPressed: () {
+                    Navigator.pop(context); // Works if there's a previous screen
+                  },
                 ),
-              ),
+                Expanded(
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(30),
+                    ),
+                    child: const TextField(
+                      decoration: InputDecoration(
+                        hintText: 'Search',
+                        border: InputBorder.none,
+                        icon: Icon(Icons.search),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
+
           Expanded(
             child: ListView.builder(
               padding: const EdgeInsets.all(16),
