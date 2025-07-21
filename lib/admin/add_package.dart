@@ -192,14 +192,25 @@ class _AddPackageState extends State<AddPackage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
-              padding: const EdgeInsets.only(top: 40, left: 24, bottom: 20),
-              child: Text(
-                'Add Package',
-                style: GoogleFonts.montserrat(
-                  fontSize: 30,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.black,
-                ),
+              padding: const EdgeInsets.only(top: 40, left: 0, bottom: 20),
+              child: Row(
+                children: [
+                  IconButton(
+                    icon: const Icon(Icons.arrow_back,
+                        color: Colors.black, size: 30),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                  ),
+                  Text(
+                    'Add Package',
+                    style: GoogleFonts.montserrat(
+                      fontSize: 30,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.black,
+                    ),
+                  ),
+                ],
               ),
             ),
             Padding(

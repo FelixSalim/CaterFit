@@ -48,7 +48,7 @@ class PackageManagement extends StatelessWidget {
               ),
               child: IconButton(
                 onPressed: () {
-                  Navigator.pushReplacement(
+                  Navigator.push(
                     context,
                     MaterialPageRoute(
                       builder: (context) => const AddPackage(),
