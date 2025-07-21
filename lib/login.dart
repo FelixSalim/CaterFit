@@ -1,4 +1,5 @@
-import 'package:caterfit/navbar.dart';
+import 'package:caterfit/admin/navbarAdmin.dart';
+import 'package:caterfit/user/navbarUser.dart';
 import 'package:caterfit/user/packageMenu.dart';
 import 'package:caterfit/user/home.dart';
 import 'package:flutter/material.dart';
@@ -39,7 +40,8 @@ class _LoginPageState extends State<LoginPage> {
           width: 1.5), // Slightly thicker stroke for text fields
       borderRadius: BorderRadius.circular(10),
     );
-
+    final GlobalKey<HomePageState> navbarKey = GlobalKey<HomePageState>();
+    final GlobalKey<NavbarState> navbarAdminKey = GlobalKey<NavbarState>();
     return Scaffold(
       backgroundColor:
           const Color(0xFFFEFFDE), // Changed background color to FEFFDE
@@ -226,11 +228,21 @@ class _LoginPageState extends State<LoginPage> {
                               if (_usernameController.text == "Admin" &&
                                   _passwordController.text == "Admin123") {
                                 _errorMessage = null;
+                                LoginPage.username = _usernameController.text;
+                                // Navigator.push(
+                                //   context,
+                                //   MaterialPageRoute(
+                                //     builder: (context) =>
+                                //         const PackageManagement(),
+                                //   ),
+                                // );
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) =>
-                                        const PackageManagement(),
+                                    // TO-DO : NAVBAR ADMIN
+                                    builder: (context) => NavbarAdmin(
+                                      key: navbarAdminKey,
+                                    ),
                                   ),
                                 );
                               } else if (_usernameController.text == "User" &&
@@ -240,7 +252,9 @@ class _LoginPageState extends State<LoginPage> {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => const Navbar(),
+                                    builder: (context) => Navbar(
+                                      key: navbarKey,
+                                    ),
                                   ),
                                 );
                               } else {

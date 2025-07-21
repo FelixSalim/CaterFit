@@ -1,4 +1,6 @@
-import 'package:caterfit/navbar.dart';
+import 'package:caterfit/admin/homeAdmin.dart';
+import 'package:caterfit/admin/navbarAdmin.dart';
+import 'package:caterfit/user/navbarUser.dart';
 import 'package:caterfit/user/payment.dart';
 import 'package:caterfit/user/home.dart';
 import 'package:flutter/material.dart';
@@ -16,20 +18,22 @@ void main() {
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
-
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    GlobalKey<NavbarState> navbarAdminKey = GlobalKey<NavbarState>();
+    return MaterialApp(
       title: 'CaterFit',
-      // home: LoginPage(),
       // home:Register(),
       // home: PaymentPage(),
       // home:CaterfitPackageScreen(),
       // home:HomeScreen(username: 'Carmen',),
-      home: LoginPage(),
+      // home: HomeAdmin(username: 'Admin123',),
       // home: TodaysOrderDetail(),
       // home: Subscription(),
       // home:PackageManagement(),
+      home: NavbarAdmin(
+        key: navbarAdminKey,
+      ),
       debugShowMaterialGrid: false,
       debugShowCheckedModeBanner: false,
     );

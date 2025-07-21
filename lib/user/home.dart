@@ -1,3 +1,4 @@
+import 'package:caterfit/user/navbarUser.dart';
 import 'package:caterfit/user/packageMenu.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -88,6 +89,7 @@ class PromoCarousel extends StatelessWidget {
 
   // --- PROMOTION ---
   Widget _buildPromoCard1(BuildContext context) {
+    final GlobalKey<HomePageState> navbarKey = GlobalKey<HomePageState>();
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 20),
       decoration: BoxDecoration(
@@ -142,11 +144,12 @@ class PromoCarousel extends StatelessWidget {
                       const SizedBox(height: 2),
                       ElevatedButton(
                         onPressed: () {
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (_) => const CaterfitPackageScreen()),
-                          );
+                          Navbar.of(context)?.changeTab(1);
+                          // Navigator.pushReplacement(
+                          //   context,
+                          //   MaterialPageRoute(
+                          //       builder: (_)=> const CaterfitPackageScreen()),
+                          // );
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(0xFF0D3011),
