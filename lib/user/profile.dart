@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:caterfit/login.dart';
 import 'package:caterfit/user/preferences.dart';
 
@@ -127,6 +128,11 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   void _onGenderChanged(String? newValue) {
+    setState(() {
+       // remove the focus from the dropdown
+        _genderFocusNode.unfocus();
+        _isGenderDropdownOpen = false; // Close the dropdown
+    });
     if (newValue != null) {
       setState(() {
         _selectedGender = newValue;
@@ -564,55 +570,58 @@ class _ProfilePageState extends State<ProfilePage> {
                 ],
                 // REVISED: Dynamic radius based on dropdown open/close state
                 borderRadius: _isGenderDropdownOpen
-                    ? const BorderRadius.vertical(top: Radius.circular(10))
+                    ? BorderRadius.vertical(top: Radius.circular(10))
                     : BorderRadius.circular(10),
                 color: const Color(0xFFFEFFDE),
               ),
-              child: DropdownMenu<String>(
-                // REVISED: Add focus node
-                focusNode: _genderFocusNode,
-                initialSelection: _selectedGender,
-                onSelected: _onGenderChanged,
-                width: dropdownWidth,
-                // REVISED: Match text style with other fields
-                textStyle: dropdownTextStyle,
-                inputDecorationTheme: InputDecorationTheme(
-                  filled: true,
-                  fillColor: Colors.transparent, // Set to transparent as container handles color
-                  contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                    borderSide: BorderSide.none,
-                  ),
-                  // REVISED: Ensure no extra borders are shown
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                    borderSide: BorderSide.none,
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                    borderSide: BorderSide.none,
-                  ),
+              child: DropdownButton2<String>(
+              focusNode: _genderFocusNode,
+              value: _selectedGender,
+              isExpanded: true,
+              buttonStyleData: ButtonStyleData(
+                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 5),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFFEFFDE),
+                  borderRadius: BorderRadius.circular(10),
                 ),
-                menuStyle: MenuStyle(
-                  backgroundColor: MaterialStateProperty.all(const Color(0xFFFEFFDE)),
-                  surfaceTintColor: MaterialStateProperty.all(Colors.transparent),
-                  // REVISED: Shape the menu to be seamless
-                  shape: MaterialStateProperty.all(const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.vertical(bottom: Radius.circular(10)),
-                  )),
-                ),
-                dropdownMenuEntries: _genders.map<DropdownMenuEntry<String>>((String value) {
-                  return DropdownMenuEntry<String>(
-                    value: value,
-                    label: value,
-                    style: MenuItemButton.styleFrom(
-                      textStyle: dropdownTextStyle,
-                    )
-                  );
-                }).toList(),
               ),
-          ),
+              dropdownStyleData: DropdownStyleData(
+                width: dropdownWidth,
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: Color(0xFFFEFFDE),
+                  borderRadius: BorderRadius.vertical(bottom: Radius.circular(10)),
+                  boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.1),
+                    spreadRadius: 1,
+                    blurRadius: 5,
+                    offset: const Offset(0, 3),
+                  ),
+                ],
+                ),
+              ),
+              // Hides the default underline
+              underline: const SizedBox(),
+              // Custom dropdown icon
+              iconStyleData: const IconStyleData(
+                icon: Icon(Icons.arrow_drop_down, color: Color(0xFF0D3011)),
+              ),
+              // Style for the selected item
+              style: GoogleFonts.nunitoSans(
+                color: const Color(0xFF0D3011).withOpacity(0.7),
+                fontWeight: FontWeight.w600,
+                fontSize: 16,
+              ),
+              // The callback function when an item is selected
+              onChanged: _onGenderChanged,
+              items: _genders.map<DropdownMenuItem<String>>((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(value),
+                );
+              }).toList(),
+          ),),
         ],
       ),
     );

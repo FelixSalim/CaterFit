@@ -42,6 +42,7 @@ dependencies:
   integration_test:
     sdk: flutter
   gherkin_widget_extension: ^0.0.4
+  dropdown_button2: ^2.3.9
 
 dev_dependencies:
   flutter_test:
