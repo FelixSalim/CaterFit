@@ -104,6 +104,7 @@ class _CaterfitPackageScreenState extends State<CaterfitPackageScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: Text(
           'Caterfit Package',
           style: GoogleFonts.montserrat(

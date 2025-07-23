@@ -8,7 +8,6 @@ import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:caterfit/login.dart';
 import 'package:caterfit/user/preferences.dart';
 
-
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
 
@@ -52,7 +51,6 @@ class _ProfilePageState extends State<ProfilePage> {
   final FocusNode _genderFocusNode = FocusNode();
   bool _isGenderDropdownOpen = false;
 
-
   @override
   void initState() {
     super.initState();
@@ -68,12 +66,14 @@ class _ProfilePageState extends State<ProfilePage> {
       'gender': 'Female',
       'email': 'carmenkim88@gmail.com',
       'phone': '0812345678910',
-      'address': 'Jalan Jalan Ke Pasar No 77, Cianjai, Jawa Barat, Indonesia 43282',
+      'address':
+          'Jalan Jalan Ke Pasar No 77, Cianjai, Jawa Barat, Indonesia 43282',
     };
     _originalImage = _image;
 
     // Initialize controllers with original data
-    _usernameController = TextEditingController(text: _originalData['username']);
+    _usernameController =
+        TextEditingController(text: _originalData['username']);
     _nameController = TextEditingController(text: _originalData['name']);
     _emailController = TextEditingController(text: _originalData['email']);
     _phoneController = TextEditingController(text: _originalData['phone']);
@@ -113,12 +113,13 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   void _onFieldChanged() {
-    final hasTextChanged = _usernameController.text != _originalData['username'] ||
-        _nameController.text != _originalData['name'] ||
-        _emailController.text != _originalData['email'] ||
-        _phoneController.text != _originalData['phone'] ||
-        _addressController.text != _originalData['address'] ||
-        _selectedGender != _originalData['gender'];
+    final hasTextChanged =
+        _usernameController.text != _originalData['username'] ||
+            _nameController.text != _originalData['name'] ||
+            _emailController.text != _originalData['email'] ||
+            _phoneController.text != _originalData['phone'] ||
+            _addressController.text != _originalData['address'] ||
+            _selectedGender != _originalData['gender'];
 
     if (hasTextChanged && !_isEditing) {
       setState(() {
@@ -129,9 +130,9 @@ class _ProfilePageState extends State<ProfilePage> {
 
   void _onGenderChanged(String? newValue) {
     setState(() {
-       // remove the focus from the dropdown
-        _genderFocusNode.unfocus();
-        _isGenderDropdownOpen = false; // Close the dropdown
+      // remove the focus from the dropdown
+      _genderFocusNode.unfocus();
+      _isGenderDropdownOpen = false; // Close the dropdown
     });
     if (newValue != null) {
       setState(() {
@@ -218,7 +219,6 @@ class _ProfilePageState extends State<ProfilePage> {
     _showAlert('Changes have been discarded.');
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -228,6 +228,7 @@ class _ProfilePageState extends State<ProfilePage> {
           CustomScrollView(
             slivers: [
               SliverAppBar(
+                automaticallyImplyLeading: false,
                 backgroundColor: Colors.white,
                 surfaceTintColor: Colors.white,
                 elevation: 0,
@@ -249,11 +250,21 @@ class _ProfilePageState extends State<ProfilePage> {
                     const SizedBox(height: 20),
                     _buildProfilePicture(),
                     const SizedBox(height: 30),
-                    _buildProfileTextField(label: 'Username', controller: _usernameController, isUsername: true),
-                    _buildProfileTextField(label: 'Name', controller: _nameController),
+                    _buildProfileTextField(
+                        label: 'Username',
+                        controller: _usernameController,
+                        isUsername: true),
+                    _buildProfileTextField(
+                        label: 'Name', controller: _nameController),
                     _buildGenderDropdown(),
-                    _buildProfileTextField(label: 'Email', controller: _emailController, keyboardType: TextInputType.emailAddress),
-                    _buildProfileTextField(label: 'Phone Number', controller: _phoneController, keyboardType: TextInputType.phone),
+                    _buildProfileTextField(
+                        label: 'Email',
+                        controller: _emailController,
+                        keyboardType: TextInputType.emailAddress),
+                    _buildProfileTextField(
+                        label: 'Phone Number',
+                        controller: _phoneController,
+                        keyboardType: TextInputType.phone),
                     _buildAddressField(),
                     if (_isEditing) _buildActionButtons(),
                     const SizedBox(height: 40),
@@ -267,34 +278,36 @@ class _ProfilePageState extends State<ProfilePage> {
             ],
           ),
           // Alert Widget
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: AnimatedContainer(
-                duration: const Duration(milliseconds: 300),
-                curve: Curves.easeInOut,
-                transform: Matrix4.translationValues(0, _isAlertVisible ? 0 : 120, 0),
-                child: Material(
-                  color: Colors.transparent,
-                  child: Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.fromLTRB(20, 16, 20, 16),
-                    decoration: const BoxDecoration(
-                      color: Color(0xFFCDE38B),
-                      borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
-                    ),
-                    child: Text(
-                      _alertMessage,
-                      textAlign: TextAlign.center,
-                      style: GoogleFonts.nunitoSans(
-                        color: const Color(0xFF0D3011),
-                        fontWeight: FontWeight.w600,
-                        fontSize: 15,
-                      ),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 300),
+              curve: Curves.easeInOut,
+              transform:
+                  Matrix4.translationValues(0, _isAlertVisible ? 0 : 120, 0),
+              child: Material(
+                color: Colors.transparent,
+                child: Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.fromLTRB(20, 16, 20, 16),
+                  decoration: const BoxDecoration(
+                    color: Color(0xFFCDE38B),
+                    borderRadius:
+                        BorderRadius.vertical(top: Radius.circular(16)),
+                  ),
+                  child: Text(
+                    _alertMessage,
+                    textAlign: TextAlign.center,
+                    style: GoogleFonts.nunitoSans(
+                      color: const Color(0xFF0D3011),
+                      fontWeight: FontWeight.w600,
+                      fontSize: 15,
                     ),
                   ),
                 ),
               ),
             ),
+          ),
         ],
       ),
     );
@@ -326,9 +339,8 @@ class _ProfilePageState extends State<ProfilePage> {
                 width: 120,
                 height: 120,
                 image: (_image != null
-                        ? FileImage(_image!)
-                        : const AssetImage('Assets/profile.png'))
-                    as ImageProvider,
+                    ? FileImage(_image!)
+                    : const AssetImage('Assets/profile.png')) as ImageProvider,
               ),
             ),
           ),
@@ -366,12 +378,14 @@ class _ProfilePageState extends State<ProfilePage> {
               onPressed: _saveChanges,
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFF0D3011),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10)),
                 padding: const EdgeInsets.symmetric(vertical: 12),
               ),
               child: Text(
                 'Save',
-                style: GoogleFonts.montserrat(color: Colors.white, fontWeight: FontWeight.bold),
+                style: GoogleFonts.montserrat(
+                    color: Colors.white, fontWeight: FontWeight.bold),
               ),
             ),
           ),
@@ -381,12 +395,15 @@ class _ProfilePageState extends State<ProfilePage> {
               onPressed: _discardChanges,
               style: OutlinedButton.styleFrom(
                 side: const BorderSide(color: Color(0xFF0D3011), width: 1.5),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10)),
                 padding: const EdgeInsets.symmetric(vertical: 12),
               ),
               child: Text(
                 'Discard',
-                  style: GoogleFonts.montserrat(color: const Color(0xFF0D3011), fontWeight: FontWeight.bold),
+                style: GoogleFonts.montserrat(
+                    color: const Color(0xFF0D3011),
+                    fontWeight: FontWeight.bold),
               ),
             ),
           ),
@@ -489,7 +506,8 @@ class _ProfilePageState extends State<ProfilePage> {
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
               width: double.infinity,
-              constraints: const BoxConstraints(minHeight: 50), // Ensure consistent height
+              constraints: const BoxConstraints(
+                  minHeight: 50), // Ensure consistent height
               alignment: Alignment.centerLeft,
               decoration: BoxDecoration(
                 color: const Color(0xFFFEFFDE),
@@ -542,7 +560,7 @@ class _ProfilePageState extends State<ProfilePage> {
         color: const Color(0xFF0D3011).withOpacity(0.7),
         fontWeight: FontWeight.w600,
         fontSize: 16 // Explicitly set font size to match TextFormField
-    );
+        );
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 8.0),
@@ -559,27 +577,28 @@ class _ProfilePageState extends State<ProfilePage> {
           ),
           const SizedBox(height: 8),
           Container(
-              decoration: BoxDecoration(
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.1),
-                    spreadRadius: 1,
-                    blurRadius: 5,
-                    offset: const Offset(0, 3),
-                  ),
-                ],
-                // REVISED: Dynamic radius based on dropdown open/close state
-                borderRadius: _isGenderDropdownOpen
-                    ? BorderRadius.vertical(top: Radius.circular(10))
-                    : BorderRadius.circular(10),
-                color: const Color(0xFFFEFFDE),
-              ),
-              child: DropdownButton2<String>(
+            decoration: BoxDecoration(
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.1),
+                  spreadRadius: 1,
+                  blurRadius: 5,
+                  offset: const Offset(0, 3),
+                ),
+              ],
+              // REVISED: Dynamic radius based on dropdown open/close state
+              borderRadius: _isGenderDropdownOpen
+                  ? BorderRadius.vertical(top: Radius.circular(10))
+                  : BorderRadius.circular(10),
+              color: const Color(0xFFFEFFDE),
+            ),
+            child: DropdownButton2<String>(
               focusNode: _genderFocusNode,
               value: _selectedGender,
               isExpanded: true,
               buttonStyleData: ButtonStyleData(
-                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 5),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 24, vertical: 5),
                 decoration: BoxDecoration(
                   color: const Color(0xFFFEFFDE),
                   borderRadius: BorderRadius.circular(10),
@@ -590,15 +609,16 @@ class _ProfilePageState extends State<ProfilePage> {
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
                   color: Color(0xFFFEFFDE),
-                  borderRadius: BorderRadius.vertical(bottom: Radius.circular(10)),
+                  borderRadius:
+                      BorderRadius.vertical(bottom: Radius.circular(10)),
                   boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.1),
-                    spreadRadius: 1,
-                    blurRadius: 5,
-                    offset: const Offset(0, 3),
-                  ),
-                ],
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.1),
+                      spreadRadius: 1,
+                      blurRadius: 5,
+                      offset: const Offset(0, 3),
+                    ),
+                  ],
                 ),
               ),
               // Hides the default underline
@@ -621,7 +641,8 @@ class _ProfilePageState extends State<ProfilePage> {
                   child: Text(value),
                 );
               }).toList(),
-          ),),
+            ),
+          ),
         ],
       ),
     );
@@ -633,7 +654,8 @@ class _ProfilePageState extends State<ProfilePage> {
       child: GestureDetector(
         onTap: () {
           // Navigate to preferences page
-          Navigator.push(context, MaterialPageRoute(builder: (context) => PreferencesPage()));
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => PreferencesPage()));
           print('Navigate to Preferences');
         },
         child: Container(
@@ -699,4 +721,3 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 }
-

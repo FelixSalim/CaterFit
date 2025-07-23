@@ -26,6 +26,7 @@ class PackageDetailScreen extends StatefulWidget {
   static int subscriptionWeeks = 1; //initial subscribe
 
   static final int stock = 3;
+  static int _currentPage = 0;
 
   static final Map<String, String?> selectedOptions = {
     'beef': null,
@@ -40,9 +41,32 @@ class _PackageDetailScreenState extends State<PackageDetailScreen> {
   bool _isAlertVisible = false;
   Timer? _alertTimer;
 
+  Timer? _autoScrollTimer;
+  late PageController _pageController;
+
+  @override
+  void initState() {
+    super.initState();
+    _pageController = PageController(viewportFraction: 0.85);
+
+    _autoScrollTimer = Timer.periodic(const Duration(seconds: 4), (timer) {
+      if (_pageController.hasClients) {
+        int nextPage = (PackageDetailScreen._currentPage + 1) %
+            PackageDetailScreen.mealPlans.length;
+        _pageController.animateToPage(
+          nextPage,
+          duration: const Duration(milliseconds: 500),
+          curve: Curves.easeInOut,
+        );
+      }
+    });
+  }
+
   @override
   void dispose() {
     _alertTimer?.cancel();
+    _pageController.dispose();
+    _autoScrollTimer?.cancel();
     super.dispose();
   }
 
@@ -259,82 +283,111 @@ class _PackageDetailScreenState extends State<PackageDetailScreen> {
                               ),
                             ),
                             const SizedBox(height: 20),
-                            Text(
-                              "Meal Plan",
-                              style: GoogleFonts.montserrat(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 20,
-                                color: const Color(0xFF0D3011),
+                            Align(
+                              alignment: Alignment.centerLeft,
+                              child: Padding(
+                                padding: const EdgeInsets.only(
+                                    left: 38.0, bottom: 12),
+                                child: Text(
+                                  "Meal Plan",
+                                  style: GoogleFonts.montserrat(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 20,
+                                    color: const Color(0xFF0D3011),
+                                  ),
+                                ),
                               ),
                             ),
-                            ListView.builder(
-                              itemCount: PackageDetailScreen.mealPlans.length,
-                              shrinkWrap: true,
-                              physics: const NeverScrollableScrollPhysics(),
-                              itemBuilder: (context, index) {
-                                return Container(
-                                  margin:
-                                      const EdgeInsets.symmetric(vertical: 1),
-                                  decoration: const BoxDecoration(
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Colors.black12,
-                                        blurRadius: 4,
-                                        offset: Offset(0, 2),
-                                      )
-                                    ],
-                                  ),
-                                  child: Stack(
-                                    children: [
-                                      // Background image
-                                      Image.asset(
-                                        'Assets/muscleplan${index + 1}.png', // Replace with actual assets
-                                        fit: BoxFit.cover,
-                                        width: double.infinity,
-                                      ),
 
-                                      // Dark gradient overlay at bottom
-                                      Positioned.fill(
-                                        top: 0,
-                                        left: 0,
-                                        child: Container(
-                                          decoration: BoxDecoration(
-                                            color:
-                                                Colors.black.withOpacity(0.75),
+                            // Carousel
+                            SizedBox(
+                              height: 120,
+                              child: PageView.builder(
+                                itemCount: PackageDetailScreen.mealPlans.length,
+                                controller: _pageController,
+                                onPageChanged: (index) {
+                                  setState(() {
+                                    PackageDetailScreen._currentPage = index;
+                                  });
+                                },
+                                itemBuilder: (context, index) {
+                                  return Container(
+                                    margin: const EdgeInsets.symmetric(
+                                        horizontal: 6),
+                                    decoration: BoxDecoration(
+                                      color: const Color(0xFFCDE38B),
+                                      borderRadius: BorderRadius.circular(16),
+                                      boxShadow: const [
+                                        BoxShadow(
+                                          color: Colors.black12,
+                                          blurRadius: 6,
+                                          offset: Offset(0, 4),
+                                        ),
+                                      ],
+                                    ),
+                                    child: Row(
+                                      children: [
+                                        // Image
+                                        ClipRRect(
+                                          borderRadius:
+                                              const BorderRadius.horizontal(
+                                                  left: Radius.circular(16)),
+                                          child: Image.asset(
+                                            'Assets/muscleplan${index + 1}.png',
+                                            width: 165,
+                                            height: 120,
+                                            fit: BoxFit.fill,
                                           ),
                                         ),
-                                      ),
 
-                                      // Meal description text
-                                      Positioned(
-                                        left: 40,
-                                        top: 20,
-                                        width:
-                                            MediaQuery.of(context).size.width -
-                                                80,
-                                        child: Text(
-                                          PackageDetailScreen.mealPlans[index],
-                                          softWrap: true,
-                                          textAlign: TextAlign.center,
-                                          textWidthBasis: TextWidthBasis.parent,
-                                          style: GoogleFonts.nunitoSans(
-                                            color: Colors.white,
-                                            fontSize: 15,
-                                            fontWeight: FontWeight.w500,
-                                            shadows: [
-                                              const Shadow(
-                                                blurRadius: 2,
-                                                color: Colors.black54,
-                                                offset: Offset(1, 1),
+                                        // Text Description
+                                        Expanded(
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(12.0),
+                                            child: Text(
+                                              PackageDetailScreen
+                                                  .mealPlans[index],
+                                              style: GoogleFonts.nunitoSans(
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.w600,
+                                                fontStyle: FontStyle.italic,
+                                                color: const Color(0xFF0D3011),
                                               ),
-                                            ],
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                    ],
+                                      ],
+                                    ),
+                                  );
+                                },
+                              ),
+                            ),
+
+                            const SizedBox(height: 12),
+
+                            // Dots indicator
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: List.generate(
+                                PackageDetailScreen.mealPlans.length,
+                                (index) => AnimatedContainer(
+                                  duration: const Duration(milliseconds: 300),
+                                  margin:
+                                      const EdgeInsets.symmetric(horizontal: 4),
+                                  width:
+                                      PackageDetailScreen._currentPage == index
+                                          ? 10
+                                          : 6,
+                                  height: 6,
+                                  decoration: BoxDecoration(
+                                    color: PackageDetailScreen._currentPage ==
+                                            index
+                                        ? const Color(0xFFB6D07E)
+                                        : const Color(0xFFD3D3D3),
+                                    borderRadius: BorderRadius.circular(3),
                                   ),
-                                );
-                              },
+                                ),
+                              ),
                             ),
                             const SizedBox(height: 20),
                             Text("Custom",
