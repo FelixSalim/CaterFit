@@ -33,9 +33,9 @@ class MyApp extends StatelessWidget {
       // home: HomeAdmin(username: 'Admin123',),
       // home: TodaysOrderDetail(),
       // home: Subscription(),
-      home: ProfilePage(),
       // home: ChatDetailPageAdmin(),
       // home:PackageManagement(),
+      home: LoginPage(),
       // home: NavbarAdmin(
       //   key: navbarAdminKey,
       // ),

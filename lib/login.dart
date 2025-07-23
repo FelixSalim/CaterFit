@@ -322,19 +322,19 @@ class _LoginPageState extends State<LoginPage> {
             ),
           ),
 
-          // Back button
-          SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.only(left: 16, top: 8),
-              child: IconButton(
-                icon: const Icon(Icons.arrow_back,
-                    color: Color(0xFF0D3011), size: 28),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-              ),
-            ),
-          ),
+          // // Back button
+          // SafeArea(
+          //   child: Padding(
+          //     padding: const EdgeInsets.only(left: 16, top: 8),
+          //     child: IconButton(
+          //       icon: const Icon(Icons.arrow_back,
+          //           color: Color(0xFF0D3011), size: 28),
+          //       onPressed: () {
+          //         Navigator.pop(context);
+          //       },
+          //     ),
+          //   ),
+          // ),
         ],
       ),
     );

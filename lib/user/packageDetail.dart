@@ -219,7 +219,7 @@ class _PackageDetailScreenState extends State<PackageDetailScreen> {
                         padding: const EdgeInsets.symmetric(vertical: 20),
                         margin: const EdgeInsets.only(top: 250),
                         decoration: const BoxDecoration(
-                          color: Color(0xFFFEFFDE),
+                          color: Colors.white,
                           borderRadius:
                               BorderRadius.vertical(top: Radius.circular(70)),
                         ),
