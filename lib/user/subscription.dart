@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class Subscription extends StatefulWidget {
   const Subscription({super.key});
@@ -52,22 +53,25 @@ class _SubscriptionPageState extends State<Subscription> {
                       backgroundColor: Colors.green.withOpacity(0.2),
                     ),
                   ),
-                  const Column(
+                  Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Text(
                         'Current Plan',
-                        style: TextStyle(
+                        style: GoogleFonts.montserrat(
                           fontSize: 35,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.green,
+                          fontWeight: FontWeight.bold,  
+                          color: const Color(0xFF0D3011),
                         ),
                       ),
                       SizedBox(height: 8),
                       Text(
                         'Paket Anak Sekolah',
-                        style: TextStyle(
-                            fontSize: 20, fontStyle: FontStyle.italic),
+                        style: GoogleFonts.montserrat(
+                            fontSize: 20, 
+                            fontStyle: FontStyle.italic,
+                            color: const Color(0xFF0D3011),
+                        ),
                       ),
                       SizedBox(height: 20),
                       Row(
@@ -77,7 +81,7 @@ class _SubscriptionPageState extends State<Subscription> {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               Text('Start date',
-                                  style: TextStyle(color: Colors.green)),
+                                  style: GoogleFonts.montserrat(color: const Color(0xFF319F43))),
                               Text('01 June 2025'),
                             ],
                           ),
@@ -86,7 +90,7 @@ class _SubscriptionPageState extends State<Subscription> {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               Text('End date',
-                                  style: TextStyle(color: Colors.red)),
+                                  style: GoogleFonts.montserrat(color: Colors.red)),
                               Text('08 June 2025'),
                             ],
                           ),
@@ -100,7 +104,7 @@ class _SubscriptionPageState extends State<Subscription> {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               Text('Days Left',
-                                  style: TextStyle(color: Colors.orange)),
+                                  style: GoogleFonts.montserrat(color: Colors.orange)),
                               Text('4 days'),
                             ],
                           ),
@@ -112,28 +116,28 @@ class _SubscriptionPageState extends State<Subscription> {
               ),
             ),
             const SizedBox(height: 30),
-            const Text(
+            Text(
               'Upcoming Menu',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              style: GoogleFonts.montserrat(fontSize: 20, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 10),
             _buildMenuRow(),
             const SizedBox(height: 30),
-            const Text(
+            Text(
               'Recent Menu',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              style: GoogleFonts.montserrat(fontSize: 20, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 8),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
               decoration: BoxDecoration(
-                color: const Color(0xFFE6F4EA),
+                color: const Color(0xFFCDE38B),
                 borderRadius: BorderRadius.circular(20),
               ),
-              child: const Text(
+              child: Text(
                 'Tuesday, 3 June 2025',
                 style:
-                    TextStyle(color: Colors.green, fontWeight: FontWeight.bold),
+                    GoogleFonts.montserrat(color: const Color(0xFF0D3011), fontWeight: FontWeight.bold),
               ),
             ),
             const SizedBox(height: 10),
@@ -145,38 +149,65 @@ class _SubscriptionPageState extends State<Subscription> {
   }
 
   Widget _buildMenuRow() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  return SingleChildScrollView(
+    scrollDirection: Axis.horizontal,
+    child: Row(
       children: [
         _buildMenuItem('Salad', 'Assets/salad.jpg'),
+        const SizedBox(width: 16),
         _buildMenuItem('Fried Rice', 'Assets/friedrice.jpg'),
+        const SizedBox(width: 16),
         _buildMenuItem('Dessert', 'Assets/icecream.jpg'),
       ],
-    );
-  }
+    ),
+  );
+}
 
   Widget _buildMenuItem(String title, String imageUrl) {
-    return Column(
-      children: [
-        ClipRRect(
-          borderRadius: BorderRadius.circular(12),
-          child: Image.asset(
-            imageUrl,
-            width: 100,
-            height: 100,
-            fit: BoxFit.cover,
+  return Column(
+    children: [
+      Stack(
+        children: [
+          ClipRRect(
+            borderRadius: BorderRadius.circular(12),
+            child: Image.asset(
+              imageUrl,
+              width: 150,
+              height: 175,
+              fit: BoxFit.cover,
+            ),
           ),
-        ),
-        const SizedBox(height: 4),
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-          decoration: BoxDecoration(
-            color: const Color(0xFFF9F6D9),
-            borderRadius: BorderRadius.circular(20),
+          Positioned(
+            bottom: 15,
+            left: 35,
+            right: 35,
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+              decoration: BoxDecoration(
+                color: const Color(0xFFFEFFDE),
+                borderRadius: const BorderRadius.only(
+                  bottomLeft: Radius.circular(12),
+                  bottomRight: Radius.circular(12),
+                  topLeft: Radius.circular(12),
+                  topRight: Radius.circular(12),
+                ),
+              ),
+              child: Center(
+                child: Text(
+                  title,
+                  style: GoogleFonts.montserrat(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 12,
+                    color: const Color(0xFF0D3011),
+                  ),
+                ),
+              ),
+            ),
           ),
-          child: Text(title),
-        ),
-      ],
-    );
-  }
+        ],
+      ),
+    ],
+  );
+}
+
 }
