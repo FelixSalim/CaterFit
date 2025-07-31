@@ -3,15 +3,13 @@ import 'dart:async';
 import 'package:caterfit/admin/navbarAdmin.dart';
 import 'package:caterfit/controller/accessibility_controller.dart';
 import 'package:caterfit/user/navbarUser.dart';
-import 'package:caterfit/user/packageMenu.dart';
-import 'package:caterfit/user/home.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/semantics.dart';
 
 import 'package:google_fonts/google_fonts.dart';
-import 'package:caterfit/admin/package_management.dart';
-import 'package:caterfit/admin/orderDetail.dart';
 import 'package:caterfit/register.dart';
+
+import 'package:speech_to_text/speech_to_text.dart' as stt;
+import 'package:permission_handler/permission_handler.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -27,6 +25,10 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   String? _errorMessage; // Added for error message
+
+  String _username = '';
+  String _password = '';
+  stt.SpeechToText _speech = stt.SpeechToText();
 
   @override
   void initState() {
@@ -44,8 +46,38 @@ class _LoginPageState extends State<LoginPage> {
   void _announceIfAccessibility() async {
     if (await AccessibilityController.getIsEnabled()) {
       await AccessibilityController.speak('Accessibility Mode Activated');
-      await AccessibilityController.speak(
-          "Login screen. Enter your email and password");
+      // Request microphone permission
+      PermissionStatus status = await Permission.microphone.request();
+      if (status.isDenied || status.isPermanentlyDenied) {
+        await AccessibilityController.speak(
+            "Microphone permission is required for speech recognition. Please enable it in your device settings.");
+        return;
+      }
+      await AccessibilityController.speak("Login screen. Enter your email");
+
+      // Delay to ensure TTS finishes speaking
+      await Future.delayed(const Duration(seconds: 1));
+
+      // Start speech recognition
+      bool available = await _speech.initialize();
+      if (available) {
+        _speech.listen(
+          onResult: (result) {
+            setState(() {
+              _username = result.recognizedWords;
+            });
+          },
+          listenFor: const Duration(seconds: 10),
+          pauseFor: const Duration(seconds: 1),
+          partialResults: false,
+        );
+
+        // Stop the speech recognizer (just in case)
+        await _speech.stop();
+
+        // Now continue with speech
+        await AccessibilityController.speak("success");
+      }
     }
   }
 

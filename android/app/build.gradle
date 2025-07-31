@@ -9,7 +9,7 @@ android {
     namespace = "com.example.caterfit"
     compileSdk = flutter.compileSdkVersion
     // ndkVersion = flutter.ndkVersion
-    ndkVersion = "25.1.8937393"
+    ndkVersion = "23.2.8568313"
 
     compileOptions {
         // sourceCompatibility = JavaVersion.VERSION_1_8
