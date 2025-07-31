@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:caterfit/controller/accessibility_controller.dart';
+
 
 void main() {
   runApp(const MaterialApp(
@@ -84,6 +86,42 @@ class _PaymentPageState extends State<PaymentPage>
     final int pricePerWeek = packages[0]['price'];
     final int subTotal = pricePerWeek * widget.weeks;
     final int totalExpenses = subTotal - couponDiscount;
+
+    void orderSummary() async {
+      if (await AccessibilityController.getIsEnabled()) {
+        await AccessibilityController.speak('Here is your order summary');
+        await AccessibilityController.speak(
+            'You have selected the ${widget.weeks} week(s) of Muscle Meal package.');
+        await AccessibilityController.speak(
+            'The price per week is Rp. $pricePerWeek, making your subtotal Rp. $subTotal.');
+        await AccessibilityController.speak(
+            'You have Fast Meal 10% off coupon, Healthy Plan 5% off coupon, and First Order Rp70,000 off coupon available. Which one would you like to apply?');
+            //logic untuk memilih coupon
+        await AccessibilityController.speak(
+            'Your subtotal is Rp. $subTotal, and after applying the coupon discount of Rp $couponDiscount, your total expenses are Rp. $totalExpenses.');
+        await AccessibilityController.speak('Do you want to proceed with the payment?');
+        //panggil paymentMethod() kalo yes
+      }
+    }
+
+    void paymentMethod() async {
+      if (await AccessibilityController.getIsEnabled()) {
+        await AccessibilityController.speak('Payment methods available are OVO, Master Card 5055, LinkAja, and Go Pay. Which one would you like to use?');
+        //logic untuk memilih metode pembayaran
+        await AccessibilityController.speak('You have selected $selectedMethod as your payment method.');
+        await AccessibilityController.speak('Please hold the screen for five seconds to proceed the payment.');
+        //logic tunggu tekan layar 5 detik
+        //panggil paymentSuccess() kalo sukses
+      }
+    }
+
+    void paymentSuccess() async {
+      if (await AccessibilityController.getIsEnabled()) {
+        await AccessibilityController.speak('Payment successful! Your subscription is now active.');
+        await AccessibilityController.speak('Thank you for choosing CaterFit!');
+        //logic untuk kembali ke HomeScreen
+      }
+    }
 
     return Scaffold(
       backgroundColor: Colors.white,

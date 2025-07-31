@@ -1,3 +1,4 @@
+import 'package:caterfit/controller/accessibility_controller.dart';
 import 'package:caterfit/user/navbarUser.dart';
 import 'package:caterfit/user/packageMenu.dart';
 import 'package:flutter/material.dart';
@@ -6,10 +7,42 @@ import 'package:google_fonts/google_fonts.dart';
 class HomeScreen extends StatelessWidget {
   final String username;
   static String orderStatus = "Received";
+  static String packageName = "Muscle Meal";
   const HomeScreen({super.key, required this.username});
+
+
+  void welcomeToCaterfit() async {
+    if (await AccessibilityController.getIsEnabled()) {
+      await AccessibilityController.speak("Hi " + username + ", welcome to CaterFit!");
+      await AccessibilityController.speak("You're currently on the home page. What would you like to do?");
+      await AccessibilityController.speak("1" + "Check order status.");
+      await AccessibilityController.speak("2" + "View package menu.");
+      await AccessibilityController.speak("3" + "Deactivate voice command." + "Please not that Deactivating voice command will log you out, and you'll need to log in again.");
+      //panggil fungsi sesuai pilihan user
+    }
+  }
+
+  void todaysOrderStatus() async {
+    if (await AccessibilityController.getIsEnabled()) {
+      await AccessibilityController.speak("Your have an order for " + packageName + "package");
+      await AccessibilityController.speak("Your menu includes Salmon Fried Rice, Chicken Wrap, and Cornflakes Bowl.");
+      await AccessibilityController.speak("Your order status is: " + orderStatus);
+    }
+  }
+
+  void deactivateVoiceCommand() async {
+    if (await AccessibilityController.getIsEnabled()) {
+      await AccessibilityController.speak("Please hold your screen for 5 seconds to deactivate voice command.");
+      //logic tunggu tekan layar 5 dtik
+      await AccessibilityController.speak("Deactivating voice command will log you out. Please log in again to use the voice command feature.");
+      // Logic to log out the user
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+    welcomeToCaterfit();
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
