@@ -79,7 +79,7 @@ class HomeScreen extends StatelessWidget {
                     ],
                   ),
                   const CircleAvatar(
-                    // backgroundImage: AssetImage('assets/profile.jpg'),
+                    backgroundImage: AssetImage('Assets/profile.png'),
                     radius: 24,
                   )
                 ],

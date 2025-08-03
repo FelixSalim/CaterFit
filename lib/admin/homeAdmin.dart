@@ -8,6 +8,8 @@ import 'package:caterfit/user/navbarUser.dart';
 import 'package:caterfit/user/packageMenu.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:caterfit/login.dart';
+
 
 class HomeAdmin extends StatelessWidget {
   final String username;
@@ -50,10 +52,30 @@ class HomeAdmin extends StatelessWidget {
                       )
                     ],
                   ),
-                  const CircleAvatar(
-                    // backgroundImage: AssetImage('assets/profile.jpg'),
-                    radius: 24,
-                  )
+                  ElevatedButton.icon(
+                    onPressed: () {
+                      Navigator.of(context).pushAndRemoveUntil(
+                        MaterialPageRoute(builder: (context) => LoginPage()),
+                        (Route<dynamic> route) => false,
+                      );
+                      print('Logout pressed, navigating to LoginPage');
+                    },
+                    icon: const Icon(Icons.logout, color: Colors.white, size: 20),
+                    label: Text(
+                      'Log Out',
+                      style: GoogleFonts.montserrat(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFF0D3011),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
+                    ),
+                  ),
                 ],
               ),
               SizedBox(height: 40),
@@ -390,3 +412,4 @@ class PackageCardFront extends StatelessWidget {
     );
   }
 }
+
