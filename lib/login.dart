@@ -54,8 +54,8 @@ class _LoginPageState extends State<LoginPage> {
         return;
       }
 
-      // Enter Email field
-      await AccessibilityController.speak("Login screen. Enter your email");
+      // Enter username field
+      await AccessibilityController.speak("Login screen. Enter your username");
       await Future.delayed(const Duration(seconds: 1));
 
       bool available = await _speech.initialize();
@@ -74,8 +74,9 @@ class _LoginPageState extends State<LoginPage> {
           pauseFor: const Duration(seconds: 5), // extended to avoid early stop
           partialResults: false,
         );
-        
-        await Future.delayed(const Duration(seconds: 6)); // wait for speech to complete
+
+        await Future.delayed(
+            const Duration(seconds: 6)); // wait for speech to complete
         await _speech.stop(); // stop before starting next listen
       }
 
@@ -98,7 +99,8 @@ class _LoginPageState extends State<LoginPage> {
           pauseFor: const Duration(seconds: 5),
           partialResults: false,
         );
-        await Future.delayed(const Duration(seconds: 6)); // wait for speech to complete
+        await Future.delayed(
+            const Duration(seconds: 6)); // wait for speech to complete
         await _speech.stop(); // stop before starting next listen
         setState(() {}); // force rebuild after speech ends
       }
@@ -131,7 +133,7 @@ class _LoginPageState extends State<LoginPage> {
         }
       } else {
         await AccessibilityController.speak(
-              "Username and password are empty. Please tap the screen for five seconds to try again.");
+            "Username and password are empty. Please tap the screen for five seconds to try again.");
         setState(() {
           _errorMessage = "Please fill in both fields";
         });
