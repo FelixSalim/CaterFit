@@ -53,30 +53,88 @@ class _LoginPageState extends State<LoginPage> {
             "Microphone permission is required for speech recognition. Please enable it in your device settings.");
         return;
       }
-      await AccessibilityController.speak("Login screen. Enter your email");
 
-      // Delay to ensure TTS finishes speaking
+      // Enter Email field
+      await AccessibilityController.speak("Login screen. Enter your email");
       await Future.delayed(const Duration(seconds: 1));
 
-      // Start speech recognition
       bool available = await _speech.initialize();
       if (available) {
         _speech.listen(
           onResult: (result) {
             setState(() {
               _username = result.recognizedWords;
+              _usernameController.text = _username;
+              _usernameController.selection = TextSelection.fromPosition(
+                TextPosition(offset: _usernameController.text.length),
+              );
             });
           },
-          listenFor: const Duration(seconds: 10),
-          pauseFor: const Duration(seconds: 1),
+          listenFor: const Duration(seconds: 5),
+          pauseFor: const Duration(seconds: 5), // extended to avoid early stop
           partialResults: false,
         );
+        
+        await Future.delayed(const Duration(seconds: 6)); // wait for speech to complete
+        await _speech.stop(); // stop before starting next listen
+      }
 
-        // Stop the speech recognizer (just in case)
-        await _speech.stop();
+      // Enter Password field
+      await AccessibilityController.speak("Now enter your password");
+      await Future.delayed(const Duration(seconds: 1));
 
-        // Now continue with speech
-        await AccessibilityController.speak("success");
+      if (available) {
+        _speech.listen(
+          onResult: (result) {
+            setState(() {
+              _password = result.recognizedWords;
+              _passwordController.text = _password;
+              _passwordController.selection = TextSelection.fromPosition(
+                TextPosition(offset: _passwordController.text.length),
+              );
+            });
+          },
+          listenFor: const Duration(seconds: 5),
+          pauseFor: const Duration(seconds: 5),
+          partialResults: false,
+        );
+        await Future.delayed(const Duration(seconds: 6)); // wait for speech to complete
+        await _speech.stop(); // stop before starting next listen
+        setState(() {}); // force rebuild after speech ends
+      }
+      // Click Login button
+      await AccessibilityController.speak("Now double tap to login");
+      await Future.delayed(const Duration(seconds: 1));
+      if (_username.isNotEmpty && _password.isNotEmpty) {
+        if (_username == "Admin" && _password == "Admin123") {
+          LoginPage.username = _username;
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => NavbarAdmin(),
+            ),
+          );
+        } else if (_username == "user" && _password == "user") {
+          LoginPage.username = _username;
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => Navbar(),
+            ),
+          );
+        } else {
+          await AccessibilityController.speak(
+              "Invalid username or password. Please tap the screen for five seconds to try again.");
+          setState(() {
+            _errorMessage = "Invalid username or password";
+          });
+        }
+      } else {
+        await AccessibilityController.speak(
+              "Username and password are empty. Please tap the screen for five seconds to try again.");
+        setState(() {
+          _errorMessage = "Please fill in both fields";
+        });
       }
     }
   }
