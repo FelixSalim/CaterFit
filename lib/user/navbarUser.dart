@@ -1,6 +1,5 @@
 import 'package:caterfit/login.dart';
 import 'package:caterfit/user/packageMenu.dart';
-import 'package:caterfit/user/payment.dart';
 import 'package:caterfit/user/home.dart';
 import 'package:caterfit/user/profile.dart';
 import 'package:caterfit/user/subscription.dart';

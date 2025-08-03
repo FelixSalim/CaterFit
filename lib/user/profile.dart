@@ -555,12 +555,6 @@ class _ProfilePageState extends State<ProfilePage> {
   // REVISED: Updated gender dropdown widget
   Widget _buildGenderDropdown() {
     final double dropdownWidth = MediaQuery.of(context).size.width - 48;
-    // REVISED: Define the correct text style once
-    final TextStyle dropdownTextStyle = GoogleFonts.nunitoSans(
-        color: const Color(0xFF0D3011).withOpacity(0.7),
-        fontWeight: FontWeight.w600,
-        fontSize: 16 // Explicitly set font size to match TextFormField
-        );
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 8.0),
