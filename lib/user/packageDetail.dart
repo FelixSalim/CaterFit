@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:caterfit/controller/accessibility_controller.dart';
 import 'dart:async';
 import 'payment.dart';
 
@@ -215,6 +216,56 @@ class _PackageDetailScreenState extends State<PackageDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // ----- CUSTOMIZE ORDER -----
+    void customMenu() async {
+      if (await AccessibilityController.getIsEnabled()) {
+        await AccessibilityController.speak(
+            'You can customize beef steak and boiled egg');
+        await AccessibilityController.speak(
+            'Do you want to customize either of them');
+        // Buat logis if yes or if no
+
+        // if yes
+        await AccessibilityController.speak(
+            'First, you can change Beef Steak to');
+        await AccessibilityController.speak(
+            'Turkey, Salmon, Tuna, or still Beef Steak');
+        // Speech to text --> pilih custom pertama
+
+        // Delay to ensure TTS finishes speaking
+        await Future.delayed(const Duration(seconds: 1));
+
+        await AccessibilityController.speak('okay noted');
+        await AccessibilityController.speak(
+            'Second, you can change boiled egg to');
+        await AccessibilityController.speak(
+            'Tahini, Edamame, Hummus, Nut butter, or still Boiled Egg');
+        // Speech to text --> pilih custom kedua
+
+        // Delay to ensure TTS finishes speaking
+        await Future.delayed(const Duration(seconds: 1));
+
+        await AccessibilityController.speak('okay noted');
+        await AccessibilityController.speak(
+            'Your customization has been saved');
+        await AccessibilityController.speak(
+            'How long is the duration of catering in week do you want to subscribe');
+        // Speech to text --> sebut angka durasi catering
+
+        // Delay to ensure TTS finishes speaking
+        await Future.delayed(const Duration(seconds: 1));
+
+        await AccessibilityController.speak(
+            'Are you sure want to subscribe XX package');
+
+        // Speech to text --> yes / no
+        // condition if no --> kembali ke halaman tentukan paket
+
+        // condition if yes
+        await AccessibilityController.speak('Direct to payment page');
+      }
+    }
+
     return Scaffold(
       backgroundColor: const Color(0xFFFAF8F1),
       // GestureDetector to detect tap outside the alert
