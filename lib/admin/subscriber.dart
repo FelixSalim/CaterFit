@@ -87,15 +87,26 @@ class _SubscriberPageState extends State<SubscriberPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
-                'Current Subscribers',
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xFF11330D),
-                ),
+              Row(
+                children: [
+                  IconButton(
+                    icon: const Icon(Icons.arrow_back),
+                    color: const Color(0xFF11330D),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                  ),
+                  const SizedBox(width: 8),
+                  const Text(
+                    'Current Subscribers',
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFF11330D),
+                    ),
+                  ),
+                ],
               ),
-              const SizedBox(height: 16),
 
               // Search bar
               TextField(
