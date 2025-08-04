@@ -276,7 +276,7 @@ class _PackageDetailScreenState extends State<PackageDetailScreen> {
             Navigator.pushNamed(context, '/payment');
           } else {
             await AccessibilityController.speak(
-                'Let’s choose the duration again.');
+                'Lets choose the duration again.');
             await askDuration();
           }
         }
