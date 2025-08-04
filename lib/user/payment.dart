@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:speech_to_text/speech_to_text.dart';
 import 'package:caterfit/controller/accessibility_controller.dart';
 
 void main() {
@@ -10,7 +11,6 @@ void main() {
 
 class PaymentPage extends StatefulWidget {
   final int weeks;
-
   const PaymentPage({super.key, required this.weeks});
 
   @override
@@ -19,35 +19,41 @@ class PaymentPage extends StatefulWidget {
 
 class _PaymentPageState extends State<PaymentPage>
     with SingleTickerProviderStateMixin {
+  final SpeechToText _speech = SpeechToText();
+  late AnimationController _controller;
+
   bool showCoupons = false;
   String selectedMethod = 'Master Card 5055';
   bool subscriptionActive = false;
   String? selectedCoupon;
   int couponDiscount = 0;
-
-  late AnimationController _controller;
-  late Animation<Offset> _slideAnimation;
+  int subTotal = 250000;
+  int totalExpenses = 250000;
 
   final List<String> coupons = [
-    'Fast Meal 10% - Rp. 100,000',
-    'Healthy Plan 5% - Rp. 50,000',
-    'First Order - Rp. 70,000',
+    'Fast Meal - Rp. 20,000',
+    'Healthy Plan - Rp. 15,000',
+    'First Order - Rp. 10,000',
   ];
 
-  final List<Map<String, dynamic>> paymentMethods = [
-    {'name': 'OVO', 'image': 'Assets/ovo.png'},
-    {'name': 'Master Card 5055', 'image': 'Assets/mastercard.png'},
-    {'name': 'LinkAja', 'image': 'Assets/Linkaja.png'},
-    {'name': 'Go Pay', 'image': 'Assets/gopay.png'},
+  final List<Map<String, String>> paymentMethods = [
+    {
+      'name': 'Master Card 5055',
+      'image': 'assets/images/mastercard.png',
+    },
+    {
+      'name': 'Gopay',
+      'image': 'assets/images/gopay.png',
+    },
+    {
+      'name': 'Dana',
+      'image': 'assets/images/dana.png',
+    },
   ];
 
   final Map<String, int> stocks = {
     'Muscle Meal': 10,
   };
-
-  final List<Map<String, dynamic>> packages = [
-    {'name': 'Muscle Meal', 'price': 400000}
-  ];
 
   @override
   void initState() {
@@ -57,76 +63,153 @@ class _PaymentPageState extends State<PaymentPage>
       duration: const Duration(milliseconds: 300),
     );
 
-    _slideAnimation =
-        Tween<Offset>(begin: const Offset(0, -0.1), end: Offset.zero).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
-    );
+    Future.delayed(const Duration(seconds: 1), () async {
+      await AccessibilityController.speak(
+        'Please select a coupon. Available coupons are: Fast Meal, Healthy Plan, and First Order.',
+      );
+      _startCouponListening();
+    });
   }
 
   @override
   void dispose() {
     _controller.dispose();
+    _speech.stop();
     super.dispose();
   }
 
   void toggleCoupons() {
     setState(() {
       showCoupons = !showCoupons;
-      if (showCoupons) {
-        _controller.forward();
-      } else {
-        _controller.reverse();
-      }
+      showCoupons ? _controller.forward() : _controller.reverse();
     });
+  }
+
+  void _startCouponListening() async {
+    bool available = await _speech.initialize();
+    if (available) {
+      _speech.listen(
+        onResult: (result) {
+          String voiceInput = result.recognizedWords.toLowerCase();
+
+          if (voiceInput.contains('fast') || voiceInput.contains('first')) {
+            _applyCoupon(0);
+          } else if (voiceInput.contains('healthy') ||
+              voiceInput.contains('second')) {
+            _applyCoupon(1);
+          } else if (voiceInput.contains('order') ||
+              voiceInput.contains('third')) {
+            _applyCoupon(2);
+          } else {
+            AccessibilityController.speak(
+              "Sorry, I didn't understand. Please say the name or number of the coupon.",
+            );
+            _startCouponListening();
+          }
+        },
+        listenFor: const Duration(seconds: 5),
+        pauseFor: const Duration(seconds: 3),
+        partialResults: false,
+      );
+    }
+  }
+
+  void _applyCoupon(int index) async {
+    selectedCoupon = coupons[index];
+    final match = RegExp(r'Rp\.?\s?([\d.,]+)').firstMatch(selectedCoupon!);
+    couponDiscount = match != null
+        ? int.parse(match.group(1)!.replaceAll(RegExp(r'[^\d]'), ''))
+        : 0;
+
+    await _speech.stop();
+    await AccessibilityController.speak('${selectedCoupon!} coupon applied.');
+
+    totalExpenses = subTotal - couponDiscount;
+
+    await AccessibilityController.speak(
+      'Your subtotal is Rp. $subTotal, and after applying the coupon discount of Rp $couponDiscount, your total expenses are Rp. $totalExpenses.',
+    );
+
+    await AccessibilityController.speak(
+      'Now choose your payment method. Say Master Card, Gopay, or Dana.',
+    );
+    _startPaymentMethodListening();
+  }
+
+  void _startPaymentMethodListening() async {
+    bool available = await _speech.initialize();
+    if (available) {
+      _speech.listen(
+        onResult: (result) {
+          String voiceInput = result.recognizedWords.toLowerCase();
+
+          if (voiceInput.contains('master')) {
+            _applyPaymentMethod('Master Card 5055');
+          } else if (voiceInput.contains('gopay')) {
+            _applyPaymentMethod('Gopay');
+          } else if (voiceInput.contains('dana')) {
+            _applyPaymentMethod('Dana');
+          } else {
+            AccessibilityController.speak(
+              "Sorry, I didn't catch that. Please say Master Card, Gopay, or Dana.",
+            );
+            _startPaymentMethodListening();
+          }
+        },
+        listenFor: const Duration(seconds: 5),
+        pauseFor: const Duration(seconds: 3),
+        partialResults: false,
+      );
+    }
+  }
+
+  void _applyPaymentMethod(String method) async {
+    selectedMethod = method;
+    await _speech.stop();
+    await AccessibilityController.speak('$selectedMethod selected.');
+
+    await AccessibilityController.speak(
+      'Do you want to proceed with the payment? Please say yes or no.',
+    );
+    _startConfirmListening();
+  }
+
+  void _startConfirmListening() async {
+    bool available = await _speech.initialize();
+    if (available) {
+      _speech.listen(
+        onResult: (result) {
+          String voiceInput = result.recognizedWords.toLowerCase();
+          if (voiceInput.contains('yes')) {
+            _payNow();
+          } else if (voiceInput.contains('no')) {
+            AccessibilityController.speak('Payment cancelled.');
+          } else {
+            AccessibilityController.speak("Please say yes or no.");
+            _startConfirmListening();
+          }
+        },
+        listenFor: const Duration(seconds: 4),
+        pauseFor: const Duration(seconds: 3),
+        partialResults: false,
+      );
+    }
+  }
+
+  void _payNow() {
+    setState(() {
+      subscriptionActive = true;
+      stocks['Muscle Meal'] = (stocks['Muscle Meal'] ?? 0) - widget.weeks;
+    });
+
+    AccessibilityController.speak('Payment successful. Subscription active.');
+    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+      content: Text('Payment Successful. Subscription Active!'),
+    ));
   }
 
   @override
   Widget build(BuildContext context) {
-    final int pricePerWeek = packages[0]['price'];
-    final int subTotal = pricePerWeek * widget.weeks;
-    final int totalExpenses = subTotal - couponDiscount;
-
-    void orderSummary() async {
-      if (await AccessibilityController.getIsEnabled()) {
-        await AccessibilityController.speak('Here is your order summary');
-        await AccessibilityController.speak(
-            'You have selected the ${widget.weeks} week(s) of Muscle Meal package.');
-        await AccessibilityController.speak(
-            'The price per week is Rp. $pricePerWeek, making your subtotal Rp. $subTotal.');
-        await AccessibilityController.speak(
-            'You have Fast Meal 10% off coupon, Healthy Plan 5% off coupon, and First Order Rp70,000 off coupon available. Which one would you like to apply?');
-        //logic untuk memilih coupon
-        await AccessibilityController.speak(
-            'Your subtotal is Rp. $subTotal, and after applying the coupon discount of Rp $couponDiscount, your total expenses are Rp. $totalExpenses.');
-        await AccessibilityController.speak(
-            'Do you want to proceed with the payment?');
-        //panggil paymentMethod() kalo yes
-      }
-    }
-
-    void paymentMethod() async {
-      if (await AccessibilityController.getIsEnabled()) {
-        await AccessibilityController.speak(
-            'Payment methods available are OVO, Master Card 5055, LinkAja, and Go Pay. Which one would you like to use?');
-        //logic untuk memilih metode pembayaran
-        await AccessibilityController.speak(
-            'You have selected $selectedMethod as your payment method.');
-        await AccessibilityController.speak(
-            'Please hold the screen for five seconds to proceed the payment.');
-        //logic tunggu tekan layar 5 detik
-        //panggil paymentSuccess() kalo sukses
-      }
-    }
-
-    void paymentSuccess() async {
-      if (await AccessibilityController.getIsEnabled()) {
-        await AccessibilityController.speak(
-            'Payment successful! Your subscription is now active.');
-        await AccessibilityController.speak('Thank you for choosing CaterFit!');
-        //logic untuk kembali ke HomeScreen
-      }
-    }
-
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
@@ -314,7 +397,7 @@ class _PaymentPageState extends State<PaymentPage>
                       return GestureDetector(
                         onTap: () {
                           setState(() {
-                            selectedMethod = method['name'];
+                            selectedMethod = method['name']!;
                           });
                         },
                         child: Container(
@@ -338,7 +421,7 @@ class _PaymentPageState extends State<PaymentPage>
                             children: [
                               ClipOval(
                                 child: Image.asset(
-                                  method['image'],
+                                  method['image']!,
                                   width: 40,
                                   height: 40,
                                   fit: BoxFit.cover,
@@ -347,7 +430,7 @@ class _PaymentPageState extends State<PaymentPage>
                               const SizedBox(width: 12),
                               Expanded(
                                 child: Text(
-                                  method['name'],
+                                  method['name']!,
                                   style: const TextStyle(
                                       fontSize: 16, color: Colors.black),
                                 ),
