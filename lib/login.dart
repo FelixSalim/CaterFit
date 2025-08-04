@@ -116,7 +116,7 @@ class _LoginPageState extends State<LoginPage> {
               builder: (context) => NavbarAdmin(),
             ),
           );
-        } else if (_username == "user" && _password == "user") {
+        } else if (_username == "hai" && _password == "hai") {
           LoginPage.username = _username;
           Navigator.push(
             context,
@@ -134,6 +134,7 @@ class _LoginPageState extends State<LoginPage> {
       } else {
         await AccessibilityController.speak(
             "Username and password are empty. Please tap the screen for five seconds to try again.");
+
         setState(() {
           _errorMessage = "Please fill in both fields";
         });

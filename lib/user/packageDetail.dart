@@ -4,6 +4,9 @@ import 'package:caterfit/controller/accessibility_controller.dart';
 import 'dart:async';
 import 'payment.dart';
 
+import 'package:speech_to_text/speech_to_text.dart' as stt;
+import 'package:permission_handler/permission_handler.dart';
+
 class PackageDetailScreen extends StatefulWidget {
   static final String packageName = "Muscle Meal";
   static final List<String> mealPlans = [
@@ -44,6 +47,14 @@ class _PackageDetailScreenState extends State<PackageDetailScreen> {
 
   Timer? _autoScrollTimer;
   late PageController _pageController;
+
+  String _customYesNo = '';
+  String _customBeefSteak = '';
+  String _customEgg = '';
+  String _confirmCustom = '';
+  String _weekDuration = '';
+  String _confirmWeek = '';
+  stt.SpeechToText _speech = stt.SpeechToText();
 
   @override
   void initState() {
@@ -216,55 +227,251 @@ class _PackageDetailScreenState extends State<PackageDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // ----- CUSTOMIZE ORDER -----
     void customMenu() async {
       if (await AccessibilityController.getIsEnabled()) {
-        await AccessibilityController.speak(
-            'You can customize beef steak and boiled egg');
-        await AccessibilityController.speak(
-            'Do you want to customize either of them');
-        // Buat logis if yes or if no
+        bool available = await _speech.initialize();
 
-        // if yes
+        Future<void> askDuration() async {
+          await AccessibilityController.speak(
+              'How many weeks do you want to subscribe? Say in numbers, for example, one for one week, two for two weeks, and so on.');
+
+          if (available) {
+            _speech.listen(
+              onResult: (result) {
+                setState(() {
+                  _weekDuration = result.recognizedWords;
+                });
+              },
+              listenFor: const Duration(seconds: 5),
+              pauseFor: const Duration(seconds: 5),
+              partialResults: false,
+            );
+
+            await Future.delayed(const Duration(seconds: 6));
+            await _speech.stop();
+          }
+
+          // Konfirmasi durasi
+          await AccessibilityController.speak(
+              'You have chosen $_weekDuration weeks. Is it correct? Say one for Yes, two for No');
+
+          if (available) {
+            _speech.listen(
+              onResult: (result) {
+                setState(() {
+                  _confirmWeek = result.recognizedWords;
+                });
+              },
+              listenFor: const Duration(seconds: 5),
+              pauseFor: const Duration(seconds: 5),
+              partialResults: false,
+            );
+
+            await Future.delayed(const Duration(seconds: 6));
+            await _speech.stop();
+          }
+
+          if (_confirmWeek.toLowerCase().contains('one')) {
+            await AccessibilityController.speak('Redirecting to payment page');
+            Navigator.pushNamed(context, '/payment');
+          } else {
+            await AccessibilityController.speak(
+                'Let’s choose the duration again.');
+            await askDuration();
+          }
+        }
+
+        Future<void> askCustomization() async {
+          await AccessibilityController.speak(
+              'Do you want to customize either of them? Say one for Yes, two for No');
+
+          if (available) {
+            _speech.listen(
+              onResult: (result) {
+                setState(() {
+                  _customYesNo = result.recognizedWords;
+                });
+              },
+              listenFor: const Duration(seconds: 5),
+              pauseFor: const Duration(seconds: 5),
+              partialResults: false,
+            );
+
+            await Future.delayed(const Duration(seconds: 6));
+            await _speech.stop();
+          }
+
+          if (_customYesNo.toLowerCase().contains('one')) {
+            // Pilih beef
+            await AccessibilityController.speak(
+                'First, you can change Beef Steak to: one Turkey, two Salmon, three Tuna, or four keep Beef Steak');
+
+            if (available) {
+              _speech.listen(
+                onResult: (result) {
+                  setState(() {
+                    _customBeefSteak = result.recognizedWords;
+                  });
+                },
+                listenFor: const Duration(seconds: 5),
+                pauseFor: const Duration(seconds: 5),
+                partialResults: false,
+              );
+
+              await Future.delayed(const Duration(seconds: 6));
+              await _speech.stop();
+            }
+
+            // Pilih egg
+            await AccessibilityController.speak(
+                'Second, you can change Boiled Egg to: one Tahini, two Edamame, three Hummus, four Nut Butter, or five keep Boiled Egg');
+
+            if (available) {
+              _speech.listen(
+                onResult: (result) {
+                  setState(() {
+                    _customEgg = result.recognizedWords;
+                  });
+                },
+                listenFor: const Duration(seconds: 5),
+                pauseFor: const Duration(seconds: 5),
+                partialResults: false,
+              );
+
+              await Future.delayed(const Duration(seconds: 6));
+              await _speech.stop();
+            }
+
+            // Konfirmasi kustomisasi
+            await AccessibilityController.speak(
+                'This is your customization: $_customBeefSteak and $_customEgg. Is it correct? Say one for Yes, two for No');
+
+            if (available) {
+              _speech.listen(
+                onResult: (result) {
+                  setState(() {
+                    _confirmCustom = result.recognizedWords;
+                  });
+                },
+                listenFor: const Duration(seconds: 5),
+                pauseFor: const Duration(seconds: 5),
+                partialResults: false,
+              );
+
+              await Future.delayed(const Duration(seconds: 6));
+              await _speech.stop();
+            }
+
+            if (_confirmCustom.toLowerCase().contains('one')) {
+              // Tanya durasi
+              await askDuration();
+            } else {
+              // Ulang kustomisasi dari awal
+              await AccessibilityController.speak(
+                  'Please try again to customize your package.');
+              await askCustomization();
+            }
+          } else if (_customYesNo.toLowerCase().contains('two')) {
+            await AccessibilityController.speak(
+                'Okay, no customization will be applied');
+            await askDuration();
+          }
+        }
+
+        // Start flow
         await AccessibilityController.speak(
-            'First, you can change Beef Steak to');
-        await AccessibilityController.speak(
-            'Turkey, Salmon, Tuna, or still Beef Steak');
-        // Speech to text --> pilih custom pertama
-
-        // Delay to ensure TTS finishes speaking
-        await Future.delayed(const Duration(seconds: 1));
-
-        await AccessibilityController.speak('okay noted');
-        await AccessibilityController.speak(
-            'Second, you can change boiled egg to');
-        await AccessibilityController.speak(
-            'Tahini, Edamame, Hummus, Nut butter, or still Boiled Egg');
-        // Speech to text --> pilih custom kedua
-
-        // Delay to ensure TTS finishes speaking
-        await Future.delayed(const Duration(seconds: 1));
-
-        await AccessibilityController.speak('okay noted');
-        await AccessibilityController.speak(
-            'Your customization has been saved');
-        await AccessibilityController.speak(
-            'How long is the duration of catering in week do you want to subscribe');
-        // Speech to text --> sebut angka durasi catering
-
-        // Delay to ensure TTS finishes speaking
-        await Future.delayed(const Duration(seconds: 1));
-
-        await AccessibilityController.speak(
-            'Are you sure want to subscribe XX package');
-
-        // Speech to text --> yes / no
-        // condition if no --> kembali ke halaman tentukan paket
-
-        // condition if yes
-        await AccessibilityController.speak('Direct to payment page');
+            'You can customize Beef Steak and Boiled Egg.');
+        await askCustomization();
       }
     }
+
+    // bool available = await _speech.initialize();
+    // if (available) {
+    //   _speech.listen(
+    //     onResult: (result) {
+    //       _customYesNo = result.recognizedWords;
+
+    //       if(_customYesNo.toLowerCase() == "one") {
+    //         // if yes
+    //         AccessibilityController.speak(
+    //             'First, you can change Beef Steak to');
+    //         AccessibilityController.speak(
+    //             '1. Turkey, 2. Salmon, 3. Tuna, or 4. still Beef Steak');
+    //         // Speech to text --> pilih custom pertama
+    //         if (available) {
+    //           _speech.listen(
+    //             onResult: (result) {
+    //               setState(() {
+    //                 // simpan customize user ke string customBeefSteak sesuai dengan angka
+    //                 // misal jika user mengatakan 1. _customBeefSteak = Turkey, jika user bilang 2 _customBeefSteak = Salmon, and so on
+    //                 _customBeefSteak = result.recognizedWords;
+    //               });
+    //             },
+    //             listenFor: const Duration(seconds: 5),
+    //             pauseFor: const Duration(seconds: 5),
+    //             partialResults: false,
+    //           );
+    //           Future.delayed(
+    //               const Duration(seconds: 6)); // wait for speech to complete
+    //           _speech.stop(); // stop before starting next listen
+    //           setState(() {}); // force rebuild after speech ends
+    //         }
+
+    //         // Delay to ensure TTS finishes speaking
+    //         Future.delayed(const Duration(seconds: 1));
+
+    //         AccessibilityController.speak(
+    //             'Second, you can change boiled egg to');
+    //         AccessibilityController.speak(
+    //             '1. Tahini, 2. Edamame, 3. Hummus, 3. Nut butter, or 4. still Boiled Egg');
+    //         // Speech to text --> pilih custom kedua
+    //         // lakukan perlakuan yang sama dengan menyimpan perkataan user ke _customEgg
+
+    //         // Delay to ensure TTS finishes speaking
+    //         Future.delayed(const Duration(seconds: 1));
+
+    //         AccessibilityController.speak('okay noted');
+    //         AccessibilityController.speak(
+    //             'This is your customization A and B, is it correct 1. Yes 2. No');
+
+    //       } else if(_customYesNo.toLowerCase() == "two"){
+    //         AccessibilityController.speak("");
+    //       } else {
+    //         AccessibilityController.speak("Sorry, I didn't understand that. Please try again.");
+    //       }
+    //     },
+    //     listenFor: const Duration(seconds: 5),
+    //     pauseFor:
+    //         const Duration(seconds: 5), // extended to avoid early stop
+    //     partialResults: false,
+    //   );
+
+    //   await Future.delayed(
+    //       const Duration(seconds: 6)); // wait for speech to complete
+    //   await _speech.stop(); // stop before starting next listen
+    // }
+
+    // if yes
+    //   await AccessibilityController.speak(
+    //       'Your customization has been saved');
+    //   await AccessibilityController.speak(
+    //       'How long is the duration of catering in week do you want to subscribe');
+    //   await AccessibilityController.speak(
+    //       'Tell me in number, for example one, means one week, two means two week, and so on');
+    //   // Speech to text --> sebut angka durasi catering
+
+    //   // Delay to ensure TTS finishes speaking
+    //   await Future.delayed(const Duration(seconds: 1));
+
+    //   await AccessibilityController.speak(
+    //       'You want to subscribe for XX week, is it correct, 1. Yes 2. No');
+
+    //   // Speech to text --> yes / no
+    //   // condition if no --> kembali ke halaman tentukan paket
+
+    //   // condition if yes
+    //   await AccessibilityController.speak('Direct to payment page');
+    // }
 
     return Scaffold(
       backgroundColor: const Color(0xFFFAF8F1),
