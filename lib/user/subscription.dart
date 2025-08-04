@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'nosubscription.dart';
 
 class Subscription extends StatefulWidget {
   const Subscription({super.key});
@@ -142,7 +143,36 @@ class _SubscriptionPageState extends State<Subscription> {
             ),
             const SizedBox(height: 10),
             _buildMenuRow(),
+            // Add this at the end of the children: [] list inside the Column
+          const SizedBox(height: 30),
+          Center(
+            child: ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const NoSubscriptionPage(),
+                  ),
+                );
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.red,
+                padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 12),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
+              child: Text(
+                'Cancel Subscription',
+                style: GoogleFonts.montserrat(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ),
           ],
+          
         ),
       ),
     );
@@ -197,7 +227,7 @@ class _SubscriptionPageState extends State<Subscription> {
                   title,
                   style: GoogleFonts.montserrat(
                     fontWeight: FontWeight.bold,
-                    fontSize: 12,
+                    fontSize: 10,
                     color: const Color(0xFF0D3011),
                   ),
                 ),
