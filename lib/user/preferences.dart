@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:caterfit/user/profile.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   runApp(const MyApp());
@@ -12,7 +13,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Preferences', // Diperbarui sesuai permintaan Anda
+      title: 'Preferences',
       theme: ThemeData(
         scaffoldBackgroundColor: Colors.white,
         useMaterial3: true,
@@ -22,7 +23,6 @@ class MyApp extends StatelessWidget {
   }
 }
 
-// Definisikan warna agar mudah diubah dan digunakan kembali
 const Color kPrimaryTextColor = Color(0xFF0D3011);
 const Color kContainerColor = Color(0xFFFEFFDE);
 const Color kUnselectedChipColor = Color(0xFFCDE38B);
@@ -37,7 +37,6 @@ class PreferencesPage extends StatefulWidget {
 }
 
 class _PreferencesPageState extends State<PreferencesPage> {
-  // Daftar untuk menyimpan preferensi yang tersedia
   final List<String> dietTypes = [
     'Cutting',
     'Bulking',
@@ -56,22 +55,10 @@ class _PreferencesPageState extends State<PreferencesPage> {
     'Balanced'
   ];
 
-  // Daftar untuk melacak preferensi yang dipilih oleh pengguna
-  final List<String> _selectedDietTypes = [];
-  final List<String> _selectedNutritionTypes = [];
+  List<String> _selectedDietTypes = [];
+  List<String> _selectedNutritionTypes = [];
+  bool _isLoading = true; // State untuk menunjukkan apakah data sedang dimuat
 
-  // Fungsi untuk menangani pemilihan chip
-  void _toggleSelection(String item, List<String> selectedList) {
-    setState(() {
-      if (selectedList.contains(item)) {
-        selectedList.remove(item);
-      } else {
-        selectedList.add(item);
-      }
-    });
-  }
-
-  // Definisikan shadow yang akan digunakan kembali
   final List<BoxShadow> kCustomShadow = [
     BoxShadow(
       color: Colors.black.withOpacity(0.25),
@@ -81,11 +68,47 @@ class _PreferencesPageState extends State<PreferencesPage> {
   ];
 
   @override
+  void initState() {
+    super.initState();
+    _loadPreferences();
+  }
+
+  // Fungsi untuk memuat preferensi dari shared_preferences
+  Future<void> _loadPreferences() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _selectedDietTypes = prefs.getStringList('selectedDietTypes') ?? [];
+      _selectedNutritionTypes =
+          prefs.getStringList('selectedNutritionTypes') ?? [];
+      _isLoading = false; // Setelah data dimuat, set isLoading menjadi false
+    });
+  }
+
+  // Fungsi untuk menyimpan preferensi ke shared_preferences
+  Future<void> _savePreferences() async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setStringList('selectedDietTypes', _selectedDietTypes);
+    prefs.setStringList('selectedNutritionTypes', _selectedNutritionTypes);
+  }
+
+  void _toggleSelection(String item, List<String> selectedList) {
+    setState(() {
+      if (selectedList.contains(item)) {
+        selectedList.remove(item);
+      } else {
+        selectedList.add(item);
+      }
+      _savePreferences(); // Panggil fungsi simpan setiap kali pilihan berubah
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     bool hasNoPreferencesSelected =
         _selectedDietTypes.isEmpty && _selectedNutritionTypes.isEmpty;
 
     return Scaffold(
+<<<<<<< Updated upstream
       // Tidak menggunakan AppBar agar header bisa ikut ter-scroll
       body: SafeArea(
         child: SingleChildScrollView(
@@ -110,20 +133,73 @@ class _PreferencesPageState extends State<PreferencesPage> {
                         width: 32, // Diperbarui sesuai permintaan Anda
                         height: 32, // Diperbarui sesuai permintaan Anda
                         color: kPrimaryTextColor,
+=======
+      body: _isLoading
+          ? const Center(
+              child: CircularProgressIndicator()) // Tampilkan loading indicator
+          : SafeArea(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.symmetric(
+                    horizontal: 24.0, vertical: 16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Row(
+                      children: [
+                        InkWell(
+                          onTap: () {
+                            Navigator.pop(context);
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.fromLTRB(0, 8, 16, 8),
+                            child: Image.asset(
+                              'Assets/back.png',
+                              width: 32,
+                              height: 32,
+                              color: kPrimaryTextColor,
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: Text(
+                            'Preferences',
+                            textAlign: TextAlign.center,
+                            style: GoogleFonts.montserrat(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 28,
+                              color: kPrimaryTextColor,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 48),
+                      ],
+                    ),
+                    const SizedBox(height: 20),
+                    Visibility(
+                      visible: hasNoPreferencesSelected,
+                      maintainState: true,
+                      maintainAnimation: true,
+                      maintainSize: true,
+                      child: Padding(
+                        padding: const EdgeInsets.only(bottom: 4.0),
+                        child: Text(
+                          "You haven't selected any preferences",
+                          textAlign: TextAlign.left,
+                          style: GoogleFonts.nunitoSans(
+                            color: Colors.red[800],
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+>>>>>>> Stashed changes
                       ),
                     ),
-                  ),
-                  // Judul halaman yang terpusat
-                  Expanded(
-                    child: Text(
-                      'Preferences',
-                      textAlign: TextAlign.center,
-                      style: GoogleFonts.montserrat(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 28,
-                        color: kPrimaryTextColor,
-                      ),
+                    _buildPreferenceSection(
+                      title: 'Diet Type',
+                      allOptions: dietTypes,
+                      selectedOptions: _selectedDietTypes,
                     ),
+<<<<<<< Updated upstream
                   ),
                   // Spacer untuk menyeimbangkan tombol kembali agar judul tetap di tengah
                   const SizedBox(
@@ -150,30 +226,19 @@ class _PreferencesPageState extends State<PreferencesPage> {
                       color: Colors.red[800],
                       fontSize: 14,
                       fontWeight: FontWeight.w500,
+=======
+                    const SizedBox(height: 32),
+                    _buildPreferenceSection(
+                      title: 'Nutrition Type',
+                      allOptions: nutritionTypes,
+                      selectedOptions: _selectedNutritionTypes,
+>>>>>>> Stashed changes
                     ),
-                  ),
+                    const SizedBox(height: 40),
+                  ],
                 ),
               ),
-
-              // Section Diet Type
-              _buildPreferenceSection(
-                title: 'Diet Type',
-                allOptions: dietTypes,
-                selectedOptions: _selectedDietTypes,
-              ),
-              const SizedBox(height: 32),
-
-              // Section Nutrition Type
-              _buildPreferenceSection(
-                title: 'Nutrition Type',
-                allOptions: nutritionTypes,
-                selectedOptions: _selectedNutritionTypes,
-              ),
-              const SizedBox(height: 40),
-            ],
-          ),
-        ),
-      ),
+            ),
     );
   }
 
@@ -200,7 +265,7 @@ class _PreferencesPageState extends State<PreferencesPage> {
           decoration: BoxDecoration(
             color: kContainerColor,
             borderRadius: BorderRadius.circular(16),
-            boxShadow: kCustomShadow, // Menambahkan shadow ke kontainer section
+            boxShadow: kCustomShadow,
           ),
           child: Wrap(
             spacing: 12.0,
@@ -227,17 +292,14 @@ class _PreferencesPageState extends State<PreferencesPage> {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        // REVISI: Mengurangi padding vertikal lagi untuk mengurangi tinggi kotak
         padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 6),
         decoration: BoxDecoration(
           color: isSelected ? kSelectedChipColor : kUnselectedChipColor,
           borderRadius: BorderRadius.circular(12),
-          // Menambahkan shadow hanya jika chip dipilih
           boxShadow: isSelected ? kCustomShadow : [],
         ),
         child: Text(
           label,
-          // Menggunakan font Nunito Sans SemiBold
           style: GoogleFonts.nunitoSans(
             color: kChipTextColor,
             fontWeight: FontWeight.w600, // SemiBold
