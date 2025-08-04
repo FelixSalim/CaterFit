@@ -39,15 +39,15 @@ class _PaymentPageState extends State<PaymentPage>
   final List<Map<String, String>> paymentMethods = [
     {
       'name': 'Master Card 5055',
-      'image': 'assets/images/mastercard.png',
+      'image': 'Assets\mastercard.png',
     },
     {
       'name': 'Gopay',
-      'image': 'assets/images/gopay.png',
+      'image': 'Assets/images/gopay.png',
     },
     {
       'name': 'Dana',
-      'image': 'assets/images/dana.png',
+      'image': 'Assets/images/dana.png',
     },
   ];
 
