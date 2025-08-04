@@ -108,32 +108,6 @@ class _PreferencesPageState extends State<PreferencesPage> {
         _selectedDietTypes.isEmpty && _selectedNutritionTypes.isEmpty;
 
     return Scaffold(
-<<<<<<< Updated upstream
-      // Tidak menggunakan AppBar agar header bisa ikut ter-scroll
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              // Header Kustom (Judul dan Tombol Kembali)
-              Row(
-                children: [
-                  // Tombol kembali dengan aset kustom
-                  InkWell(
-                    onTap: () {
-                      // Navigasi ke ProfilePage
-                      Navigator.pop(context);
-                    },
-                    // Memberi area sentuh yang cukup
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(0, 8, 16, 8),
-                      child: Image.asset(
-                        'Assets/back.png',
-                        width: 32, // Diperbarui sesuai permintaan Anda
-                        height: 32, // Diperbarui sesuai permintaan Anda
-                        color: kPrimaryTextColor,
-=======
       body: _isLoading
           ? const Center(
               child: CircularProgressIndicator()) // Tampilkan loading indicator
@@ -191,7 +165,6 @@ class _PreferencesPageState extends State<PreferencesPage> {
                             fontWeight: FontWeight.w500,
                           ),
                         ),
->>>>>>> Stashed changes
                       ),
                     ),
                     _buildPreferenceSection(
@@ -199,40 +172,11 @@ class _PreferencesPageState extends State<PreferencesPage> {
                       allOptions: dietTypes,
                       selectedOptions: _selectedDietTypes,
                     ),
-<<<<<<< Updated upstream
-                  ),
-                  // Spacer untuk menyeimbangkan tombol kembali agar judul tetap di tengah
-                  const SizedBox(
-                      width: 48), // Disesuaikan dengan padding InkWell
-                ],
-              ),
-              // REVISI: Mengurangi jarak dari header
-              const SizedBox(height: 20),
-
-              // Pesan peringatan dengan Visibility untuk menjaga konsistensi layout
-              Visibility(
-                visible: hasNoPreferencesSelected,
-                maintainState: true,
-                maintainAnimation: true,
-                maintainSize: true,
-                child: Padding(
-                  // REVISI: Mengurangi padding bawah untuk mengurangi jarak ke section
-                  padding: const EdgeInsets.only(bottom: 4.0),
-                  child: Text(
-                    "You haven't selected any preferences",
-                    textAlign: TextAlign.left,
-                    style: GoogleFonts.nunitoSans(
-                      // Diperbarui sesuai permintaan Anda
-                      color: Colors.red[800],
-                      fontSize: 14,
-                      fontWeight: FontWeight.w500,
-=======
                     const SizedBox(height: 32),
                     _buildPreferenceSection(
                       title: 'Nutrition Type',
                       allOptions: nutritionTypes,
                       selectedOptions: _selectedNutritionTypes,
->>>>>>> Stashed changes
                     ),
                     const SizedBox(height: 40),
                   ],
