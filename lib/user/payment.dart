@@ -1,4 +1,3 @@
-import 'package:caterfit/user/navbarUser.dart';
 import 'package:flutter/material.dart';
 import 'package:speech_to_text/speech_to_text.dart';
 import 'package:caterfit/controller/accessibility_controller.dart';
@@ -92,6 +91,8 @@ class _PaymentPageState extends State<PaymentPage>
   }
 
   void _startCouponListening() async {
+    if (!AccessibilityController.isEnabled) return;
+
     bool available = await _speech.initialize();
     if (available) {
       _speech.listen(
@@ -143,6 +144,8 @@ class _PaymentPageState extends State<PaymentPage>
   }
 
   void _startPaymentMethodListening() async {
+    if (!AccessibilityController.isEnabled) return;
+
     bool available = await _speech.initialize();
     if (available) {
       _speech.listen(
@@ -181,6 +184,8 @@ class _PaymentPageState extends State<PaymentPage>
   }
 
   void _startConfirmListening() async {
+    if (!AccessibilityController.isEnabled) return;
+
     bool available = await _speech.initialize();
     if (available) {
       _speech.listen(
