@@ -59,8 +59,10 @@ class _PackageDetailScreenState extends State<PackageDetailScreen> {
   @override
   void initState() {
     super.initState();
-    _pageController = PageController(viewportFraction: 0.85);
-
+    _pageController = PageController(
+        viewportFraction: 0.85,
+        initialPage: PackageDetailScreen._currentPage %
+            PackageDetailScreen.mealPlans.length);
     _autoScrollTimer = Timer.periodic(const Duration(seconds: 4), (timer) {
       if (_pageController.hasClients) {
         int nextPage = (PackageDetailScreen._currentPage + 1) %

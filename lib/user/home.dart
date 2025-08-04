@@ -2,12 +2,11 @@ import 'dart:async';
 import 'package:caterfit/controller/accessibility_controller.dart';
 import 'package:caterfit/user/navbarUser.dart';
 import 'package:caterfit/user/packageMenu.dart';
-import 'package:caterfit/login.dart'; 
+import 'package:caterfit/login.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
 import 'package:permission_handler/permission_handler.dart';
-
 
 class HomeScreen extends StatefulWidget {
   final String username;
@@ -34,18 +33,17 @@ class _HomeScreenState extends State<HomeScreen> {
     welcomeToCaterfit(context);
   }
 
-
   void _handleTouchDown(TapDownDetails details) async {
     if (await AccessibilityController.getIsEnabled()) {
       _holdTimer?.cancel();
       _holdTimer = Timer(const Duration(seconds: 5), () {
         AccessibilityController.isEnabled = false;
-        AccessibilityController.speak("Deactivating voice command. Logging you out.");
+        AccessibilityController.speak(
+            "Deactivating voice command. Logging you out.");
         _navigateToLoginPage();
       });
     }
   }
-
 
   void _handleTouchUp(TapUpDetails details) {
     _holdTimer?.cancel();
@@ -60,27 +58,33 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void deactivateVoiceCommand() async {
     if (await AccessibilityController.getIsEnabled()) {
-      await AccessibilityController.speak("Please hold your screen for 5 seconds to deactivate voice command.");
+      await AccessibilityController.speak(
+          "Please hold your screen for 5 seconds to deactivate voice command.");
     }
   }
 
   void todaysOrderStatus() async {
     if (await AccessibilityController.getIsEnabled()) {
-      await AccessibilityController.speak("Your have an order for " + HomeScreen.packageName + "package");
-      await AccessibilityController.speak("Your menu includes Salmon Fried Rice, Chicken Wrap, and Cornflakes Bowl.");
-      await AccessibilityController.speak("Your order status is: " + HomeScreen.orderStatus);
+      await AccessibilityController.speak(
+          "Your have an order for " + HomeScreen.packageName + "package");
+      await AccessibilityController.speak(
+          "Your menu includes Salmon Fried Rice, Chicken Wrap, and Cornflakes Bowl.");
+      await AccessibilityController.speak(
+          "Your order status is: " + HomeScreen.orderStatus);
     }
   }
 
   void welcomeToCaterfit(BuildContext context) async {
     if (await AccessibilityController.getIsEnabled()) {
-      await AccessibilityController.speak("Hi " + widget.username + ", welcome to CaterFit!");
-      await AccessibilityController.speak("You're currently on the home page. What would you like to do?");
+      await AccessibilityController.speak(
+          "Hi " + widget.username + ", welcome to CaterFit!");
+      await AccessibilityController.speak(
+          "You're currently on the home page. What would you like to do?");
       await AccessibilityController.speak("1. Check order status.");
       await AccessibilityController.speak("2. View package menu.");
-      await AccessibilityController.speak("3. Deactivate voice command. Please note that deactivating voice command will log you out, and you'll need to log in again.");
+      await AccessibilityController.speak(
+          "3. Deactivate voice command. Please note that deactivating voice command will log you out, and you'll need to log in again.");
       await AccessibilityController.speak("4. Exit the app.");
-
 
       bool available = await _speech.initialize();
       if (available) {
@@ -88,10 +92,11 @@ class _HomeScreenState extends State<HomeScreen> {
           onResult: (result) {
             HomeScreen.response = result.recognizedWords;
             if (HomeScreen.response.toLowerCase() == "one") {
-              AccessibilityController.speak("you chose one"); 
+              AccessibilityController.speak("you chose one");
               todaysOrderStatus();
             } else if (HomeScreen.response.toLowerCase() == "two") {
-              AccessibilityController.speak("you chose two. You will be directed to the package menu"); 
+              AccessibilityController.speak(
+                  "you chose two. You will be directed to the package menu");
               Navigator.push(
                 context,
                 MaterialPageRoute(
@@ -99,21 +104,24 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               );
             } else if (HomeScreen.response.toLowerCase() == "three") {
-              AccessibilityController.speak("you chose three. To deactivate voice command"); 
+              AccessibilityController.speak(
+                  "you chose three. To deactivate voice command");
               deactivateVoiceCommand();
-            } else if (HomeScreen.response.toLowerCase() == "four"){
-              AccessibilityController.speak("you chose four. Exiting the app"); 
+            } else if (HomeScreen.response.toLowerCase() == "four") {
+              AccessibilityController.speak("you chose four. Exiting the app");
               Navigator.of(context).pop();
             } else {
-              AccessibilityController.speak("Sorry, I didn't understand that. Please try again.");
+              AccessibilityController.speak(
+                  "Sorry, I didn't understand that. Please try again.");
             }
           },
           listenFor: const Duration(seconds: 5),
           pauseFor: const Duration(seconds: 5), // extended to avoid early stop
           partialResults: false,
         );
-        
-        await Future.delayed(const Duration(seconds: 6)); // wait for speech to complete
+
+        await Future.delayed(
+            const Duration(seconds: 6)); // wait for speech to complete
         if (_speech.isListening) {
           await _speech.stop(); // stop before starting next listen
         }
@@ -127,7 +135,6 @@ class _HomeScreenState extends State<HomeScreen> {
     _speech.stop();
     super.dispose();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -353,7 +360,7 @@ class PromoCarousel extends StatelessWidget {
         children: [
           // --- TEXT & BUTTON ---
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 20),
+            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
@@ -404,7 +411,7 @@ class PromoCarousel extends StatelessWidget {
                           "Subscribe Now",
                           style: GoogleFonts.montserrat(
                             color: const Color(0xFFFEFFDE),
-                            fontSize: 15,
+                            fontSize: 12,
                             fontWeight: FontWeight.w500,
                           ),
                         ),
@@ -419,7 +426,7 @@ class PromoCarousel extends StatelessWidget {
 
           // --- POSITIONED IMAGE ---
           Positioned(
-            right: -20,
+            right: -30,
             top: -50,
             child: Image.asset(
               'Assets/promotion.png',
