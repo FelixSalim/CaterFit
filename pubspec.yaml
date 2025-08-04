@@ -43,10 +43,13 @@ dependencies:
   flutter_tts: ^4.2.3
   speech_to_text: ^6.3.0
   permission_handler: ^11.0.1
+  shared_preferences: ^2.2.2 
+
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
