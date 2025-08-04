@@ -39,15 +39,15 @@ class _PaymentPageState extends State<PaymentPage>
   final List<Map<String, String>> paymentMethods = [
     {
       'name': 'Master Card 5055',
-      'image': 'Assets\mastercard.png',
+      'image': 'Assets/mastercard.png',
     },
     {
       'name': 'Gopay',
-      'image': 'Assets/images/gopay.png',
+      'image': 'Assets/gopay.png',
     },
     {
-      'name': 'Dana',
-      'image': 'Assets/images/dana.png',
+      'name': 'Linkaja',
+      'image': 'Assets/Linkaja.png',
     },
   ];
 
@@ -264,9 +264,10 @@ class _PaymentPageState extends State<PaymentPage>
                       ),
                       const SizedBox(height: 12),
                       rowItem('Muscle Meal [${widget.weeks} Week(s)]',
-                          'Rp. $subTotal'),
+                          'Rp. ${subTotal.toString()}'),
                       if (selectedCoupon != null)
-                        rowItem(selectedCoupon!, '-Rp. $couponDiscount'),
+                        rowItem(selectedCoupon!,
+                            '-Rp. ${couponDiscount.toString()}'),
                       const SizedBox(height: 8),
                       const Divider(),
                       Container(
@@ -357,6 +358,8 @@ class _PaymentPageState extends State<PaymentPage>
                                 } else {
                                   couponDiscount = 0;
                                 }
+                                totalExpenses =
+                                    subTotal - couponDiscount; // ✅ UPDATE TOTAL
                               });
                             },
                             child: Container(
@@ -420,11 +423,16 @@ class _PaymentPageState extends State<PaymentPage>
                           child: Row(
                             children: [
                               ClipOval(
-                                child: Image.asset(
-                                  method['image']!,
+                                child: Container(
                                   width: 40,
                                   height: 40,
-                                  fit: BoxFit.cover,
+                                  padding: const EdgeInsets.all(4),
+                                  color: Colors
+                                      .white, // Optional: adds a background
+                                  child: FittedBox(
+                                    fit: BoxFit.contain,
+                                    child: Image.asset(method['image']!),
+                                  ),
                                 ),
                               ),
                               const SizedBox(width: 12),
