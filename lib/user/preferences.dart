@@ -98,13 +98,16 @@ class _PreferencesPageState extends State<PreferencesPage> {
                 children: [
                   // Tombol kembali dengan aset kustom
                   InkWell(
+                    // onTap: () {
+                    // Navigasi ke ProfilePage
+                    // Navigator.push(
+                    //   context,
+                    //   MaterialPageRoute(builder: (context) => const ProfilePage()),
+                    // );
                     onTap: () {
-                      // Navigasi ke ProfilePage
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => const ProfilePage()),
-                      );
+                      Navigator.pop(context);
                     },
+                    // },
                     // Memberi area sentuh yang cukup
                     child: Padding(
                       padding: const EdgeInsets.fromLTRB(0, 8, 16, 8),
@@ -129,7 +132,8 @@ class _PreferencesPageState extends State<PreferencesPage> {
                     ),
                   ),
                   // Spacer untuk menyeimbangkan tombol kembali agar judul tetap di tengah
-                  const SizedBox(width: 48), // Disesuaikan dengan padding InkWell
+                  const SizedBox(
+                      width: 48), // Disesuaikan dengan padding InkWell
                 ],
               ),
               // REVISI: Mengurangi jarak dari header
@@ -147,7 +151,8 @@ class _PreferencesPageState extends State<PreferencesPage> {
                   child: Text(
                     "You haven't selected any preferences",
                     textAlign: TextAlign.left,
-                    style: GoogleFonts.nunitoSans( // Diperbarui sesuai permintaan Anda
+                    style: GoogleFonts.nunitoSans(
+                      // Diperbarui sesuai permintaan Anda
                       color: Colors.red[800],
                       fontSize: 14,
                       fontWeight: FontWeight.w500,
