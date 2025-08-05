@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:caterfit/controller/accessibility_controller.dart';
 import 'package:caterfit/user/navbarUser.dart';
-import 'package:caterfit/user/packageDetail.dart';
 import 'package:caterfit/user/packageMenu.dart';
 import 'package:caterfit/login.dart';
 import 'package:caterfit/user/user_chat.dart';
@@ -123,22 +122,15 @@ class _HomeScreenState extends State<HomeScreen> {
           await AccessibilityController.speak(
               "you chose two. You will be directed to the package menu");
           HomeScreen.response = "Response";
-          final navKey = GlobalKey<HomePageState>();
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => Navbar(key: navKey),
-            ),
-          ).then((_) {
-            navKey.currentState?.changeTab(1);
-          });
+          Navbar.of(context)?.changeTab(1);
         } else if (HomeScreen.response.toLowerCase() == "three" ||
             HomeScreen.response.toLowerCase() == "3") {
           await AccessibilityController.speak(
               "you chose three. To deactivate voice command");
           await deactivateVoiceCommand();
           HomeScreen.response = "Response";
-        } else if (HomeScreen.response.toLowerCase() == "four") {
+        } else if (HomeScreen.response.toLowerCase() == "four" ||
+            HomeScreen.response.toLowerCase() == "4") {
           await AccessibilityController.speak(
               "you chose four. Exiting the app");
           HomeScreen.response = "Response";
@@ -376,7 +368,6 @@ class PromoCarousel extends StatelessWidget {
 
   // --- PROMOTION ---
   Widget _buildPromoCard1(BuildContext context) {
-    final GlobalKey<HomePageState> navbarKey = GlobalKey<HomePageState>();
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 20),
       decoration: BoxDecoration(
