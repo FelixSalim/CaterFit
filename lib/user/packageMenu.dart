@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:caterfit/user/packageDetail.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart' as intl;
+import 'package:speech_to_text/speech_to_text.dart' as stt;
+import 'package:permission_handler/permission_handler.dart';
+import 'package:caterfit/controller/accessibility_controller.dart';
 
 class CaterfitPackage {
   final String name;
@@ -26,6 +29,10 @@ class CaterfitPackageScreen extends StatefulWidget {
 
 class _CaterfitPackageScreenState extends State<CaterfitPackageScreen> {
   // --- STATE MANAGEMENT ---
+
+  String choice = '';
+  stt.SpeechToText _speech = stt.SpeechToText();
+
   final List<String> _categories = [
     'Hot Deals',
     'Bulking',
@@ -80,9 +87,93 @@ class _CaterfitPackageScreenState extends State<CaterfitPackageScreen> {
       locale: 'id_ID', symbol: 'Rp ', decimalDigits: 0);
 
   @override
-  void initState() {
+  void initState() async {
     super.initState();
     _filterPackages();
+    if (AccessibilityController.getIsEnabled()) {
+      await AccessibilityController.speak(
+          'Welcome to Caterfit Package, please choose a package. 1. Muscle Meal, 2. Eastern Delights, 3. Office Bites, 4. Carbo Charge, 5. Lil\' Lunch Pack, 6. Gains on the Go.');
+    } 
+    bool available = await _speech.initialize();
+      if (available) {
+        _speech.listen(
+          onResult: (result) {
+            setState(() {
+              choice = result.recognizedWords;
+            });
+          },
+          listenFor: const Duration(seconds: 5),
+          pauseFor: const Duration(seconds: 5), // extended to avoid early stop
+          partialResults: false,
+        );
+
+        await Future.delayed(const Duration(seconds: 6)); // wait for speech to complete
+
+        if (choice.toLowerCase() == "one" ||
+            choice == "1") {
+            AccessibilityController.speak(
+                'You have selected Muscle Meal. It costs Rp 400,000. Continuing to detail package');
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => PackageDetailScreen(),
+              ),
+            );
+        } else if (choice.toLowerCase() == "two" ||
+            choice == "2") {
+            AccessibilityController.speak(
+                'You have selected Eastern Delights. It costs Rp 350,000. Continuing to detail package');
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => PackageDetailScreen(),
+              ),
+            );
+        } else if (choice.toLowerCase() == "three" ||
+            choice == "3") {
+            AccessibilityController.speak(
+                'You have selected Office Bites. It costs Rp 290,000. Continuing to detail package');
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => PackageDetailScreen(),
+              ),
+            );
+        } else if (choice.toLowerCase() == "four" ||
+            choice == "4") {
+            AccessibilityController.speak(
+                'You have selected Carbo Charge. It costs Rp 350,000. Continuing to detail package');
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => PackageDetailScreen(),
+              ),
+            );
+        } else if (choice.toLowerCase() == "five" ||
+            choice == "5") {
+            AccessibilityController.speak(
+                'You have selected Lil\' Lunch Pack. It costs Rp 300,000. Continuing to detail package');
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => PackageDetailScreen(),
+              ),
+            );
+        } else if (choice.toLowerCase() == "six" ||
+            choice == "6") {
+            AccessibilityController.speak(
+                'You have selected Gains on the Go. It costs Rp 500,000. Continuing to detail package');
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => PackageDetailScreen(),
+              ),
+            );
+        } else {
+          AccessibilityController.speak('Invalid choice, please try again.');
+        }
+      }
+
   }
 
   // --- LOGIC ---
