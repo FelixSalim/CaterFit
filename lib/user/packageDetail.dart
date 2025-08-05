@@ -231,7 +231,7 @@ class _PackageDetailScreenState extends State<PackageDetailScreen> {
   Widget build(BuildContext context) {
     // Function baru untuk membacakan detail paket
     void readPackageDetail() async {
-      if (await AccessibilityController.getIsEnabled()) {
+      if (AccessibilityController.getIsEnabled()) {
         bool available = await _speech.initialize();
 
         String namaPaket = "Muscle Meal";
@@ -259,7 +259,7 @@ class _PackageDetailScreenState extends State<PackageDetailScreen> {
         }
 
         void customMenu() async {
-          if (await AccessibilityController.getIsEnabled()) {
+          if (AccessibilityController.getIsEnabled()) {
             bool available = await _speech.initialize();
 
             Future<void> askDuration() async {
