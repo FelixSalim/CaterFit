@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:speech_to_text/speech_to_text.dart';
 import 'package:caterfit/controller/accessibility_controller.dart';
-import 'package:caterfit/user/home.dart';
+import 'package:caterfit/user/navbarUser.dart';
 
 int pricePerWeek = 250000;
 void main() {
@@ -224,8 +224,15 @@ class _PaymentPageState extends State<PaymentPage>
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         content: Text('Payment Successful. Subscription Active!'),
       ));
-      return;
+      Future.delayed(const Duration(seconds: 2), () {
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => const Navbar()),
+          (route) => false,
+        );
+      });
+      return; // Move return here, after block finishes
     }
+
     AccessibilityController.speak('Payment successful. Subscription active.');
 
     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
@@ -234,8 +241,7 @@ class _PaymentPageState extends State<PaymentPage>
 
     Future.delayed(const Duration(seconds: 2), () {
       Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(
-            builder: (context) => const HomeScreen(username: 'User')),
+        MaterialPageRoute(builder: (context) => const Navbar()),
         (route) => false,
       );
     });
