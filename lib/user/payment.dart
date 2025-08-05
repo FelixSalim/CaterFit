@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:speech_to_text/speech_to_text.dart';
 import 'package:caterfit/controller/accessibility_controller.dart';
+import 'package:caterfit/user/home.dart';
 
+int pricePerWeek = 250000;
 void main() {
   runApp(const MaterialApp(
     debugShowCheckedModeBanner: false,
@@ -63,7 +65,11 @@ class _PaymentPageState extends State<PaymentPage>
       duration: const Duration(milliseconds: 300),
     );
 
+    subTotal = pricePerWeek * widget.weeks;
+    totalExpenses = subTotal;
+
     Future.delayed(const Duration(seconds: 1), () async {
+      if (!AccessibilityController.isEnabled) return;
       await AccessibilityController.speak(
         'Please select a coupon. Available coupons are: Fast Meal, Healthy Plan, and First Order.',
       );
@@ -86,19 +92,25 @@ class _PaymentPageState extends State<PaymentPage>
   }
 
   void _startCouponListening() async {
+    if (!AccessibilityController.isEnabled) return;
+
     bool available = await _speech.initialize();
     if (available) {
       _speech.listen(
         onResult: (result) {
           String voiceInput = result.recognizedWords.toLowerCase();
 
-          if (voiceInput.contains('fast') || voiceInput.contains('first')) {
+          if (voiceInput.contains('fast') ||
+              voiceInput.contains('first') ||
+              voiceInput.contains('one')) {
             _applyCoupon(0);
           } else if (voiceInput.contains('healthy') ||
-              voiceInput.contains('second')) {
+              voiceInput.contains('second') ||
+              voiceInput.contains('two')) {
             _applyCoupon(1);
           } else if (voiceInput.contains('order') ||
-              voiceInput.contains('third')) {
+              voiceInput.contains('third') ||
+              voiceInput.contains('three')) {
             _applyCoupon(2);
           } else {
             AccessibilityController.speak(
@@ -137,6 +149,8 @@ class _PaymentPageState extends State<PaymentPage>
   }
 
   void _startPaymentMethodListening() async {
+    if (!AccessibilityController.isEnabled) return;
+
     bool available = await _speech.initialize();
     if (available) {
       _speech.listen(
@@ -165,6 +179,8 @@ class _PaymentPageState extends State<PaymentPage>
 
   void _applyPaymentMethod(String method) async {
     selectedMethod = method;
+
+    if (!AccessibilityController.isEnabled) return;
     await _speech.stop();
     await AccessibilityController.speak('$selectedMethod selected.');
 
@@ -175,6 +191,8 @@ class _PaymentPageState extends State<PaymentPage>
   }
 
   void _startConfirmListening() async {
+    if (!AccessibilityController.isEnabled) return;
+
     bool available = await _speech.initialize();
     if (available) {
       _speech.listen(
@@ -202,10 +220,25 @@ class _PaymentPageState extends State<PaymentPage>
       stocks['Muscle Meal'] = (stocks['Muscle Meal'] ?? 0) - widget.weeks;
     });
 
+    if (!AccessibilityController.isEnabled) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text('Payment Successful. Subscription Active!'),
+      ));
+      return;
+    }
     AccessibilityController.speak('Payment successful. Subscription active.');
+
     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
       content: Text('Payment Successful. Subscription Active!'),
     ));
+
+    Future.delayed(const Duration(seconds: 2), () {
+      Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(
+            builder: (context) => const HomeScreen(username: 'User')),
+        (route) => false,
+      );
+    });
   }
 
   @override
@@ -225,15 +258,20 @@ class _PaymentPageState extends State<PaymentPage>
                   children: [
                     GestureDetector(
                       onTap: () => Navigator.pop(context),
-                      child: const Icon(Icons.arrow_back, color: Colors.green),
+                      child: const Icon(
+                        Icons.arrow_back,
+                        size: 32, // Set icon size to 32
+                        color: Color.fromRGBO(27, 94, 32, 1),
+                      ),
                     ),
-                    const SizedBox(width: 12),
+                    const SizedBox(
+                        width: 16), // spacing between arrow and title
                     const Text(
                       'Complete Payment',
                       style: TextStyle(
                         fontSize: 22,
                         fontWeight: FontWeight.bold,
-                        color: Colors.green,
+                        color: Color.fromRGBO(27, 94, 32, 1),
                       ),
                     ),
                   ],
@@ -257,7 +295,7 @@ class _PaymentPageState extends State<PaymentPage>
                           'ORDER SUMMARY',
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
-                            color: Colors.green,
+                            color: Color.fromRGBO(27, 94, 32, 1),
                             fontSize: 16,
                           ),
                         ),
@@ -456,18 +494,7 @@ class _PaymentPageState extends State<PaymentPage>
                 // Pay Now Button
                 Center(
                   child: ElevatedButton(
-                    onPressed: () {
-                      setState(() {
-                        subscriptionActive = true;
-                        stocks['Muscle Meal'] =
-                            (stocks['Muscle Meal'] ?? 0) - widget.weeks;
-                      });
-
-                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                        content:
-                            Text('Payment Successful. Subscription Active!'),
-                      ));
-                    },
+                    onPressed: _payNow,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.green.shade900,
                       padding: const EdgeInsets.symmetric(
