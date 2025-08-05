@@ -11,6 +11,7 @@ import 'package:permission_handler/permission_handler.dart';
 
 class HomeScreen extends StatefulWidget {
   final String username;
+  static bool hasSubscription = false;
   static String response = "Response";
   static String orderStatus = "Received";
   static String packageName = "Muscle Meal";
@@ -28,7 +29,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     // Nanti apus yaa
-    AccessibilityController.isEnabled = true;
+    // AccessibilityController.isEnabled = true;
     // Sampe sini
     super.initState();
     welcomeToCaterfit(context);
@@ -85,13 +86,13 @@ class _HomeScreenState extends State<HomeScreen> {
     if (AccessibilityController.getIsEnabled()) {
       await AccessibilityController.speak(
           "Hi " + widget.username + ", welcome to CaterFit!");
-      // await AccessibilityController.speak(
-      //     "You're currently on the home page. What would you like to do?");
-      // await AccessibilityController.speak("1. Check order status.");
-      // await AccessibilityController.speak("2. View package menu.");
-      // await AccessibilityController.speak(
-      //     "3. Deactivate voice command. Please note that deactivating voice command will log you out, and you'll need to log in again.");
-      // await AccessibilityController.speak("4. Exit the app.");
+      await AccessibilityController.speak(
+          "You're currently on the home page. What would you like to do?");
+      await AccessibilityController.speak("1. Check order status.");
+      await AccessibilityController.speak("2. View package menu.");
+      await AccessibilityController.speak(
+          "3. Deactivate voice command. Please note that deactivating voice command will log you out, and you'll need to log in again.");
+      await AccessibilityController.speak("4. Exit the app.");
 
       bool available = await _speech.initialize();
       if (available) {
@@ -137,8 +138,8 @@ class _HomeScreenState extends State<HomeScreen> {
           Navigator.of(context).pop();
         } else {
           HomeScreen.response = "Response";
-          // await AccessibilityController.speak(
-          // "Sorry, I didn't understand that. Double tap the screen to try again.");
+          await AccessibilityController.speak(
+              "Sorry, I didn't understand that. Double tap the screen to try again.");
         }
       }
     }
@@ -215,29 +216,41 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
                 const SizedBox(height: 16),
-                SizedBox(
-                  height: 250,
-                  child: ListView(
-                    scrollDirection: Axis.horizontal,
-                    children: [
-                      _buildTodayCard(
-                        imagePath: 'Assets/salmon-custom.png',
-                        title: "Salmon Fried Rice",
-                        subtitle: "Fried Rice, Salmon, Egg, Leek, Peas, Carrot",
-                      ),
-                      _buildTodayCard(
-                        imagePath: 'Assets/salmon-custom.png',
-                        title: "Chicken Wrap",
-                        subtitle: "Chicken, Sausage, Tomato, Cabbage, Egg",
-                      ),
-                      _buildTodayCard(
-                        imagePath: 'Assets/salmon-custom.png',
-                        title: "Cornflakes Bowl",
-                        subtitle: "Brownies, Cornflakes, Marshmallow, Berry",
-                      ),
-                    ],
+                if (!HomeScreen.hasSubscription)
+                  Text(
+                    "You don't have an active subscription.",
+                    style: GoogleFonts.nunitoSans(
+                      fontSize: 15,
+                      color: const Color(0xFF0D3011),
+                      fontWeight: FontWeight.w400,
+                    ),
                   ),
-                ),
+                const SizedBox(height: 10),
+                if (HomeScreen.hasSubscription)
+                  SizedBox(
+                    height: 250,
+                    child: ListView(
+                      scrollDirection: Axis.horizontal,
+                      children: [
+                        _buildTodayCard(
+                          imagePath: 'Assets/salmon-custom.png',
+                          title: "Salmon Fried Rice",
+                          subtitle:
+                              "Fried Rice, Salmon, Egg, Leek, Peas, Carrot",
+                        ),
+                        _buildTodayCard(
+                          imagePath: 'Assets/salmon-custom.png',
+                          title: "Chicken Wrap",
+                          subtitle: "Chicken, Sausage, Tomato, Cabbage, Egg",
+                        ),
+                        _buildTodayCard(
+                          imagePath: 'Assets/salmon-custom.png',
+                          title: "Cornflakes Bowl",
+                          subtitle: "Brownies, Cornflakes, Marshmallow, Berry",
+                        ),
+                      ],
+                    ),
+                  ),
                 const SizedBox(height: 32),
                 Stack(
                   clipBehavior: Clip.none,
@@ -484,7 +497,7 @@ class PromoCarousel extends StatelessWidget {
         children: [
           // --- TEXT & LIST ---
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 20),
+            padding: const EdgeInsets.only(top: 20, bottom: 20, left: 12),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -510,7 +523,7 @@ class PromoCarousel extends StatelessWidget {
                       const SizedBox(height: 8),
                       Padding(
                         padding:
-                            const EdgeInsets.only(left: 8.0), // indent tips
+                            const EdgeInsets.only(left: 5.0), // indent tips
                         child: Text(
                           "1. Eat 3 meals a day + healthy snacks\n"
                           "2. Limit fried & fast foods and sweet drinks\n"

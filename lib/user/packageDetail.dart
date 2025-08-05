@@ -134,6 +134,26 @@ class _PackageDetailScreenState extends State<PackageDetailScreen> {
             if (_confirmWeek.toLowerCase().contains('one')) {
               await AccessibilityController.speak(
                   'Redirecting to payment page');
+              if(_weekDuration == 'one' || _weekDuration == '1')
+                PackageDetailScreen.weekPackage = 1;
+              else if(_weekDuration == 'two' || _weekDuration == '2')
+                PackageDetailScreen.weekPackage = 2;
+              else if(_weekDuration == 'three' || _weekDuration == '3')
+                PackageDetailScreen.weekPackage = 3;
+              else if(_weekDuration == 'four' || _weekDuration == '4')
+                PackageDetailScreen.weekPackage = 4;
+              else if(_weekDuration == 'five' || _weekDuration == '5')
+                PackageDetailScreen.weekPackage = 5;
+              else if(_weekDuration == 'six' || _weekDuration == '6')
+                PackageDetailScreen.weekPackage = 6;
+              else if(_weekDuration == 'seven' || _weekDuration == '7')
+                PackageDetailScreen.weekPackage = 7;
+              else if(_weekDuration == 'eight' || _weekDuration == '8')
+                PackageDetailScreen.weekPackage = 8;
+              else if(_weekDuration == 'nine' || _weekDuration == '9')
+                PackageDetailScreen.weekPackage = 9;
+              else if(_weekDuration == 'ten' || _weekDuration == '10')
+                PackageDetailScreen.weekPackage = 10;
               Navigator.push(
                 context,
                 MaterialPageRoute(

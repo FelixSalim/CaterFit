@@ -1,3 +1,5 @@
+import 'package:caterfit/user/home.dart';
+import 'package:caterfit/user/navbarUser.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'nosubscription.dart';
@@ -12,6 +14,9 @@ class Subscription extends StatefulWidget {
 class _SubscriptionPageState extends State<Subscription> {
   @override
   Widget build(BuildContext context) {
+    if (!HomeScreen.hasSubscription) {
+      return const NoSubscriptionPage();
+    }
     return Scaffold(
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
@@ -61,7 +66,7 @@ class _SubscriptionPageState extends State<Subscription> {
                         'Current Plan',
                         style: GoogleFonts.montserrat(
                           fontSize: 35,
-                          fontWeight: FontWeight.bold,  
+                          fontWeight: FontWeight.bold,
                           color: const Color(0xFF0D3011),
                         ),
                       ),
@@ -69,9 +74,9 @@ class _SubscriptionPageState extends State<Subscription> {
                       Text(
                         'Muscle Meal',
                         style: GoogleFonts.montserrat(
-                            fontSize: 20, 
-                            fontStyle: FontStyle.italic,
-                            color: const Color(0xFF0D3011),
+                          fontSize: 20,
+                          fontStyle: FontStyle.italic,
+                          color: const Color(0xFF0D3011),
                         ),
                       ),
                       SizedBox(height: 20),
@@ -82,7 +87,8 @@ class _SubscriptionPageState extends State<Subscription> {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               Text('Start date',
-                                  style: GoogleFonts.montserrat(color: const Color(0xFF319F43))),
+                                  style: GoogleFonts.montserrat(
+                                      color: const Color(0xFF319F43))),
                               Text('06 August 2025'),
                             ],
                           ),
@@ -91,7 +97,8 @@ class _SubscriptionPageState extends State<Subscription> {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               Text('End date',
-                                  style: GoogleFonts.montserrat(color: Colors.red)),
+                                  style: GoogleFonts.montserrat(
+                                      color: Colors.red)),
                               Text('12 August 2025'),
                             ],
                           ),
@@ -105,7 +112,8 @@ class _SubscriptionPageState extends State<Subscription> {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               Text('Days Left',
-                                  style: GoogleFonts.montserrat(color: Colors.orange)),
+                                  style: GoogleFonts.montserrat(
+                                      color: Colors.orange)),
                               Text('6 days'),
                             ],
                           ),
@@ -119,14 +127,16 @@ class _SubscriptionPageState extends State<Subscription> {
             const SizedBox(height: 30),
             Text(
               'Upcoming Menu',
-              style: GoogleFonts.montserrat(fontSize: 20, fontWeight: FontWeight.bold),
+              style: GoogleFonts.montserrat(
+                  fontSize: 20, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 10),
             _buildMenuRow(),
             const SizedBox(height: 30),
             Text(
               'Recent Menu',
-              style: GoogleFonts.montserrat(fontSize: 20, fontWeight: FontWeight.bold),
+              style: GoogleFonts.montserrat(
+                  fontSize: 20, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 8),
             Container(
@@ -137,107 +147,103 @@ class _SubscriptionPageState extends State<Subscription> {
               ),
               child: Text(
                 'Tuesday, 5 August 2025',
-                style:
-                    GoogleFonts.montserrat(color: const Color(0xFF0D3011), fontWeight: FontWeight.bold),
+                style: GoogleFonts.montserrat(
+                    color: const Color(0xFF0D3011),
+                    fontWeight: FontWeight.bold),
               ),
             ),
             const SizedBox(height: 10),
             _buildMenuRow(),
             // Add this at the end of the children: [] list inside the Column
-          const SizedBox(height: 30),
-          Center(
-            child: ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const NoSubscriptionPage(),
+            const SizedBox(height: 30),
+            Center(
+              child: ElevatedButton(
+                onPressed: () {
+                  HomeScreen.hasSubscription = false;
+                  Navbar.of(context)?.changeTab(0); // Navigate to Package Menu
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.red,
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 30, vertical: 12),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
                   ),
-                );
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.red,
-                padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 12),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
                 ),
-              ),
-              child: Text(
-                'Cancel Subscription',
-                style: GoogleFonts.montserrat(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
+                child: Text(
+                  'Cancel Subscription',
+                  style: GoogleFonts.montserrat(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
             ),
-          ),
           ],
-          
         ),
       ),
     );
   }
 
   Widget _buildMenuRow() {
-  return SingleChildScrollView(
-    scrollDirection: Axis.horizontal,
-    child: Row(
-      children: [
-        _buildMenuItem('Salad', 'Assets/salad.jpg'),
-        const SizedBox(width: 16),
-        _buildMenuItem('Fried Rice', 'Assets/friedrice.jpg'),
-        const SizedBox(width: 16),
-        _buildMenuItem('Dessert', 'Assets/icecream.jpg'),
-      ],
-    ),
-  );
-}
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Row(
+        children: [
+          _buildMenuItem('Salad', 'Assets/salad.jpg'),
+          const SizedBox(width: 16),
+          _buildMenuItem('Fried Rice', 'Assets/friedrice.jpg'),
+          const SizedBox(width: 16),
+          _buildMenuItem('Dessert', 'Assets/icecream.jpg'),
+        ],
+      ),
+    );
+  }
 
   Widget _buildMenuItem(String title, String imageUrl) {
-  return Column(
-    children: [
-      Stack(
-        children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(12),
-            child: Image.asset(
-              imageUrl,
-              width: 150,
-              height: 175,
-              fit: BoxFit.cover,
-            ),
-          ),
-          Positioned(
-            bottom: 15,
-            left: 35,
-            right: 35,
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-              decoration: BoxDecoration(
-                color: const Color(0xFFFEFFDE),
-                borderRadius: const BorderRadius.only(
-                  bottomLeft: Radius.circular(12),
-                  bottomRight: Radius.circular(12),
-                  topLeft: Radius.circular(12),
-                  topRight: Radius.circular(12),
-                ),
+    return Column(
+      children: [
+        Stack(
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(12),
+              child: Image.asset(
+                imageUrl,
+                width: 150,
+                height: 175,
+                fit: BoxFit.cover,
               ),
-              child: Center(
-                child: Text(
-                  title,
-                  style: GoogleFonts.montserrat(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 10,
-                    color: const Color(0xFF0D3011),
+            ),
+            Positioned(
+              bottom: 15,
+              left: 35,
+              right: 35,
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFFEFFDE),
+                  borderRadius: const BorderRadius.only(
+                    bottomLeft: Radius.circular(12),
+                    bottomRight: Radius.circular(12),
+                    topLeft: Radius.circular(12),
+                    topRight: Radius.circular(12),
+                  ),
+                ),
+                child: Center(
+                  child: Text(
+                    title,
+                    style: GoogleFonts.montserrat(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 10,
+                      color: const Color(0xFF0D3011),
+                    ),
                   ),
                 ),
               ),
             ),
-          ),
-        ],
-      ),
-    ],
-  );
-}
-
+          ],
+        ),
+      ],
+    );
+  }
 }

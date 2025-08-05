@@ -61,10 +61,10 @@ class _ProfilePageState extends State<ProfilePage> {
   void _initializeData() {
     // Set initial data
     _originalData = {
-      'username': 'cimcarmen',
-      'name': 'Carmen Kim',
-      'gender': 'Female',
-      'email': 'carmenkim88@gmail.com',
+      'username': 'User',
+      'name': 'User',
+      'gender': 'Male',
+      'email': 'user@gmail.com',
       'phone': '0812345678910',
       'address':
           'Jalan Jalan Ke Pasar No 77, Cianjai, Jawa Barat, Indonesia 43282',

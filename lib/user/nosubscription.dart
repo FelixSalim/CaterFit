@@ -8,7 +8,7 @@ class NoSubscriptionPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-        final GlobalKey<HomePageState> navbarKey = GlobalKey<HomePageState>();
+    final GlobalKey<HomePageState> navbarKey = GlobalKey<HomePageState>();
     return Scaffold(
       backgroundColor: Colors.white,
       body: Center(
@@ -27,7 +27,7 @@ class NoSubscriptionPage extends StatelessWidget {
 
               // Text message
               Text(
-                "You haven’t subscribed\nto any package yet :(",
+                "You haven't subscribed\nto any package yet :(",
                 textAlign: TextAlign.center,
                 style: GoogleFonts.montserrat(
                   fontSize: 18,
@@ -40,19 +40,12 @@ class NoSubscriptionPage extends StatelessWidget {
               // Subscribe Now Button
               ElevatedButton(
                 onPressed: () {
-                 Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => Navbar(
-                      key: navbarKey,
-                    ),
-                  ),
-                );
+                  Navbar.of(context)?.changeTab(1); // Navigate to Package Menu
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFF0D3011),
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 30, vertical: 14),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 30, vertical: 14),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8),
                   ),

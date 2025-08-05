@@ -1,3 +1,4 @@
+import 'package:caterfit/user/home.dart';
 import 'package:flutter/material.dart';
 import 'package:speech_to_text/speech_to_text.dart';
 import 'package:caterfit/controller/accessibility_controller.dart';
@@ -216,6 +217,7 @@ class _PaymentPageState extends State<PaymentPage>
 
   void _payNow() {
     setState(() {
+      HomeScreen.hasSubscription = true;
       subscriptionActive = true;
       stocks['Muscle Meal'] = (stocks['Muscle Meal'] ?? 0) - widget.weeks;
     });

@@ -12,8 +12,8 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
-      // home: LoginPage(),
-      home: Navbar(),
+      home: LoginPage(),
+      // home: Navbar(),
       debugShowMaterialGrid: false,
       debugShowCheckedModeBanner: false,
     );
