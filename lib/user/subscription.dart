@@ -67,7 +67,7 @@ class _SubscriptionPageState extends State<Subscription> {
                       ),
                       SizedBox(height: 8),
                       Text(
-                        'Paket Anak Sekolah',
+                        'Muscle Meal',
                         style: GoogleFonts.montserrat(
                             fontSize: 20, 
                             fontStyle: FontStyle.italic,
@@ -83,7 +83,7 @@ class _SubscriptionPageState extends State<Subscription> {
                             children: [
                               Text('Start date',
                                   style: GoogleFonts.montserrat(color: const Color(0xFF319F43))),
-                              Text('01 June 2025'),
+                              Text('06 August 2025'),
                             ],
                           ),
                           SizedBox(width: 15),
@@ -92,7 +92,7 @@ class _SubscriptionPageState extends State<Subscription> {
                             children: [
                               Text('End date',
                                   style: GoogleFonts.montserrat(color: Colors.red)),
-                              Text('08 June 2025'),
+                              Text('12 August 2025'),
                             ],
                           ),
                         ],
@@ -106,7 +106,7 @@ class _SubscriptionPageState extends State<Subscription> {
                             children: [
                               Text('Days Left',
                                   style: GoogleFonts.montserrat(color: Colors.orange)),
-                              Text('4 days'),
+                              Text('6 days'),
                             ],
                           ),
                         ],
@@ -136,7 +136,7 @@ class _SubscriptionPageState extends State<Subscription> {
                 borderRadius: BorderRadius.circular(20),
               ),
               child: Text(
-                'Tuesday, 3 June 2025',
+                'Tuesday, 5 August 2025',
                 style:
                     GoogleFonts.montserrat(color: const Color(0xFF0D3011), fontWeight: FontWeight.bold),
               ),
