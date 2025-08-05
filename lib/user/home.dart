@@ -3,6 +3,7 @@ import 'package:caterfit/controller/accessibility_controller.dart';
 import 'package:caterfit/user/navbarUser.dart';
 import 'package:caterfit/user/packageMenu.dart';
 import 'package:caterfit/login.dart';
+import 'package:caterfit/user/user_chat.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
@@ -274,7 +275,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 right:
                                     150), // Change this as needed (top, bottom, left, right)
                             child: Text(
-                              "\n– CaterFit, “Healthy Catering for Your Fit Life”",
+                              "\n- CaterFit, “Healthy Catering for Your Fit Life”",
                               style: GoogleFonts.nunitoSans(
                                 fontSize: 8,
                                 fontWeight: FontWeight.w400,
@@ -293,13 +294,26 @@ class _HomeScreenState extends State<HomeScreen> {
                       left: 220,
                       right: 0,
                       child: Center(
+                          child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.transparent,
+                            shape: CircleBorder(),
+                            padding: EdgeInsets.all(0),
+                            shadowColor: Colors.transparent),
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const ChatDetailPage(),
+                              ));
+                        },
                         child: Image.asset(
                           'Assets/ChatUs.png',
                           width: 140,
                           height: 140,
                           fit: BoxFit.contain,
                         ),
-                      ),
+                      )),
                     ),
                   ],
                 ),
