@@ -69,6 +69,7 @@ class _PaymentPageState extends State<PaymentPage>
     totalExpenses = subTotal;
 
     Future.delayed(const Duration(seconds: 1), () async {
+      if (!AccessibilityController.isEnabled) return;
       await AccessibilityController.speak(
         'Please select a coupon. Available coupons are: Fast Meal, Healthy Plan, and First Order.',
       );
@@ -94,6 +95,7 @@ class _PaymentPageState extends State<PaymentPage>
     if (!AccessibilityController.isEnabled) return;
 
     bool available = await _speech.initialize();
+    if (!AccessibilityController.isEnabled) return;
     if (available) {
       _speech.listen(
         onResult: (result) {
@@ -128,6 +130,7 @@ class _PaymentPageState extends State<PaymentPage>
         ? int.parse(match.group(1)!.replaceAll(RegExp(r'[^\d]'), ''))
         : 0;
 
+    if (!AccessibilityController.isEnabled) return;
     await _speech.stop();
     await AccessibilityController.speak('${selectedCoupon!} coupon applied.');
 
@@ -174,6 +177,8 @@ class _PaymentPageState extends State<PaymentPage>
 
   void _applyPaymentMethod(String method) async {
     selectedMethod = method;
+
+    if (!AccessibilityController.isEnabled) return;
     await _speech.stop();
     await AccessibilityController.speak('$selectedMethod selected.');
 
@@ -213,6 +218,12 @@ class _PaymentPageState extends State<PaymentPage>
       stocks['Muscle Meal'] = (stocks['Muscle Meal'] ?? 0) - widget.weeks;
     });
 
+    if (!AccessibilityController.isEnabled) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text('Payment Successful. Subscription Active!'),
+      ));
+      return;
+    }
     AccessibilityController.speak('Payment successful. Subscription active.');
 
     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
@@ -245,10 +256,14 @@ class _PaymentPageState extends State<PaymentPage>
                   children: [
                     GestureDetector(
                       onTap: () => Navigator.pop(context),
-                      child: const Icon(Icons.arrow_back,
-                          color: Color.fromRGBO(27, 94, 32, 1)),
+                      child: const Icon(
+                        Icons.arrow_back,
+                        size: 32, // Set icon size to 32
+                        color: Color.fromRGBO(27, 94, 32, 1),
+                      ),
                     ),
-                    const SizedBox(width: 12),
+                    const SizedBox(
+                        width: 16), // spacing between arrow and title
                     const Text(
                       'Complete Payment',
                       style: TextStyle(
