@@ -95,19 +95,22 @@ class _PaymentPageState extends State<PaymentPage>
     if (!AccessibilityController.isEnabled) return;
 
     bool available = await _speech.initialize();
-    if (!AccessibilityController.isEnabled) return;
     if (available) {
       _speech.listen(
         onResult: (result) {
           String voiceInput = result.recognizedWords.toLowerCase();
 
-          if (voiceInput.contains('fast') || voiceInput.contains('first')) {
+          if (voiceInput.contains('fast') ||
+              voiceInput.contains('first') ||
+              voiceInput.contains('one')) {
             _applyCoupon(0);
           } else if (voiceInput.contains('healthy') ||
-              voiceInput.contains('second')) {
+              voiceInput.contains('second') ||
+              voiceInput.contains('two')) {
             _applyCoupon(1);
           } else if (voiceInput.contains('order') ||
-              voiceInput.contains('third')) {
+              voiceInput.contains('third') ||
+              voiceInput.contains('three')) {
             _applyCoupon(2);
           } else {
             AccessibilityController.speak(
@@ -130,7 +133,6 @@ class _PaymentPageState extends State<PaymentPage>
         ? int.parse(match.group(1)!.replaceAll(RegExp(r'[^\d]'), ''))
         : 0;
 
-    if (!AccessibilityController.isEnabled) return;
     await _speech.stop();
     await AccessibilityController.speak('${selectedCoupon!} coupon applied.');
 
