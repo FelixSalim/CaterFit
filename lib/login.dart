@@ -37,14 +37,14 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void _announceToActivateAccessibility() async {
-    if (!await AccessibilityController.getIsEnabled()) {
+    if (!AccessibilityController.getIsEnabled()) {
       await AccessibilityController.speak(
           "Welcome to Caterfit, To enable accessibility mode, hold the screen for five seconds. This will allow voice feedback for better navigation.");
     }
   }
 
   void _announceIfAccessibility() async {
-    if (await AccessibilityController.getIsEnabled()) {
+    if (AccessibilityController.getIsEnabled()) {
       await AccessibilityController.speak('Accessibility Mode Activated');
       // Request microphone permission
       PermissionStatus status = await Permission.microphone.request();
