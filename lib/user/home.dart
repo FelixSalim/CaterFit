@@ -117,7 +117,7 @@ class _HomeScreenState extends State<HomeScreen> {
           await todaysOrderStatus();
           HomeScreen.response = "Response";
           await AccessibilityController.speak(
-              "Triple tap the screen to try again.");
+              "Double tap the screen to try again.");
         } else if (HomeScreen.response.toLowerCase() == "two" ||
             HomeScreen.response.toLowerCase() == "2") {
           await AccessibilityController.speak(
@@ -146,7 +146,7 @@ class _HomeScreenState extends State<HomeScreen> {
         } else {
           HomeScreen.response = "Response";
           await AccessibilityController.speak(
-              "Sorry, I didn't understand that. Triple tap the screen to try again.");
+              "Sorry, I didn't understand that. Double tap the screen to try again.");
         }
       }
     }
