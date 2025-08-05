@@ -469,6 +469,12 @@ class _PackageDetailScreenState extends State<PackageDetailScreen> {
                           ),
                         ),
                       ),
+                      Container(
+                        height: 400,
+                        decoration: BoxDecoration(
+                          color: Colors.black.withOpacity(0.25),
+                        ),
+                      ),
                       // Details
                       Container(
                         padding: const EdgeInsets.symmetric(vertical: 20),
@@ -795,7 +801,8 @@ class _PackageDetailScreenState extends State<PackageDetailScreen> {
                         left: 16,
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.black.withOpacity(0.5),
+                            shadowColor: Colors.transparent,
+                            backgroundColor: Colors.transparent,
                             shape: CircleBorder(),
                             padding: EdgeInsets.all(12),
                           ),
@@ -805,7 +812,7 @@ class _PackageDetailScreenState extends State<PackageDetailScreen> {
                           child: const Icon(
                             Icons.arrow_back,
                             color: Color(0xFFFEFFDE),
-                            size: 30,
+                            size: 35,
                           ),
                         ),
                       ),
