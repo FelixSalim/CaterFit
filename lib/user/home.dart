@@ -85,13 +85,13 @@ class _HomeScreenState extends State<HomeScreen> {
     if (AccessibilityController.getIsEnabled()) {
       await AccessibilityController.speak(
           "Hi " + widget.username + ", welcome to CaterFit!");
-      await AccessibilityController.speak(
-          "You're currently on the home page. What would you like to do?");
-      await AccessibilityController.speak("1. Check order status.");
-      await AccessibilityController.speak("2. View package menu.");
-      await AccessibilityController.speak(
-          "3. Deactivate voice command. Please note that deactivating voice command will log you out, and you'll need to log in again.");
-      await AccessibilityController.speak("4. Exit the app.");
+      // await AccessibilityController.speak(
+      //     "You're currently on the home page. What would you like to do?");
+      // await AccessibilityController.speak("1. Check order status.");
+      // await AccessibilityController.speak("2. View package menu.");
+      // await AccessibilityController.speak(
+      //     "3. Deactivate voice command. Please note that deactivating voice command will log you out, and you'll need to log in again.");
+      // await AccessibilityController.speak("4. Exit the app.");
 
       bool available = await _speech.initialize();
       if (available) {
@@ -137,8 +137,8 @@ class _HomeScreenState extends State<HomeScreen> {
           Navigator.of(context).pop();
         } else {
           HomeScreen.response = "Response";
-          await AccessibilityController.speak(
-              "Sorry, I didn't understand that. Double tap the screen to try again.");
+          // await AccessibilityController.speak(
+          // "Sorry, I didn't understand that. Double tap the screen to try again.");
         }
       }
     }
