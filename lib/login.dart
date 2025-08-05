@@ -37,14 +37,14 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void _announceToActivateAccessibility() async {
-    if (!await AccessibilityController.getIsEnabled()) {
+    if (!AccessibilityController.getIsEnabled()) {
       await AccessibilityController.speak(
           "Welcome to Caterfit, To enable accessibility mode, hold the screen for five seconds. This will allow voice feedback for better navigation.");
     }
   }
 
   void _announceIfAccessibility() async {
-    if (await AccessibilityController.getIsEnabled()) {
+    if (AccessibilityController.getIsEnabled()) {
       await AccessibilityController.speak('Accessibility Mode Activated');
       // Request microphone permission
       PermissionStatus status = await Permission.microphone.request();
@@ -116,7 +116,7 @@ class _LoginPageState extends State<LoginPage> {
               builder: (context) => NavbarAdmin(),
             ),
           );
-        } else if (_username == "hai" && _password == "hai") {
+        } else if (_username == "user" && _password == "user") {
           LoginPage.username = _username;
           Navigator.push(
             context,
@@ -126,14 +126,14 @@ class _LoginPageState extends State<LoginPage> {
           );
         } else {
           await AccessibilityController.speak(
-              "Invalid username or password. Please tap the screen for five seconds to try again.");
+              "Invalid username or password. Please hold the screen for five seconds to try again.");
           setState(() {
             _errorMessage = "Invalid username or password";
           });
         }
       } else {
         await AccessibilityController.speak(
-            "Username and password are empty. Please tap the screen for five seconds to try again.");
+            "Username and password are empty. Please hold the screen for five seconds to try again.");
 
         setState(() {
           _errorMessage = "Please fill in both fields";
@@ -296,8 +296,8 @@ class _LoginPageState extends State<LoginPage> {
                             suffixIcon: IconButton(
                               icon: Icon(
                                 _obscurePassword
-                                    ? Icons.visibility_off
-                                    : Icons.visibility,
+                                    ? Icons.visibility
+                                    : Icons.visibility_off,
                                 color: const Color(0xFF0D3011),
                                 size: 24,
                               ),

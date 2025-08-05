@@ -17,7 +17,7 @@ class AccessibilityController {
     if (value) speak("Accessibility mode activated");
   }
 
-  static Future<bool> getIsEnabled() async {
+  static bool getIsEnabled() {
     return AccessibilityController.isEnabled;
   }
 }

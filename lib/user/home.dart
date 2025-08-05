@@ -28,18 +28,18 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     // Nanti apus yaa
-    // AccessibilityController.isEnabled = true;
+    AccessibilityController.isEnabled = true;
     // Sampe sini
     super.initState();
     welcomeToCaterfit(context);
   }
 
-  void _handleTouchDown(TapDownDetails details) async {
-    if (await AccessibilityController.getIsEnabled()) {
+  Future<void> _handleTouchDown(TapDownDetails details) async {
+    if (AccessibilityController.getIsEnabled()) {
       _holdTimer?.cancel();
-      _holdTimer = Timer(const Duration(seconds: 5), () {
+      _holdTimer = Timer(const Duration(seconds: 5), () async {
         AccessibilityController.isEnabled = false;
-        AccessibilityController.speak(
+        await AccessibilityController.speak(
             "Deactivating voice command. Logging you out.");
         _navigateToLoginPage();
       });
@@ -50,6 +50,12 @@ class _HomeScreenState extends State<HomeScreen> {
     _holdTimer?.cancel();
   }
 
+  void handleDoubleTap() async {
+    if (AccessibilityController.getIsEnabled()) {
+      welcomeToCaterfit(context);
+    }
+  }
+
   void _navigateToLoginPage() {
     Navigator.of(context).pushAndRemoveUntil(
       MaterialPageRoute(builder: (context) => const LoginPage()),
@@ -57,15 +63,15 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  void deactivateVoiceCommand() async {
-    if (await AccessibilityController.getIsEnabled()) {
+  Future<void> deactivateVoiceCommand() async {
+    if (AccessibilityController.getIsEnabled()) {
       await AccessibilityController.speak(
           "Please hold your screen for 5 seconds to deactivate voice command.");
     }
   }
 
-  void todaysOrderStatus() async {
-    if (await AccessibilityController.getIsEnabled()) {
+  Future<void> todaysOrderStatus() async {
+    if (AccessibilityController.getIsEnabled()) {
       await AccessibilityController.speak(
           "Your have an order for " + HomeScreen.packageName + "package");
       await AccessibilityController.speak(
@@ -75,56 +81,64 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  void welcomeToCaterfit(BuildContext context) async {
-    if (await AccessibilityController.getIsEnabled()) {
+  Future<void> welcomeToCaterfit(BuildContext context) async {
+    if (AccessibilityController.getIsEnabled()) {
       await AccessibilityController.speak(
           "Hi " + widget.username + ", welcome to CaterFit!");
-      await AccessibilityController.speak(
-          "You're currently on the home page. What would you like to do?");
-      await AccessibilityController.speak("1. Check order status.");
-      await AccessibilityController.speak("2. View package menu.");
-      await AccessibilityController.speak(
-          "3. Deactivate voice command. Please note that deactivating voice command will log you out, and you'll need to log in again.");
-      await AccessibilityController.speak("4. Exit the app.");
+      // await AccessibilityController.speak(
+      //     "You're currently on the home page. What would you like to do?");
+      // await AccessibilityController.speak("1. Check order status.");
+      // await AccessibilityController.speak("2. View package menu.");
+      // await AccessibilityController.speak(
+      //     "3. Deactivate voice command. Please note that deactivating voice command will log you out, and you'll need to log in again.");
+      // await AccessibilityController.speak("4. Exit the app.");
 
       bool available = await _speech.initialize();
       if (available) {
         _speech.listen(
           onResult: (result) {
             HomeScreen.response = result.recognizedWords;
-            if (HomeScreen.response.toLowerCase() == "one") {
-              AccessibilityController.speak("you chose one");
-              todaysOrderStatus();
-            } else if (HomeScreen.response.toLowerCase() == "two") {
-              AccessibilityController.speak(
-                  "you chose two. You will be directed to the package menu");
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const CaterfitPackageScreen(),
-                ),
-              );
-            } else if (HomeScreen.response.toLowerCase() == "three") {
-              AccessibilityController.speak(
-                  "you chose three. To deactivate voice command");
-              deactivateVoiceCommand();
-            } else if (HomeScreen.response.toLowerCase() == "four") {
-              AccessibilityController.speak("you chose four. Exiting the app");
-              Navigator.of(context).pop();
-            } else {
-              AccessibilityController.speak(
-                  "Sorry, I didn't understand that. Please try again.");
-            }
           },
           listenFor: const Duration(seconds: 5),
           pauseFor: const Duration(seconds: 5), // extended to avoid early stop
-          partialResults: false,
+          listenOptions: stt.SpeechListenOptions(
+            partialResults: false,
+          ),
         );
-
         await Future.delayed(
-            const Duration(seconds: 6)); // wait for speech to complete
+            const Duration(seconds: 5)); // wait for speech to complete
         if (_speech.isListening) {
           await _speech.stop(); // stop before starting next listen
+        }
+        if (HomeScreen.response.toLowerCase() == "one" ||
+            HomeScreen.response.toLowerCase() == "1") {
+          await AccessibilityController.speak("you chose one");
+          await todaysOrderStatus();
+          HomeScreen.response = "Response";
+          await AccessibilityController.speak(
+              "Double tap the screen to try again.");
+        } else if (HomeScreen.response.toLowerCase() == "two" ||
+            HomeScreen.response.toLowerCase() == "2") {
+          await AccessibilityController.speak(
+              "you chose two. You will be directed to the package menu");
+          HomeScreen.response = "Response";
+          Navbar.of(context)?.changeTab(1);
+        } else if (HomeScreen.response.toLowerCase() == "three" ||
+            HomeScreen.response.toLowerCase() == "3") {
+          await AccessibilityController.speak(
+              "you chose three. To deactivate voice command");
+          await deactivateVoiceCommand();
+          HomeScreen.response = "Response";
+        } else if (HomeScreen.response.toLowerCase() == "four" ||
+            HomeScreen.response.toLowerCase() == "4") {
+          await AccessibilityController.speak(
+              "you chose four. Exiting the app");
+          HomeScreen.response = "Response";
+          Navigator.of(context).pop();
+        } else {
+          HomeScreen.response = "Response";
+          // await AccessibilityController.speak(
+          // "Sorry, I didn't understand that. Double tap the screen to try again.");
         }
       }
     }
@@ -141,12 +155,11 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     // GestureDetector is used to detect the long press on the entire screen.
     return GestureDetector(
-      behavior: HitTestBehavior.opaque, // Ensures the entire area is tappable.
+      behavior:
+          HitTestBehavior.translucent, // Ensures the entire area is tappable.
+      onDoubleTap: handleDoubleTap,
       onTapDown: _handleTouchDown,
       onTapUp: _handleTouchUp,
-      onTapCancel: () {
-        _holdTimer?.cancel();
-      },
       child: Scaffold(
         backgroundColor: Colors.white,
         body: SafeArea(
@@ -355,7 +368,6 @@ class PromoCarousel extends StatelessWidget {
 
   // --- PROMOTION ---
   Widget _buildPromoCard1(BuildContext context) {
-    final GlobalKey<HomePageState> navbarKey = GlobalKey<HomePageState>();
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 20),
       decoration: BoxDecoration(
