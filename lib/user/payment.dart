@@ -144,7 +144,7 @@ class _PaymentPageState extends State<PaymentPage>
     );
 
     await AccessibilityController.speak(
-      'Now choose your payment method. Say Master Card, Gopay, or Dana.',
+      'Now choose your payment method. Say Master Card, Gopay, or Linkaja.',
     );
     _startPaymentMethodListening();
   }
