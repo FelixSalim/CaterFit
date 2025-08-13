@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:caterfit/admin/navbarAdmin.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -135,11 +136,8 @@ class _AddPackageState extends State<AddPackage> {
       PackageManagement.lastId = newPackage.id; // Update the last ID
       // Close the form and navigate back to the package management screen
       // Refresh management screen
-      Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const PackageManagement(),
-          ));
+      Navigator.pushReplacement(context, 
+          MaterialPageRoute(builder: (context) => const NavbarAdmin()));
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(

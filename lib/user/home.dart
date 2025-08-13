@@ -88,10 +88,10 @@ class _HomeScreenState extends State<HomeScreen> {
           "Hi " + widget.username + ", welcome to CaterFit!");
       await AccessibilityController.speak(
           "You're currently on the home page. What would you like to do?");
-      await AccessibilityController.speak("1. Check order status.");
-      await AccessibilityController.speak("2. View package menu.");
+      await AccessibilityController.speak("1. View package menu.");
+      await AccessibilityController.speak("2. Check order status.");
       await AccessibilityController.speak(
-          "3. Deactivate voice command. Please note that deactivating voice command will log you out, and you'll need to log in again.");
+          "3. Deactivate voice command.");
       await AccessibilityController.speak("4. Exit the app.");
 
       bool available = await _speech.initialize();
@@ -111,17 +111,17 @@ class _HomeScreenState extends State<HomeScreen> {
         if (_speech.isListening) {
           await _speech.stop(); // stop before starting next listen
         }
-        if (HomeScreen.response.toLowerCase() == "one" ||
-            HomeScreen.response.toLowerCase() == "1") {
-          await AccessibilityController.speak("you chose one");
+        if (HomeScreen.response.toLowerCase() == "two" ||
+            HomeScreen.response.toLowerCase() == "2") {
+          await AccessibilityController.speak("you chose two");
           await todaysOrderStatus();
           HomeScreen.response = "Response";
           await AccessibilityController.speak(
               "Double tap the screen to try again.");
-        } else if (HomeScreen.response.toLowerCase() == "two" ||
-            HomeScreen.response.toLowerCase() == "2") {
+        } else if (HomeScreen.response.toLowerCase() == "one" ||
+            HomeScreen.response.toLowerCase() == "1") {
           await AccessibilityController.speak(
-              "you chose two. You will be directed to the package menu");
+              "you chose one. You will be directed to the package menu");
           HomeScreen.response = "Response";
           Navbar.of(context)?.changeTab(1);
         } else if (HomeScreen.response.toLowerCase() == "three" ||

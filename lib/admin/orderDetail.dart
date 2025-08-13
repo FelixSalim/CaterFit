@@ -305,7 +305,7 @@ class TodaysOrderDetailState extends State<TodaysOrderDetail> {
                                         ],
                                       ),
                                       const SizedBox(
-                                        width: 35,
+                                        width: 10,
                                       ),
                                       OutlinedButton(
                                         onPressed: () {
@@ -411,7 +411,7 @@ class _UpdateOrderStatusDialogState extends State<UpdateOrderStatusDialog> {
                 Text(
                   "Update Order Status",
                   style: GoogleFonts.nunitoSans(
-                    fontSize: 22,
+                    fontSize: 20,
                     fontWeight: FontWeight.w700,
                     color: const Color(0xFF0D3011),
                   ),

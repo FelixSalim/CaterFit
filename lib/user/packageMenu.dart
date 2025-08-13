@@ -103,7 +103,7 @@ class _CaterfitPackageScreenState extends State<CaterfitPackageScreen> {
           onResult: (result) {
             setState(() {
               choice = result.recognizedWords;
-            });
+            }); 
           },
           listenFor: const Duration(seconds: 5),
           pauseFor: const Duration(seconds: 5), // extended to avoid early stop
